@@ -1,4 +1,4 @@
-{% extends 'admin_templates/base.html' %}
+{% extends 'user_templates/base.html' %}
 {% load static %}
 {% block content %}
     <!-- Start Product Details Section -->
@@ -12,22 +12,22 @@
                         <div class="product-large-image product-large-image-vartical swiper-container ml-5">
                             <div class="swiper-wrapper">
                                 <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img src="assets/images/product/default/home-1/default-1.jpg" alt="">
+                                    <img src="{% static 'assets/images/product/default/home-1/default-1.jpg' %}" alt="">
                                 </div>
                                 <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img src="assets/images/product/default/home-1/default-2.jpg" alt="">
+                                    <img src="{% static 'assets/images/product/default/home-1/default-2.jpg' %}" alt="">
                                 </div>
                                 <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img src="assets/images/product/default/home-1/default-3.jpg" alt="">
+                                    <img src="{% static 'assets/images/product/default/home-1/default-3.jpg' %}" alt="">
                                 </div>
                                 <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img src="assets/images/product/default/home-1/default-4.jpg" alt="">
+                                    <img src="{% static 'assets/images/product/default/home-1/default-4.jpg' %}" alt="">
                                 </div>
                                 <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img src="assets/images/product/default/home-1/default-5.jpg" alt="">
+                                    <img src="{% static 'assets/images/product/default/home-1/default-5.jpg' %}" alt="">
                                 </div>
                                 <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img src="assets/images/product/default/home-1/default-6.jpg" alt="">
+                                    <img src="{% static 'assets/images/product/default/home-1/default-6.jpg' %}" alt="">
                                 </div>
                             </div>
                         </div>
@@ -36,19 +36,19 @@
                         <div class="product-image-thumb product-image-thumb-vartical swiper-container pos-relative">
                             <div class="swiper-wrapper">
                                 <div class="product-image-thumb-single swiper-slide">
-                                    <img class="img-fluid" src="assets/images/product/default/home-1/default-1.jpg"
+                                    <img class="img-fluid" src="{% static 'assets/images/product/default/home-1/default-1.jpg' %}"
                                         alt="">
                                 </div>
                                 <div class="product-image-thumb-single swiper-slide">
-                                    <img class="img-fluid" src="assets/images/product/default/home-1/default-2.jpg"
+                                    <img class="img-fluid" src="{% static 'assets/images/product/default/home-1/default-2.jpg' %}"
                                         alt="">
                                 </div>
                                 <div class="product-image-thumb-single swiper-slide">
-                                    <img class="img-fluid" src="assets/images/product/default/home-1/default-3.jpg"
+                                    <img class="img-fluid" src="{% static 'assets/images/product/default/home-1/default-3.jpg' %}"
                                         alt="">
                                 </div>
                                 <div class="product-image-thumb-single swiper-slide">
-                                    <img class="img-fluid" src="assets/images/product/default/home-1/default-4.jpg"
+                                    <img class="img-fluid" src="{% static 'assets/images/product/default/home-1/default-4.jpg' %}"
                                         alt="">
                                 </div>
                             </div>
@@ -267,7 +267,7 @@
                                             <li class="comment-list">
                                                 <div class="comment-wrapper">
                                                     <div class="comment-img">
-                                                        <img src="assets/images/user/image-1.png" alt="">
+                                                        <img src="{% static 'assets/images/user/image-1.png' %}" alt="">
                                                     </div>
                                                     <div class="comment-content">
                                                         <div class="comment-content-top">
@@ -309,7 +309,7 @@
                                                     <li class="comment-reply-list">
                                                         <div class="comment-wrapper">
                                                             <div class="comment-img">
-                                                                <img src="assets/images/user/image-2.png" alt="">
+                                                                <img src="{% static 'assets/images/user/image-2.png' %}" alt="">
                                                             </div>
                                                             <div class="comment-content">
                                                                 <div class="comment-content-top">
@@ -343,7 +343,7 @@
                                             <li class="comment-list">
                                                 <div class="comment-wrapper">
                                                     <div class="comment-img">
-                                                        <img src="assets/images/user/image-3.png" alt="">
+                                                        <img src="{% static 'assets/images/user/image-3.png' %}" alt="">
                                                     </div>
                                                     <div class="comment-content">
                                                         <div class="comment-content-top">
@@ -463,8 +463,8 @@
                                     <div class="product-default-single-item product-color--golden swiper-slide">
                                         <div class="image-box">
                                             <a href="product-details-default.html" class="image-link">
-                                                <img src="assets/images/product/default/home-1/default-9.jpg" alt="">
-                                                <img src="assets/images/product/default/home-1/default-10.jpg" alt="">
+                                                <img src="{% static 'assets/images/product/default/home-1/default-9.jpg' %}" alt="">
+                                                <img src="{% static 'assets/images/product/default/home-1/default-10.jpg' %}" alt="">
                                             </a>
                                             <div class="action-link">
                                                 <div class="action-link-left">
@@ -503,8 +503,8 @@
                                     <div class="product-default-single-item product-color--golden swiper-slide">
                                         <div class="image-box">
                                             <a href="product-details-default.html" class="image-link">
-                                                <img src="assets/images/product/default/home-1/default-11.jpg" alt="">
-                                                <img src="assets/images/product/default/home-1/default-3.jpg" alt="">
+                                                <img src="{% static 'assets/images/product/default/home-1/default-11.jpg' %}" alt="">
+                                                <img src="{% static 'assets/images/product/default/home-1/default-3.jpg' %}" alt="">
                                             </a>
                                             <div class="action-link">
                                                 <div class="action-link-left">
@@ -543,8 +543,8 @@
                                     <div class="product-default-single-item product-color--golden swiper-slide">
                                         <div class="image-box">
                                             <a href="product-details-default.html" class="image-link">
-                                                <img src="assets/images/product/default/home-1/default-5.jpg" alt="">
-                                                <img src="assets/images/product/default/home-1/default-7.jpg" alt="">
+                                                <img src="{% static 'assets/images/product/default/home-1/default-5.jpg' %}" alt="">
+                                                <img src="{% static 'assets/images/product/default/home-1/default-7.jpg' %}" alt="">
                                             </a>
                                             <div class="action-link">
                                                 <div class="action-link-left">
@@ -583,8 +583,8 @@
                                     <div class="product-default-single-item product-color--golden swiper-slide">
                                         <div class="image-box">
                                             <a href="product-details-default.html" class="image-link">
-                                                <img src="assets/images/product/default/home-1/default-6.jpg" alt="">
-                                                <img src="assets/images/product/default/home-1/default-9.jpg" alt="">
+                                                <img src="{% static 'assets/images/product/default/home-1/default-6.jpg' %}" alt="">
+                                                <img src="{% static 'assets/images/product/default/home-1/default-9.jpg' %}" alt="">
                                             </a>
                                             <div class="action-link">
                                                 <div class="action-link-left">
@@ -623,8 +623,8 @@
                                     <div class="product-default-single-item product-color--golden swiper-slide">
                                         <div class="image-box">
                                             <a href="product-details-default.html" class="image-link">
-                                                <img src="assets/images/product/default/home-1/default-1.jpg" alt="">
-                                                <img src="assets/images/product/default/home-1/default-2.jpg" alt="">
+                                                <img src="{% static 'assets/images/product/default/home-1/default-1.jpg' %}" alt="">
+                                                <img src="{% static 'assets/images/product/default/home-1/default-2.jpg' %}" alt="">
                                             </a>
                                             <div class="tag">
                                                 <span>sale</span>
@@ -666,8 +666,8 @@
                                     <div class="product-default-single-item product-color--golden swiper-slide">
                                         <div class="image-box">
                                             <a href="product-details-default.html" class="image-link">
-                                                <img src="assets/images/product/default/home-1/default-3.jpg" alt="">
-                                                <img src="assets/images/product/default/home-1/default-4.jpg" alt="">
+                                                <img src="{% static 'assets/images/product/default/home-1/default-3.jpg' %}" alt="">
+                                                <img src="{% static 'assets/images/product/default/home-1/default-4.jpg' %}" alt="">
                                             </a>
                                             <div class="tag">
                                                 <span>sale</span>
@@ -709,8 +709,8 @@
                                     <div class="product-default-single-item product-color--golden swiper-slide">
                                         <div class="image-box">
                                             <a href="product-details-default.html" class="image-link">
-                                                <img src="assets/images/product/default/home-1/default-5.jpg" alt="">
-                                                <img src="assets/images/product/default/home-1/default-6.jpg" alt="">
+                                                <img src="{% static 'assets/images/product/default/home-1/default-5.jpg' %}" alt="">
+                                                <img src="{% static 'assets/images/product/default/home-1/default-6.jpg' %}" alt="">
                                             </a>
                                             <div class="tag">
                                                 <span>sale</span>
@@ -752,8 +752,8 @@
                                     <div class="product-default-single-item product-color--golden swiper-slide">
                                         <div class="image-box">
                                             <a href="product-details-default.html" class="image-link">
-                                                <img src="assets/images/product/default/home-1/default-7.jpg" alt="">
-                                                <img src="assets/images/product/default/home-1/default-8.jpg" alt="">
+                                                <img src="{% static 'assets/images/product/default/home-1/default-7.jpg' %}" alt="">
+                                                <img src="{% static 'assets/images/product/default/home-1/default-8.jpg' %}" alt="">
                                             </a>
                                             <div class="action-link">
                                                 <div class="action-link-left">

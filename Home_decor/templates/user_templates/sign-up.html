@@ -165,20 +165,7 @@
     });
 
 
-    window.addEventListener('DOMContentLoaded', (event) => {
-    const hash = window.location.hash;
-    if (hash) {
-        // Delay in milliseconds (e.g., 1000 milliseconds = 1 second)
-        const delay = 1000;
-
-        setTimeout(() => {
-            const targetElement = document.querySelector(hash);
-            if (targetElement) {
-                targetElement.scrollIntoView({ behavior: 'smooth' });
-            }
-        }, delay);
-    }
-});
+   
 </script>
 
     {% endblock content %}

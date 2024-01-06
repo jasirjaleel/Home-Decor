@@ -72,3 +72,9 @@ def userlogout(request):
         logout(request)
         messages.success(request,("You Were Logged Out!"))
     return redirect('userlogin')
+
+def productdetails(request):
+    return render(request,'user_templates/productdetails.html')
+
+def shop(request):
+    return render(request,'user_templates/shop.html')
