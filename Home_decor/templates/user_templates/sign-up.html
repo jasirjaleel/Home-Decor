@@ -1,0 +1,184 @@
+{% extends 'user_templates/base.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- ...:::: Start Breadcrumb Section:::... -->
+    <div class="breadcrumb-section breadcrumb-bg-color--golden">
+        <div class="breadcrumb-wrapper">
+            <div class="container">
+                <div class="row ">
+                    <div class="col-12">
+                        <h3 class="breadcrumb-title">Register</h3>
+                        <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden" id="loadnow">
+                            <nav aria-label="breadcrumb">
+                                <ul>
+                                    <li><a href="index.html">Home</a></li>
+                                    <li><a href="shop-grid-sidebar-left.html">Shop</a></li>
+                                    <li class="active" aria-current="page">SignUp</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- ...:::: End Breadcrumb Section:::... -->
+
+    <!-- ...:::: Start Customer Login Section :::... -->
+    <div class="customer-login">
+        <div class="container">
+            <div class="row justify-content-between mb-4 flex-column align-items-center" >
+               
+                <!--register area start-->
+                <div class="col-lg-6 col-md-6">
+                    <div class="account_form register" data-aos="fade-up" data-aos-delay="200">
+                        <h3>Welcome !</h3>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <h3>
+                                <span>Register your account.</span>
+                            </h3>
+                            <div class="default-form-box"style="width: 90px; max-width: 600px; position: relative;">
+                                <input type="text" class="mt-3" id="username-field" placeholder="Username" name="username" autocomplete="off" required style="display: block; width: 528px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
+                                <span id="username-error" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
+                            </div>
+                            <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;">
+                                <input type="email" class="mt-" id="email-field" name="email" placeholder="Email" autocomplete="off" required style="display: block; width: 528px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;" onkeyup="validateEmail()">
+                                <span id="email-error" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
+                            </div>
+                            <div class="default-form-box">
+                                <!-- <label>Password<span>*</span></label> -->
+                                <input type="password" class="mt-1" id="password-field" placeholder="Password" name="password1" required>
+                                <span id="password-error" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;"></span>
+                            </div>
+                            <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;">
+                                <!-- <label>Confirm Password<span>*</span></label> -->
+                                <input type="password" class="mt-3" id="password2-field" placeholder="Confirm Password" name="password2" required style="display: block; width: 528px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
+                                <span id="password2-error" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;"></span>
+                            </div>
+                            <div class="login_submit pt-4">
+                                <button class="btn  btn-black-default-hover  w-25" type="submit">Sign Up</button>
+                            </div>
+                            <div class="mt-3"><h4>Already have an account? <a href="{% url 'userlogin' %}" class="text-decoration-none">Login</a></h4></div>
+                    </div>
+                </div>
+                <!--register area end-->
+            </div>
+        </div>
+    </div> <!-- ...:::: End Customer Login Section :::... -->
+<script>
+    var usernameField = document.getElementById("username-field");
+    var usernameError = document.getElementById("username-error");
+    var emailField = document.getElementById("email-field");
+    var emailError = document.getElementById("email-error");
+    var passwordField = document.getElementById("password-field");
+    // var PasswordError = document.getElementById("password-error");
+    var password2Field = document.getElementById("password2-field");
+    var password2Error = document.getElementById("password2-error");
+
+    function validateEmail() {
+        if (!emailField.value.match(/^[A-Za-z\._\-0-9]*[@][A-Za-z]*[\.][a-z]{2,4}$/)) {
+            emailError.innerHTML = "Please enter a valid email";
+            emailError.style.opacity = "1"; // Make the error message visible
+            return false;
+        }
+
+        emailError.innerHTML = "";
+        emailError.style.opacity = "0"; // Hide the error message
+        return true;
+    }
+
+
+    function validatePasswordMatch() {
+        // Check if the passwords match
+        if (passwordField.value !== password2Field.value) {
+            password2Error.innerHTML = "Passwords do not match";
+            password2Error.style.opacity = "1"; // Make the error message visible
+        } else {
+            // Clear the error message if the passwords match
+            password2Error.innerHTML = "";
+            password2Error.style.opacity = "0"; // Hide the error message
+        }
+    }
+
+    // Add an event listener for the 'input' event on both password fields
+    passwordField.addEventListener('input', validatePasswordMatch);
+    password2Field.addEventListener('input', validatePasswordMatch);
+
+    // Add an event listener for the 'focus' event on the confirm password field
+    password2Field.addEventListener('focus', function () {
+        validatePasswordMatch(); // Validate on focus
+    });
+
+    // Add an event listener for the 'blur' event on the confirm password field
+    password2Field.addEventListener('blur', function () {
+        // Clear the error message when the field loses focus
+        password2Error.innerHTML = "";
+        password2Error.style.opacity = "0";
+    });
+    // Add an event listener for the 'input' event
+    emailField.addEventListener('input', validateEmail);
+
+    // Add an event listener for the 'focus' event
+    emailField.addEventListener('focus', function () {
+        emailError.style.transition = "opacity 0.5s"; // Add a smooth transition
+        emailError.style.opacity = "0"; // Show the error message when focused
+    });
+
+    // Add an event listener for the 'blur' event
+    emailField.addEventListener('blur', function () {
+        // Adjust the opacity based on whether there's an error or not
+        if (emailError.innerHTML.trim()) {
+            emailError.style.opacity = "1"; // Show the error message if there's an error
+        } else {
+            emailError.style.opacity = "0"; // Hide the error message if there's no error
+        }
+        // Reset the transition after blur
+        emailError.style.transition = "none";
+    });
+    
+    function validateUsername() {
+        // Check if the username field is empty
+        if (usernameField.value.trim() === "") {
+            usernameError.innerHTML = "Please fill in this field";
+            usernameError.style.opacity = "1"; // Make the error message visible
+        } else {
+            // Clear the error message if the field is filled
+            usernameError.innerHTML = "";
+            usernameError.style.opacity = "0"; // Hide the error message
+        }
+    }
+
+    // Add an event listener for the 'input' event on the username field
+    usernameField.addEventListener('input', validateUsername);
+
+    // Add an event listener for the 'focus' event on the username field
+    usernameField.addEventListener('focus', function () {
+        validateUsername(); // Validate on focus
+    });
+
+    // Add an event listener for the 'blur' event on the username field
+    usernameField.addEventListener('blur', function () {
+        // Clear the error message when the field loses focus
+        usernameError.innerHTML = "";
+        usernameError.style.opacity = "0";
+    });
+
+
+    window.addEventListener('DOMContentLoaded', (event) => {
+    const hash = window.location.hash;
+    if (hash) {
+        // Delay in milliseconds (e.g., 1000 milliseconds = 1 second)
+        const delay = 1000;
+
+        setTimeout(() => {
+            const targetElement = document.querySelector(hash);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, delay);
+    }
+});
+</script>
+
+    {% endblock content %}

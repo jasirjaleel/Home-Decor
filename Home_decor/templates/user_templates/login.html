@@ -1,0 +1,74 @@
+{% extends 'user_templates/base.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- ...:::: Start Breadcrumb Section:::... -->
+    <div class="breadcrumb-section breadcrumb-bg-color--golden">
+        <div class="breadcrumb-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="breadcrumb-title">Login</h3>
+                        <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
+                            <nav aria-label="breadcrumb">
+                                <ul>
+                                    <li><a href="index.html">Home</a></li>
+                                    <li><a href="shop-grid-sidebar-left.html">Shop</a></li>
+                                    <li class="active" aria-current="page">Login</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- ...:::: End Breadcrumb Section:::... -->
+
+    <!-- ...:::: Start Customer Login Section :::... -->
+    <div class="customer-login">
+        <div class="container">
+            <div class="row justify-content-between mb-4 flex-column align-items-center">
+                <!--login area start-->
+                <div class="col-lg-6 col-md-6">
+                    <div class="account_form" data-aos="fade-up" data-aos-delay="0">
+
+                            <form method="POST">
+                                <h3>Welcome !</h3>
+                                {% csrf_token %}
+                                <h3>
+                                    <span>Login to your account.</span>
+                                </h3>
+                                <div class="default-form-box">
+                                    <input type="text" class="mt-3" placeholder="Username" name="username" autocomplete="off">
+                                </div>
+                                <div class="default-form-box">
+                                    <input type="password" class="mt-3" placeholder="Password" name="password" required>
+                                </div>
+                                <div class="login_submit">
+                                    <div class="d-flex flex-row gap-40">
+                                       <div class="d-flex align-items-center">    
+                                            <!-- <label class="checkbox-default d-flex align-items-center">
+                                                <input type="checkbox"  >
+                                                <div class="d-flex align-items-center ">Remember me</div>
+                                            </label> -->
+                                        </div>
+                                        <div class="d-flex  ">
+                                            <a href="#" class="">Forget password?</a>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-black-default-hover m-4 w-25" type="submit">login</button>
+    
+                                </div>
+                                <div class="mt-3"><h5>Don't have an account? <a href="{% url 'usersignup' %}"  class="text-decoration-none">Register</a></h5></div>
+                        </form>
+                    </div>
+                </div>
+                <!--login area start-->
+
+              
+            </div>
+        </div>
+    </div> <!-- ...:::: End Customer Login Section :::... -->
+    
+
+    {% endblock content %}
