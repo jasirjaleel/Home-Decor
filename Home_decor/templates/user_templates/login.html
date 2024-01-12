@@ -39,11 +39,17 @@
                                     <span>Login to your account.</span>
                                 </h3>
                                 <div class="default-form-box">
-                                    <input type="text" class="mt-3" placeholder="Username" name="username" autocomplete="off">
+                                    <input type="email" class="mt-3" placeholder="Email" name="email" autocomplete="off">
                                 </div>
                                 <div class="default-form-box">
                                     <input type="password" class="mt-3" placeholder="Password" name="password" required>
+                                    {% if messages %}
+                                    {% for message in messages %}
+                                    <span class="error" style="top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">{{message}}</span>
+                                    {% endfor %}
+                                    {% endif %}
                                 </div>
+                                
                                 <div class="login_submit">
                                     <div class="d-flex flex-row gap-40">
                                        <div class="d-flex align-items-center">    

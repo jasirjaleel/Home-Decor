@@ -1,0 +1,54 @@
+{% extends 'admin_templates/base.html' %}
+{% load static %}
+{% block content %}
+<section class="content-main">
+    <div class="row">
+        <div class="col-9">
+            <div class="content-header">
+                <h2 class="content-title">Add New Category</h2>
+                
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>General Information</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'addcategory' %}">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="product_name" class="form-label">Category Name</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="product_name" name="category_name" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Full description</label>
+                            <textarea placeholder="Type here" class="form-control" name="category_description" rows="4" required></textarea>
+                        </div>
+                        <div>
+                            
+                            <button class="btn btn-md rounded font-sm hover-up" type="submit">Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div> <!-- card end// -->
+            
+        </div>
+        {% comment %}
+        <div class="col-lg-3">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>Media</h4>
+                </div>
+                <div class="card-body">
+                    <div class="input-upload">
+                        <img src="{% static 'assets/imgs/theme/upload.svg' %}" alt="">
+                        <input class="form-control" type="file">
+                    </div>
+                </div>
+            </div> <!-- card end// -->
+        </div>
+        {% endcomment %}
+    </div>
+</section> <!-- content-main end// -->
+{% endblock content %}

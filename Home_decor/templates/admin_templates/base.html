@@ -6,7 +6,7 @@
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:32:35 GMT -->
 <head>
     <meta charset="utf-8">
-    <title>Evara Dashboard</title>
+    <title>Home Decor Dashboard</title>
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -106,14 +106,30 @@
                             <!-- <i class="icon material-icons md-add_box"></i> -->
                             <span class="text">User Details</span>
                         </a>
-                       
                     </div>
                 </li>
-                <li class="menu-item {% if request.path == '/admin/category-management/' %}active{% endif %}">
+                <!-- <li class="menu-item {% if request.path == '/admin/category-management/' %}active{% endif %}">
                     <a class="menu-link " href="{% url 'categorymanagement' %}"> <img src="{% static 'assets/images/icon/categorypng' %}" alt="">
                         <span class="text">Category</span>
                     </a>
+                </li> -->
+
+                <li class="menu-item has-submenu  {% if request.path == '/admin/category-management/' or request.path == '/admin/add-category/' %}active{% endif %}" >
+                    <a class="menu-link " > <i class="icon material-icons md-people"></i>
+                        <span class="text">Category</span>
+                    </a>
+                    <div class="submenu">
+                        <a class="{% if request.path == '/admin/category-management/' %}active{% endif %}  p-2" href="{% url 'categorymanagement' %}">
+                            <!-- <i class="icon material-icons md-people"></i> -->
+                            <span class="text">Category List</span>
+                        </a>
+                        <a class="{% if request.path == '/admin/add-category/' %}active{% endif %} p-2" href="{% url 'addcategory' %}"> 
+                            <!-- <i class="icon material-icons md-add_box"></i> -->
+                            <span class="text">Add Category</span>
+                        </a>
+                    </div>
                 </li>
+
                 <!-- <li class="menu-item has-submenu">
                     <a class="menu-link" href="page-transactions-1.html"> <i class="icon material-icons md-monetization_on"></i>
                         <span class="text">Transactions</span>

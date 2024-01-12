@@ -1,0 +1,95 @@
+        {% extends 'admin_templates/base.html' %}
+        {% load static %}
+        {% block content %}
+        <section class="content-main">
+            <div class="row">
+                <div class="col-9">
+                    <div class="content-header">
+                    <form method="post" action="{% url 'addproduct' %}" enctype="multipart/form-data">{% csrf_token %}
+                        <h2 class="content-title" >Add Product</h2>
+                        
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Basic</h4>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="mb-4">
+                                    <label for="product_name" class="form-label">Product Name</label>
+                                    <input type="text" placeholder="Type here" class="form-control" id="product_name" name="product_name" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Full description</label>
+                                    <textarea placeholder="Type here" class="form-control" name="description" rows="4" required></textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="mb-4">
+                                            <label class="form-label">Product Price</label>
+                                            <div class="row gx-2">
+                                                <input placeholder="$" type="text" name="price" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-4">
+                                            <label class="form-label">Product Stock</label>
+                                            <div class="row gx-2">
+                                                <input  type="number" name="stock" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% comment %} <label for="product_slug">Product Slug:</label>
+                                    <input type="text" id="product_slug" name="product_slug" required><br> {% endcomment %}
+                    
+                                </div>
+                                <div>
+                                    <!-- <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button> -->
+                                    <button class="btn btn-md rounded font-sm hover-up" type="submit">Add</button>
+                                </div>
+                            
+                        </div>
+                    </div> <!-- card end// -->
+                
+                </div>
+                <div class="col-lg-3">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Product Image</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="input-upload">
+                                <img src="" alt="">
+                                <input class="form-control" type="file"name="image" accept="image/*" required>
+                            </div>
+                        </div>
+                    </div> <!-- card end// -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Category</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-6 mb-3">
+                                    <select class="form-select"  aria-label="Default select example" name="category_id">
+                                        <option selected disabled>Select Category</option>
+                                        {%for category in categories%}
+                                        <option value="{{category.id}}">{{category.category_name}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+                            </form>   
+                                
+                            </div> <!-- row.// -->
+                        </div>
+                    </div> <!-- card end// -->
+                </div>
+            </div>
+        </section> <!-- content-main end// -->
+
+        {% endblock content %}
+
+        

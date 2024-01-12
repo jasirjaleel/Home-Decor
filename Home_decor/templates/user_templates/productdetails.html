@@ -12,22 +12,22 @@
                         <div class="product-large-image product-large-image-vartical swiper-container ml-5">
                             <div class="swiper-wrapper">
                                 <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img src="{% static 'assets/images/product/default/home-1/default-1.jpg' %}" alt="">
+                                    <img src="{{ products.images.url }}" alt="">
                                 </div>
                                 <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img src="{% static 'assets/images/product/default/home-1/default-2.jpg' %}" alt="">
+                                    <img src="{{ products.images.url }}" alt="">
                                 </div>
                                 <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img src="{% static 'assets/images/product/default/home-1/default-3.jpg' %}" alt="">
+                                    <img src="{{ products.images.url }}" alt="">
                                 </div>
                                 <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img src="{% static 'assets/images/product/default/home-1/default-4.jpg' %}" alt="">
+                                    <img src="{{ products.images.url }}" alt="">
                                 </div>
                                 <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img src="{% static 'assets/images/product/default/home-1/default-5.jpg' %}" alt="">
+                                    <img src="{{ products.images.url }}" alt="">
                                 </div>
                                 <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img src="{% static 'assets/images/product/default/home-1/default-6.jpg' %}" alt="">
+                                    <img src="{{ products.images.url }}" alt="">
                                 </div>
                             </div>
                         </div>
@@ -36,19 +36,19 @@
                         <div class="product-image-thumb product-image-thumb-vartical swiper-container pos-relative">
                             <div class="swiper-wrapper">
                                 <div class="product-image-thumb-single swiper-slide">
-                                    <img class="img-fluid" src="{% static 'assets/images/product/default/home-1/default-1.jpg' %}"
+                                    <img class="img-fluid" src="{{ products.images.url }}"
                                         alt="">
                                 </div>
                                 <div class="product-image-thumb-single swiper-slide">
-                                    <img class="img-fluid" src="{% static 'assets/images/product/default/home-1/default-2.jpg' %}"
+                                    <img class="img-fluid" src="{{ products.images.url }}"
                                         alt="">
                                 </div>
                                 <div class="product-image-thumb-single swiper-slide">
-                                    <img class="img-fluid" src="{% static 'assets/images/product/default/home-1/default-3.jpg' %}"
+                                    <img class="img-fluid" src="{{ products.images.url }}"
                                         alt="">
                                 </div>
                                 <div class="product-image-thumb-single swiper-slide">
-                                    <img class="img-fluid" src="{% static 'assets/images/product/default/home-1/default-4.jpg' %}"
+                                    <img class="img-fluid" src="{{ products.images.url }}"
                                         alt="">
                                 </div>
                             </div>
@@ -61,7 +61,7 @@
                         data-aos-delay="200">
                         <!-- Start  Product Details Text Area-->
                         <div class="product-details-text">
-                            <h4 class="title">Ornare sed consequat</h4>
+                            <h4 class="title">{{products.product_name}} </h4>
                             <div class="d-flex align-items-center">
                                 <ul class="review-star">
                                     <li class="fill"><i class="ion-android-star"></i></li>
@@ -72,21 +72,18 @@
                                 </ul>
                                 <a href="#" class="customer-review ml-2">(customer review )</a>
                             </div>
-                            <div class="price">$80.00</div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est
-                                tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare lectus quis
-                                justo gravida semper. Nulla tellus mi, vulputate adipiscing
-                                cursus eu, suscipit id nulla.</p>
+                            <div class="price">{{products.price}}</div>
+                            <p>{{products.description}}</p>
                         </div>
                         <!-- End  Product Details Text Area-->
                         <!-- Start Product Variable Area -->
                         <div class="product-details-variable">
                             <h4 class="title">Available Options</h4>
                             <!-- Product Variable Single Item -->
-                            <div class="variable-single-item">
+                            <!-- <div class="variable-single-item">
                                 <div class="product-stock"> <span class="product-stock-in"><i
                                             class="ion-checkmark-circled"></i></span> 200 IN STOCK</div>
-                            </div>
+                            </div> -->
                             <!-- Product Variable Single Item -->
                             <div class="variable-single-item">
                                 <span>Color</span>

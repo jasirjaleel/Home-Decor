@@ -24,6 +24,7 @@ urlpatterns = [
     path('djadmin/', admin.site.urls),
     path('admin/',include('admin_app.urls')),
     path('',include('user_app.urls')),
+    path('',include('cart_app.urls')),
 ]
 
 if settings.DEBUG:

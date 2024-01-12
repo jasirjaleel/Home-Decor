@@ -9,7 +9,7 @@
                 <div class="row ">
                     <div class="col-12">
                         <h3 class="breadcrumb-title">Register</h3>
-                        <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden" id="loadnow">
+                        <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden" >
                             <nav aria-label="breadcrumb">
                                 <ul>
                                     <li><a href="index.html">Home</a></li>
@@ -33,139 +33,282 @@
                 <div class="col-lg-6 col-md-6">
                     <div class="account_form register" data-aos="fade-up" data-aos-delay="200">
                         <h3>Welcome !</h3>
-                        <form method="POST">
+                      
+                        <form method="post" id="form" action="{% url 'usersignup' %}">
                             {% csrf_token %}
                             <h3>
                                 <span>Register your account.</span>
                             </h3>
-                            <div class="default-form-box"style="width: 90px; max-width: 600px; position: relative;">
-                                <input type="text" class="mt-3" id="username-field" placeholder="Username" name="username" autocomplete="off" required style="display: block; width: 528px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
-                                <span id="username-error" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
+                            <div class="d-flex " style="gap: 178px; width: 260;">
+                                <div class="default-form-box"style="width: 90px; max-width: 600px; position: relative;">
+                                    <input type="text" class="mt-3" id="firstname" placeholder="First Name" name="firstname" autocomplete="off"  style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
+                                </div>
+                                <div class="default-form-box"style="width: 90px; max-width: 600px; position: relative;">
+                                    <input type="text" class="mt-3" id="lastname" placeholder="Last Name" name="lastname" autocomplete="off"  style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
+                                </div>
                             </div>
-                            <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;">
-                                <input type="email" class="mt-" id="email-field" name="email" placeholder="Email" autocomplete="off" required style="display: block; width: 528px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;" onkeyup="validateEmail()">
-                                <span id="email-error" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
+                            <div class="d-flex " style="gap: 178px; width: 260;">
+                                <div class="default-form-box"style="width: 90px; max-width: 600px; position: relative;">
+                                    <input type="text" class="mt-3" id="username" onkeyup="validName()" placeholder="Username" name="username" autocomplete="off"  style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span id="names" class="text-danger"style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;" ></span>
+                                    <!-- <span class="error" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span> -->
+                                </div>
+                                <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;margin-top: 15px;">
+                                    <input type="text" class="mt-" id="email" name="email" placeholder="Email" autocomplete="off"  style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;" >
+                                    <span class="error" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
+                                </div>
                             </div>
-                            <div class="default-form-box">
-                                <!-- <label>Password<span>*</span></label> -->
-                                <input type="password" class="mt-1" id="password-field" placeholder="Password" name="password1" required>
-                                <span id="password-error" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;"></span>
-                            </div>
-                            <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;">
-                                <!-- <label>Confirm Password<span>*</span></label> -->
-                                <input type="password" class="mt-3" id="password2-field" placeholder="Confirm Password" name="password2" required style="display: block; width: 528px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
-                                <span id="password2-error" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;"></span>
+                            <div class="d-flex " style="gap: 178px; width: 260;">
+                                <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;margin-top: 5px;">
+                                   
+                                    <input type="password" class="mt-1" id="password" placeholder="Password" name="password1" style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;"></span>
+                                </div>
+                                <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;margin-top: 5px;">
+                                   
+                                    <input type="password" class="mt-1" id="password2" placeholder="Confirm Password" name="password2" style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;"></span>
+                                </div>
                             </div>
                             <div class="login_submit pt-4">
-                                <button class="btn  btn-black-default-hover  w-25" type="submit">Sign Up</button>
+                                <button class="btn  btn-black-default-hover  w-25" onclick="return validation()" type="submit">Sign Up</button>
                             </div>
                             <div class="mt-3"><h4>Already have an account? <a href="{% url 'userlogin' %}" class="text-decoration-none">Login</a></h4></div>
-                    </div>
+                        </form>
+                      </div>
                 </div>
                 <!--register area end-->
             </div>
         </div>
     </div> <!-- ...:::: End Customer Login Section :::... -->
-<script>
-    var usernameField = document.getElementById("username-field");
-    var usernameError = document.getElementById("username-error");
-    var emailField = document.getElementById("email-field");
-    var emailError = document.getElementById("email-error");
-    var passwordField = document.getElementById("password-field");
-    // var PasswordError = document.getElementById("password-error");
-    var password2Field = document.getElementById("password2-field");
-    var password2Error = document.getElementById("password2-error");
 
-    function validateEmail() {
-        if (!emailField.value.match(/^[A-Za-z\._\-0-9]*[@][A-Za-z]*[\.][a-z]{2,4}$/)) {
-            emailError.innerHTML = "Please enter a valid email";
-            emailError.style.opacity = "1"; // Make the error message visible
-            return false;
-        }
+<!-- 
+    <script>
+        
 
-        emailError.innerHTML = "";
-        emailError.style.opacity = "0"; // Hide the error message
-        return true;
+        // validation
+//         const Form = document.getElementById('form');
+// const username = document.getElementById('username');
+// const email = document.getElementById('email');
+// const password = document.getElementById('password');
+// const password2 = document.getElementById('password2');
+// const firstname = document.getElementById('firstname');
+// const lastname = document.getElementById('lastname');
+
+    //     var Name = document.getElementById('names')
+    //     var Fname = document.getElementById('firstname')
+    //     var Lname = document.getElementById('lastname')
+    //     var Email = document.getElementById('email')
+    //     var Password = document.getElementById('password')
+    //     // var Phone = document.getElementById('phones')
+
+    //     function validEmail() {
+    //         const email = document.getElementById('email').value
+    //         if (email == "") {
+    //             Email.innerHTML = "enter your email address"
+    //             return false
+    //         }
+    //         if (!email.match(/^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/)) {
+    //             Email.innerHTML = 'enter a proper email adress'
+    //             return false
+    //         }
+    //         Email.innerHTML = null
+    //         return true
+    //     }  
+
+    //     function validName() {
+            
+    //         const name = document.getElementById('username').value;
+    //         if (name == "") {
+    //             Name.innerHTML = 'Enter your Name'
+    //             return false
+    //         }
+    //         if (!name.match(/^[a-zA-Z\s-, ]+$/)) {
+    //             Name.innerHTML = 'Numbers and symbols are not allowed'
+    //             return false
+    //         }
+    //         if(name.length < 3){
+    //             Name.innerHTML = "Name must be three characters long"
+    //             return false
+    //         }
+    //         Name.innerHTML = null
+    //         return true
+    //     }
+        
+    //     function validFname() {
+            
+    //         const fname = document.getElementById('firstname').value;
+    //         if (fname == "") {
+    //             Name.innerHTML = 'Enter your Fname'
+    //             return false
+    //         }
+    //         if (!fname.match(/^[a-zA-Z\s-, ]+$/)) {
+    //             Name.innerHTML = 'Numbers and symbols are not allowed'
+    //             return false
+    //         }
+    //         if(fname.length < 3){
+    //             Name.innerHTML = "Name must be three characters long"
+    //             return false
+    //         }
+    //         fname.innerHTML = null
+    //         return true
+    //     }
+
+    //     function validLname() {
+            
+    //         const lname = document.getElementById('lastname').value;
+    //         if (lname == "") {
+    //             Lname.innerHTML = 'Enter your Fname'
+    //             return false
+    //         }
+    //         if (!lname.match(/^[a-zA-Z\s-, ]+$/)) {
+    //             Lname.innerHTML = 'Numbers and symbols are not allowed'
+    //             return false
+    //         }
+    //         if(lname.length < 3){
+    //             Lname.innerHTML = "Name must be three characters long"
+    //             return false
+    //         }
+    //         lname.innerHTML = null
+    //         return true
+    //     }
+
+    //     function validPassowrd() {
+    //         const password = document.getElementById('password').value
+    //         if (password == "") {
+    //             Password.innerHTML = "enter password"
+    //             return false
+    //         }
+    //         if (password.length < 6) {
+    //             Password.innerHTML = "password should be more than six characters"
+    //             return false
+    //         }
+    //         Password.innerHTML = null
+    //         return true
+    //     }
+    //     function validation() {
+    //         if (!validEmail() && !validName() && !validPassowrd() && !validPhone()) {
+    //             return false
+    //         } else if (!validEmail() || !validName() || !validPassowrd() || !validPhone() ) {
+    //             return false
+    //         }else { return true }
+    //     }
+
+
+     </script>  -->
+
+
+<!-- <script>
+const Form = document.getElementById('form');
+const username = document.getElementById('username');
+const email = document.getElementById('email');
+const password = document.getElementById('password');
+const password2 = document.getElementById('password2');
+const firstname = document.getElementById('firstname');
+const lastname = document.getElementById('lastname');
+
+// form.addEventListener('submit', e => {
+//     validateInputs();
+//     e.preventDefault();
+// });
+
+
+
+const setError = (element, message) => {
+    const inputControl = element.parentElement;
+    const errorDisplay = inputControl.querySelector('.error');
+
+    errorDisplay.innerText = message;
+    inputControl.classList.add('error');
+    inputControl.classList.remove('success')
+}
+
+const setSuccess = element => {
+    const inputControl = element.parentElement;
+    const errorDisplay = inputControl.querySelector('.error');
+
+    errorDisplay.innerText = '';
+    inputControl.classList.add('success');
+    inputControl.classList.remove('error');
+};
+
+const isValidEmail = email => {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+const validateInputs = () => {
+    // e.preventDefault()
+    const usernameValue = username.value.trim();
+    const emailValue = email.value.trim();
+    const passwordValue = password.value.trim();
+    const password2Value = password2.value.trim();
+    const firstnameValue = firstname.value.trim();
+    const lastnameValue = lastname.value.trim();
+
+    if(usernameValue === '') {
+        setError(username, 'Username is required');
+    } else {
+        setSuccess(username);
+    }
+
+    if(emailValue === '') {
+        setError(email, 'Email is required');
+    } else if (!isValidEmail(emailValue)) {
+        setError(email, 'Provide a valid email address');
+    } else {
+        setSuccess(email);
+    }
+
+    if(passwordValue === '') {
+        setError(password, 'Password is required');
+    } else if (passwordValue.length < 3 ) {
+        setError(password, 'Password must be at least 8 character.')
+    } else {
+        setSuccess(password);
+    }
+
+    if(password2Value === '') {
+        setError(password2, 'Please confirm your password');
+    } else if (password2Value !== passwordValue) {
+        setError(password2, "Passwords doesn't match");
+    } else {
+        setSuccess(password2);
+    }
+
+    if(firstnameValue === '') {
+        setError(firstname, 'Please enter first name');
+    } else {
+        setSuccess(firstname);
+    }
+    if(lastnameValue === '') {
+        setError(lastname, 'Please enter last name');
+    } else {
+        setSuccess(lastname);
     }
 
 
-    function validatePasswordMatch() {
-        // Check if the passwords match
-        if (passwordField.value !== password2Field.value) {
-            password2Error.innerHTML = "Passwords do not match";
-            password2Error.style.opacity = "1"; // Make the error message visible
-        } else {
-            // Clear the error message if the passwords match
-            password2Error.innerHTML = "";
-            password2Error.style.opacity = "0"; // Hide the error message
-        }
-    }
-
-    // Add an event listener for the 'input' event on both password fields
-    passwordField.addEventListener('input', validatePasswordMatch);
-    password2Field.addEventListener('input', validatePasswordMatch);
-
-    // Add an event listener for the 'focus' event on the confirm password field
-    password2Field.addEventListener('focus', function () {
-        validatePasswordMatch(); // Validate on focus
-    });
-
-    // Add an event listener for the 'blur' event on the confirm password field
-    password2Field.addEventListener('blur', function () {
-        // Clear the error message when the field loses focus
-        password2Error.innerHTML = "";
-        password2Error.style.opacity = "0";
-    });
-    // Add an event listener for the 'input' event
-    emailField.addEventListener('input', validateEmail);
-
-    // Add an event listener for the 'focus' event
-    emailField.addEventListener('focus', function () {
-        emailError.style.transition = "opacity 0.5s"; // Add a smooth transition
-        emailError.style.opacity = "0"; // Show the error message when focused
-    });
-
-    // Add an event listener for the 'blur' event
-    emailField.addEventListener('blur', function () {
-        // Adjust the opacity based on whether there's an error or not
-        if (emailError.innerHTML.trim()) {
-            emailError.style.opacity = "1"; // Show the error message if there's an error
-        } else {
-            emailError.style.opacity = "0"; // Hide the error message if there's no error
-        }
-        // Reset the transition after blur
-        emailError.style.transition = "none";
-    });
+    alert('sd')
     
-    function validateUsername() {
-        // Check if the username field is empty
-        if (usernameField.value.trim() === "") {
-            usernameError.innerHTML = "Please fill in this field";
-            usernameError.style.opacity = "1"; // Make the error message visible
-        } else {
-            // Clear the error message if the field is filled
-            usernameError.innerHTML = "";
-            usernameError.style.opacity = "0"; // Hide the error message
-        }
-    }
+    // const hasErrors = document.querySelector('.error');
 
-    // Add an event listener for the 'input' event on the username field
-    usernameField.addEventListener('input', validateUsername);
-
-    // Add an event listener for the 'focus' event on the username field
-    usernameField.addEventListener('focus', function () {
-        validateUsername(); // Validate on focus
-    });
-
-    // Add an event listener for the 'blur' event on the username field
-    usernameField.addEventListener('blur', function () {
-        // Clear the error message when the field loses focus
-        usernameError.innerHTML = "";
-        usernameError.style.opacity = "0";
-    });
+    // // If there are errors, prevent form submission
+    // if (hasErrors) {
+    //     return;
+    // }
+    // Form.submit();
+};
 
 
-   
-</script>
+form.addEventListener('submit', e => {
+    e.preventDefault();
+    validateInputs();
+});
+
+// Form.addEventListener('submit', validateInputs);
+
+</script> -->
 
     {% endblock content %}
