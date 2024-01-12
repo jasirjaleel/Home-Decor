@@ -8,6 +8,23 @@ from .models import *
 from django.http import JsonResponse
 
 # Create your views here.
+
+def admin_login(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['password']
+        user = authenticate(email = email , password = password)
+        if user is not None and user.is_superadmin == True:
+            login(request, user)
+            messages.success(request,'Successfuly Logged in')
+            return redirect('adminhome')
+        else:
+            messages.error(request,'Bad Credentials!')
+            return render(request,'admin_templates/admin-login.html')
+    return render(request,'admin_templates/admin-login.html')
+
+        
+@login_required(login_url='admin_login')
 def adminhome(request):
     if request.user.is_authenticated and request.user.is_superadmin:
         return render(request,"admin_templates/index.html")
@@ -15,11 +32,11 @@ def adminhome(request):
     # return render(request,'admin_templates/index.html')
 
 @never_cache
-@login_required(login_url='userlogin')
+@login_required(login_url='admin_login')
 def adminlogout(request):
     logout(request)
     messages.success(request,'Successfuly Logged Out')
-    return redirect('adminhome')
+    return redirect('home')
 
 def productdetail(request):
     products = Product.objects.all().order_by('-id')
@@ -152,18 +169,18 @@ def addcategory(request):
 
 
 def blockuser(request, user_id):
-    user = Account.objects.get(id=user_id)
-    if request.user.is_authenticated and request.user == user:
+    user1 = Account.objects.get(id=user_id)
+    if user1.is_authenticated :
         logout(request)
-        request.session.flush()
-    user.is_blocked = True
-    user.save()
+        # request.session.flush()
+    user1.is_blocked = True
+    user1.save()
     # return JsonResponse({'message': 'User blocked successfully'})
     return redirect('user_management')
 
 def unblockuser(request, user_id):
     user = Account.objects.get(id=user_id)
-    user.is_blocked = False
+    user.is_blocked = not user.is_blocked 
     user.save()
     # return JsonResponse({'message': 'User unblocked successfully'})
     return redirect('user_management')

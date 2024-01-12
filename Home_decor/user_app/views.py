@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User
-from django.views.decorators.cache import never_cache
+from django.views.decorators.cache import never_cache,cache_control
 from django.contrib import messages
 from django.http import JsonResponse
 from admin_app.models import Product
@@ -81,20 +81,17 @@ def verify_otp(request):
 
 @never_cache
 def userlogin(request):
+    if request.user.is_authenticated:
+        return redirect('home')
     if request.method=="POST":
         email = request.POST.get('email')
         password = request.POST.get('password')  
         user = authenticate(email=email,password=password) 
-        if user is not None and  user.is_blocked == False:
+        if user is not None and  user.is_blocked == False and user.is_superadmin == False:
             login(request,user)
             return redirect('home')
-
-            # if request.user.is_superadmin:
-            #     return redirect("adminhome")
-            # else:
-            #     return redirect('home')
         elif user is not None and user.is_blocked == True:
-            messages.error(request,' 0_0ps You are Blocked!')
+            messages.error(request,'You are Blocked!')
             return redirect('userlogin')
 
         else:
