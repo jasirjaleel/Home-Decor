@@ -41,39 +41,39 @@
                             </h3>
                             <div class="d-flex " style="gap: 178px; width: 260;">
                                 <div class="default-form-box"style="width: 90px; max-width: 600px; position: relative;">
-                                    <input type="text" class="mt-3" id="firstname" placeholder="First Name" name="firstname" autocomplete="off"  style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
-                                    <span class="error" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
+                                    <input type="text" class="mt-3" id="firstname" placeholder="First Name" name="firstname" autocomplete="off" oninput="validateFname()" style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error"  id="fnameError" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
                                 </div>
                                 <div class="default-form-box"style="width: 90px; max-width: 600px; position: relative;">
-                                    <input type="text" class="mt-3" id="lastname" placeholder="Last Name" name="lastname" autocomplete="off"  style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
-                                    <span class="error" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
+                                    <input type="text" class="mt-3" id="lastname" placeholder="Last Name" name="lastname" autocomplete="off" oninput="validateLname()" style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error" id="lnameError" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
                                 </div>
                             </div>
                             <div class="d-flex " style="gap: 178px; width: 260;">
                                 <div class="default-form-box"style="width: 90px; max-width: 600px; position: relative;">
-                                    <input type="text" class="mt-3" id="username" onkeyup="validName()" placeholder="Username" name="username" autocomplete="off"  style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
-                                    <span id="names" class="text-danger"style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;" ></span>
-                                    <!-- <span class="error" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span> -->
+                                    <input type="text" class="mt-3" id="username"  placeholder="Username" name="username" autocomplete="off" oninput="validateName()" style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error" id="nameError" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
                                 </div>
                                 <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;margin-top: 15px;">
-                                    <input type="text" class="mt-" id="email" name="email" placeholder="Email" autocomplete="off"  style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;" >
-                                    <span class="error" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
+                                    <input type="text" class="mt-" id="email" name="email" placeholder="Email" autocomplete="off" oninput="validateEmail()" style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;" >
+                                    <span class="error"  id="emailError" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
                                 </div>
                             </div>
                             <div class="d-flex " style="gap: 178px; width: 260;">
                                 <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;margin-top: 5px;">
                                    
-                                    <input type="password" class="mt-1" id="password" placeholder="Password" name="password1" style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
-                                    <span class="error" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;"></span>
+                                    <input type="password" class="mt-1" id="password" placeholder="Password" name="password1" oninput="validatePassword()" style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error" id="passwordError" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;"></span>
                                 </div>
                                 <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;margin-top: 5px;">
                                    
-                                    <input type="password" class="mt-1" id="password2" placeholder="Confirm Password" name="password2" style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
-                                    <span class="error" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;"></span>
+                                    <input type="password" class="mt-1" id="password2" placeholder="Confirm Password" name="password2" oninput="validatePassword2()" style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <!-- <span class="error" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;"></span> -->
+                                    <span class="error" id="password2Error" style="position: absolute; top: 100%; left: 2px; font-size: 14px; font-weight: 400; color: red; width: 190px; transition: opacity 0.5s;"></span>
                                 </div>
                             </div>
                             <div class="login_submit pt-4">
-                                <button class="btn  btn-black-default-hover  w-25" onclick="return validation()" type="submit">Sign Up</button>
+                                <button class="btn  btn-black-default-hover  w-25"  type="submit">Sign Up</button>
                             </div>
                             <div class="mt-3"><h4>Already have an account? <a href="{% url 'userlogin' %}" class="text-decoration-none">Login</a></h4></div>
                         </form>
@@ -84,123 +84,10 @@
         </div>
     </div> <!-- ...:::: End Customer Login Section :::... -->
 
-<!-- 
-    <script>
-        
 
-        // validation
-//         const Form = document.getElementById('form');
-// const username = document.getElementById('username');
-// const email = document.getElementById('email');
-// const password = document.getElementById('password');
-// const password2 = document.getElementById('password2');
-// const firstname = document.getElementById('firstname');
-// const lastname = document.getElementById('lastname');
+   
 
-    //     var Name = document.getElementById('names')
-    //     var Fname = document.getElementById('firstname')
-    //     var Lname = document.getElementById('lastname')
-    //     var Email = document.getElementById('email')
-    //     var Password = document.getElementById('password')
-    //     // var Phone = document.getElementById('phones')
-
-    //     function validEmail() {
-    //         const email = document.getElementById('email').value
-    //         if (email == "") {
-    //             Email.innerHTML = "enter your email address"
-    //             return false
-    //         }
-    //         if (!email.match(/^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/)) {
-    //             Email.innerHTML = 'enter a proper email adress'
-    //             return false
-    //         }
-    //         Email.innerHTML = null
-    //         return true
-    //     }  
-
-    //     function validName() {
-            
-    //         const name = document.getElementById('username').value;
-    //         if (name == "") {
-    //             Name.innerHTML = 'Enter your Name'
-    //             return false
-    //         }
-    //         if (!name.match(/^[a-zA-Z\s-, ]+$/)) {
-    //             Name.innerHTML = 'Numbers and symbols are not allowed'
-    //             return false
-    //         }
-    //         if(name.length < 3){
-    //             Name.innerHTML = "Name must be three characters long"
-    //             return false
-    //         }
-    //         Name.innerHTML = null
-    //         return true
-    //     }
-        
-    //     function validFname() {
-            
-    //         const fname = document.getElementById('firstname').value;
-    //         if (fname == "") {
-    //             Name.innerHTML = 'Enter your Fname'
-    //             return false
-    //         }
-    //         if (!fname.match(/^[a-zA-Z\s-, ]+$/)) {
-    //             Name.innerHTML = 'Numbers and symbols are not allowed'
-    //             return false
-    //         }
-    //         if(fname.length < 3){
-    //             Name.innerHTML = "Name must be three characters long"
-    //             return false
-    //         }
-    //         fname.innerHTML = null
-    //         return true
-    //     }
-
-    //     function validLname() {
-            
-    //         const lname = document.getElementById('lastname').value;
-    //         if (lname == "") {
-    //             Lname.innerHTML = 'Enter your Fname'
-    //             return false
-    //         }
-    //         if (!lname.match(/^[a-zA-Z\s-, ]+$/)) {
-    //             Lname.innerHTML = 'Numbers and symbols are not allowed'
-    //             return false
-    //         }
-    //         if(lname.length < 3){
-    //             Lname.innerHTML = "Name must be three characters long"
-    //             return false
-    //         }
-    //         lname.innerHTML = null
-    //         return true
-    //     }
-
-    //     function validPassowrd() {
-    //         const password = document.getElementById('password').value
-    //         if (password == "") {
-    //             Password.innerHTML = "enter password"
-    //             return false
-    //         }
-    //         if (password.length < 6) {
-    //             Password.innerHTML = "password should be more than six characters"
-    //             return false
-    //         }
-    //         Password.innerHTML = null
-    //         return true
-    //     }
-    //     function validation() {
-    //         if (!validEmail() && !validName() && !validPassowrd() && !validPhone()) {
-    //             return false
-    //         } else if (!validEmail() || !validName() || !validPassowrd() || !validPhone() ) {
-    //             return false
-    //         }else { return true }
-    //     }
-
-
-     </script>  -->
-
-
-<!-- <script>
+ <!-- <script>
 const Form = document.getElementById('form');
 const username = document.getElementById('username');
 const email = document.getElementById('email');
@@ -209,10 +96,10 @@ const password2 = document.getElementById('password2');
 const firstname = document.getElementById('firstname');
 const lastname = document.getElementById('lastname');
 
-// form.addEventListener('submit', e => {
-//     validateInputs();
-//     e.preventDefault();
-// });
+form.addEventListener('submit', e => {
+    validateInputs();
+    e.preventDefault();
+});
 
 
 
@@ -302,13 +189,146 @@ const validateInputs = () => {
 };
 
 
-form.addEventListener('submit', e => {
-    e.preventDefault();
-    validateInputs();
-});
+// form.addEventListener('submit', e => {
+//     e.preventDefault();
+//     validateInputs();
+// });
 
 // Form.addEventListener('submit', validateInputs);
 
 </script> -->
+
+
+<script>
+    function validateName() {
+        const name = document.getElementById('username').value;
+        const nameError = document.getElementById('nameError');
+
+        if (name === "") {
+            nameError.innerHTML = 'Enter your Name';
+            return false;
+        }
+        if (!name.match(/^[a-zA-Z\s-, ]+$/)) {
+            nameError.innerHTML = 'Numbers and symbols are not allowed';
+            return false;
+        }
+        if (name.length < 3) {
+            nameError.innerHTML = "Must be three characters";
+            return false;
+        }
+        nameError.innerHTML = null;
+        return true;
+    }
+
+    function validateFname() {
+        const fname = document.getElementById('firstname').value;
+        const fnameError = document.getElementById('fnameError');
+
+        if (fname === "") {
+            fnameError.innerHTML = 'Enter your First Name';
+            return false;
+        }
+        if (!fname.match(/^[a-zA-Z\s-, ]+$/)) {
+            fnameError.innerHTML = 'Numbers and symbols are not allowed';
+            return false;
+        }
+        if (fname.length < 3) {
+            fnameError.innerHTML = "Must be three characters";
+            return false;
+        }
+        fnameError.innerHTML = null;
+        return true;
+    }
+
+    function validateLname() {
+        const lname = document.getElementById('lastname').value;
+        const lnameError = document.getElementById('lnameError');
+
+        if (lname === "") {
+            lnameError.innerHTML = 'Enter your Last Name';
+            return false;
+        }
+        if (!lname.match(/^[a-zA-Z\s-, ]+$/)) {
+            lnameError.innerHTML = 'Numbers and symbols are not allowed';
+            return false;
+        }
+        if (lname.length < 3) {
+            lnameError.innerHTML = "Must be three characters";
+            return false;
+        }
+        lnameError.innerHTML = null;
+        return true;
+    }
+
+    function validateEmail() {
+        const email = document.getElementById('email').value;
+        const emailError = document.getElementById('emailError');
+
+        if (email === "") {
+            emailError.innerHTML = "Enter your email address";
+            return false;
+        }
+        if (!email.match(/^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/)) {
+            emailError.innerHTML = 'Unvalid email address';
+            return false;
+        }
+        emailError.innerHTML = null;
+        return true;
+    }
+
+    function validatePassword() {
+        const password = document.getElementById('password').value;
+        const passwordError = document.getElementById('passwordError');
+
+        if (password === "") {
+            passwordError.innerHTML = "Enter password";
+            return false;
+        }
+        if (password.length < 6) {
+            passwordError.innerHTML = "Password should be more than six characters";
+            return false;
+        }
+        passwordError.innerHTML = null;
+        return true;
+    }
+
+
+    function validatePassword2() {
+        const password1 = document.getElementById('password').value;
+        const password2 = document.getElementById('password2').value;
+        const password2Error = document.getElementById('password2Error');
+
+        if (password2 === "") {
+            password2Error.innerHTML = "Confirm your password";
+            return false;
+        }
+        if (password1 !== password2) {
+            password2Error.innerHTML = "Passwords do not match";
+            return false;
+        }
+        password2Error.innerHTML = null;
+        return true;
+    }
+
+
+
+    function validation() {
+        const isValidName = validateName();
+        const isValidFname = validateFname();
+        const isValidLname = validateLname();
+        const isValidEmail = validateEmail();
+        const isValidPassword = validatePassword();
+        const isValidPassword2 = validatePassword2();
+        
+
+        return isValidName && isValidFname && isValidLname && isValidEmail && isValidPassword && isValidPassword2;
+    }
+
+//     form.addEventListener('submit', e => {
+//     e.preventDefault();
+   
+// });
+</script>
+
 
     {% endblock content %}

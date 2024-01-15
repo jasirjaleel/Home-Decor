@@ -96,6 +96,49 @@ def addproduct(request):
     return render(request,"admin_templates/addproduct.html",context)
 
 
+@never_cache
+@login_required(login_url='adminhome')
+def editproduct(request,product_id):
+    if request.method ==  "POST":
+
+        productname        = request.POST['product_name']
+        productslug        = slugify(productname)
+        productdescription = request.POST['description']
+        productprice       = request.POST['price']
+        productstock       = request.POST['stock']
+        productimages      = request.FILES.get('image')
+        productcategory    = request.POST['category_id']
+
+        category = Category.objects.get(id=productcategory)
+
+        product              = Product.objects.get(id=product_id)
+        product.product_name = productname
+        product.slug         = productslug
+        product.description  = productdescription
+        product.stock        = productstock
+        product.category     = category
+        product.price        = productprice
+        product.offerprice   = productprice
+
+        if productimages is not None:
+            product.images = productimages
+        product.save()
+        messages.success(request,'Successfully Saved')
+        return redirect('productdetail')
+
+        
+    category = Category.objects.all()
+
+
+    pros = Product.objects.get(id=product_id)
+    context = {
+        'product':pros,
+        'category':category,
+    }
+
+    return render(request,'admin_templates/editproduct.html',context)
+
+
 
 @never_cache
 @login_required(login_url='userlogin')
@@ -143,34 +186,9 @@ def addcategory(request):
         return redirect('categorymanagement')
     return render(request,'admin_templates/addcategory.html')
 
-
-# @never_cache
-# def blockuser(request):
-#     id = request.GET.get('user_id')
-#     user = Account.objects.get(id=id)
-#     if request.user.is_authenticated and request.user == user:
-#         logout(request)
-#         request.session.flush()
-#     user.is_blocked = True
-#     user.save()
-#     messages.success(request,'User is Successfully Blocked')
-#     return redirect('user_management')
-
-# @never_cache  
-# def unblockuser(request):
-#     id = request.GET.get('usr_id')
-
-#     user =  Account.objects.get(id=id)
-#     user.is_blocked = False
-#     user.save()
-#     messages.success(request,'User is unblocked ')
-#     return redirect('user_management')
-
-
-
 def blockuser(request, user_id):
     user1 = Account.objects.get(id=user_id)
-    if user1.is_authenticated :
+    if request.user.is_authenticated and request.user == user1:
         logout(request)
         # request.session.flush()
     user1.is_blocked = True

@@ -73,7 +73,7 @@
                             </div>
                             <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
 
-                                <a href="#" class="btn btn-sm font-sm rounded btn-brand">
+                                <a href="{% url 'editproduct' product_id=product.id %}" class="btn btn-sm font-sm rounded btn-brand">
                                     <i class="material-icons md-edit"></i>
                                 </a>
                                 {% if product.is_available   == True %}
