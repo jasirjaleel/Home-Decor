@@ -1,0 +1,269 @@
+{% extends 'user_templates/base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- ...:::: Start Breadcrumb Section:::... -->
+<div class="breadcrumb-section breadcrumb-bg-color--golden">
+    <div class="breadcrumb-wrapper">
+        <div class="container">
+            <div class="row ">
+                <div class="col-12">
+                    <h3 class="breadcrumb-title">Profile</h3>
+                    <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden" >
+                        <nav aria-label="breadcrumb">
+                            <ul>
+                                <li><a href="{% url 'home' %}">Home</a></li>
+                                <li><a href="{% url 'myaccount' %}">My Account</a></li>
+                                <li class="active" aria-current="page">My Profile</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- ...:::: End Breadcrumb Section:::... -->
+
+<div class="container" id="account-details">
+
+    <div
+        style="width: 1032px; height: 922.61px; flex-direction: column; justify-content: center; align-items: center; gap: 40px; display: inline-flex">
+        <!-- <div
+            style="height: 68.02px; padding-top: 29.02px; padding-right: 834.86px; justify-content: flex-start; align-items: center; display: inline-flex">
+            <div
+                style="width: 197.14px; height: 41px; color: #484848; font-size: 32px; font-weight: 800; line-height: 36px; word-wrap: break-word">
+                Personal info</div>
+        </div> -->
+        <div
+            style="align-self: stretch; height: 814.59px; padding-right: 8.02px; justify-content: flex-start; align-items: flex-start; gap: 95.33px; display: inline-flex">
+            <div
+                style="width: 611.33px; align-self: stretch; padding-bottom: 85.02px; padding-left: 8px; padding-right: 8px; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
+                <div
+                    style="align-self: stretch; height: 91px; padding-top: 24px; padding-bottom: 25px; border-bottom: 1px #EBEBEB solid; justify-content: center; align-items: center; display: inline-flex">
+                    <div
+                        style="width: 595.33px; height: 42px; position: relative; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex">
+                        <div
+                            style="width: 84.45px; height: 21px; color: #222222; font-size: 16px; font-weight: 400; line-height: 20px; word-wrap: break-word">
+                            Name</div>
+                        <div
+                            style="width: 26.12px; height: 18px; text-align: right; color: #222222; font-size: 14px; font-weight: 600; text-decoration: underline; line-height: 20.02px; word-wrap: break-word">
+                            Edit</div>
+                        <div
+                            style="color: #717171; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
+                            Peter Griffin</div>
+                    </div>
+                </div>
+                <div
+                    style="align-self: stretch; height: 91px; padding-top: 24px; padding-bottom: 25px; border-bottom: 1px #EBEBEB solid; justify-content: center; align-items: center; display: inline-flex">
+                    <div
+                        style="width: 595.33px; height: 42px; position: relative; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex">
+                        <div
+                            style="width: 101.01px; height: 21px; color: #222222; font-size: 16px; font-weight: 400; line-height: 20px; word-wrap: break-word">
+                            Email address</div>
+                        <div
+                            style="width: 26.12px; height: 18px; text-align: right; color: #222222; font-size: 14px; font-weight: 600; text-decoration: underline; line-height: 20.02px; word-wrap: break-word">
+                            Edit</div>
+                        <div
+                            style="color: #717171; font-size: 13px; font-weight: 400; line-height: 18px; word-wrap: break-word">
+                            wil***@gmail.com</div>
+                    </div>
+                </div>
+                <div
+                    style="align-self: stretch; height: 91px; padding-top: 24px; padding-bottom: 25px; border-bottom: 1px #EBEBEB solid; justify-content: center; align-items: center; display: inline-flex">
+                    <div
+                        style="width: 595.33px; height: 42px; position: relative; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex">
+                        <div
+                            style="width: 60.90px; height: 21px; color: #222222; font-size: 16px; font-weight: 400; line-height: 20px; word-wrap: break-word">
+                            Address</div>
+                        <div
+                            style="width: 26.12px; height: 18px; text-align: right; color: #222222; font-size: 14px; font-weight: 600; text-decoration: underline; line-height: 20.02px; word-wrap: break-word">
+                            Edit</div>
+                        <div
+                            style="width: 84.95px; height: 18px; color: #717171; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
+                            2 address</div>
+                    </div>
+                </div>
+                <div
+                    style="align-self: stretch; height: 109px; padding-top: 24px; padding-bottom: 25px; border-bottom: 1px #EBEBEB solid; justify-content: center; align-items: center; display: inline-flex">
+                    <div
+                        style="width: 595.33px; height: 60px; position: relative; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex">
+                        <div
+                            style="width: 115.14px; height: 21px; color: #222222; font-size: 16px; font-weight: 400; line-height: 20px; word-wrap: break-word">
+                            Phone number</div>
+                        <div
+                            style="width: 27.97px; height: 18px; text-align: right; color: #222222; font-size: 14px; font-weight: 600; text-decoration: underline; line-height: 20.02px; word-wrap: break-word">
+                            Add</div>
+                        <div
+                            style="width: 528.97px; height: 36px; color: #717171; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
+                            Add a contact number for seamless delivery coordination. Feel free to
+                            include extra numbers with specific purposes.</div>
+                    </div>
+                </div>
+                <div
+                    style="height: 97px; padding-top: 24px; padding-bottom: 13px; border-bottom: 1px #EBEBEB solid; justify-content: center; align-items: center; display: inline-flex">
+                    <div
+                        style="width: 595.33px; height: 60px; position: relative; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex">
+                        <div
+                            style="width: 115.14px; height: 21px; color: #222222; font-size: 16px; font-weight: 400; line-height: 20px; word-wrap: break-word">
+                            Date of Birth</div>
+                        <div
+                            style="width: 27.97px; height: 18px; text-align: right; color: #222222; font-size: 14px; font-weight: 600; text-decoration: underline; line-height: 20.02px; word-wrap: break-word">
+                            Edit</div>
+                        <div
+                            style="width: 528.97px; height: 36px; color: #717171; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
+                            05/03/2000</div>
+                    </div>
+                </div>
+            </div>
+            <div
+                style="width: 333.33px; align-self: stretch; padding-top: 25px; padding-bottom: 26.88px; padding-left: 25px; padding-right: 25px; border-radius: 12px; border: 1px #DDDDDD solid; flex-direction: column; justify-content: center; align-items: flex-start; gap: 33.88px; display: inline-flex">
+                <div style="height: 181.06px; position: relative">
+                    <div
+                        style="width: 270.87px; height: 43.88px; left: 0px; top: 137.19px; position: absolute; color: #717171; font-size: 16px; font-weight: 400; line-height: 22.88px; word-wrap: break-word">
+                        We’re hiding some account details to protect your identity.</div>
+                    <div
+                        style="width: 230.04px; height: 54.59px; left: 0px; top: 65px; position: absolute; color: #222222; font-size: 20px; font-weight: 800; line-height: 28.60px; word-wrap: break-word">
+                        Why isn’t my info shown here?</div>
+                    <div
+                        style="width: 48px; height: 48px; left: 0px; top: 0px; position: absolute; justify-content: center; align-items: center; display: inline-flex">
+                        <div
+                            style="flex: 1 1 0; align-self: stretch; padding-top: 1px; padding-bottom: 1px; padding-left: 3px; padding-right: 2px; justify-content: center; align-items: center; display: inline-flex">
+                            <div style="width: 43px; height: 46px; position: relative">
+                                <div
+                                    style="width: 38px; height: 46px; left: 5px; top: 0px; position: absolute">
+                                    <div
+                                        style="width: 30px; height: 37.72px; left: 4px; top: 4px; position: absolute; background: rgba(184, 142, 47, 0.50)">
+                                    </div>
+                                    <div
+                                        style="width: 38px; height: 46px; left: 0px; top: 0px; position: absolute; background: #AF831D">
+                                    </div>
+                                </div>
+                                <div
+                                    style="width: 24px; height: 32px; left: 0px; top: 13px; position: absolute">
+                                    <div
+                                        style="width: 24px; height: 22px; left: 0px; top: 10px; position: absolute; border: 2px #222222 solid">
+                                    </div>
+                                    <div
+                                        style="width: 12px; height: 11px; left: 6px; top: 0px; position: absolute; border: 2px #222222 solid">
+                                    </div>
+                                    <div
+                                        style="width: 4px; height: 4px; left: 10px; top: 19px; position: absolute; border: 2px #222222 solid">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="width: 283.33px; height: 1px; border-bottom: 1px #DDDDDD solid"></div>
+                <div style="width: 280.64px; flex: 1 1 0; position: relative">
+                    <div
+                        style="width: 280.64px; height: 135.38px; left: 0px; top: 108.59px; position: absolute; color: #717171; font-size: 16px; font-weight: 400; line-height: 22.88px; word-wrap: break-word">
+                        Home Decor uses to verify your identity can’t be changed. Contact info and
+                        some personal details can be edited, but we may ask you verify your identity
+                        the next time you book or create a listing.</div>
+                    <div
+                        style="width: 275.04px; height: 26px; left: 0px; top: 65px; position: absolute; color: #222222; font-size: 20px; font-weight: 800; line-height: 28.60px; word-wrap: break-word">
+                        Which details can be edited?</div>
+                    <div
+                        style="width: 48px; height: 48px; left: 0px; top: 0px; position: absolute; justify-content: center; align-items: center; display: inline-flex">
+                        <div
+                            style="flex: 1 1 0; align-self: stretch; padding-left: 5px; padding-right: 5px; justify-content: center; align-items: center; display: inline-flex">
+                            <div style="width: 38px; height: 48px; position: relative">
+                                <div
+                                    style="width: 30px; height: 28px; left: 4px; top: 16px; position: absolute; background: rgba(184, 142, 47, 0.50)">
+                                </div>
+                                <div
+                                    style="width: 38px; height: 48px; left: 0px; top: 0px; position: absolute; background: #B88E2F">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="width: 283.33px; height: 1px; border-bottom: 1px #DDDDDD solid"></div>
+                <div style="height: 203.94px; position: relative">
+                    <div
+                        style="width: 280.20px; height: 66.75px; left: 0px; top: 137.19px; position: absolute; color: #717171; font-size: 16px; font-weight: 400; line-height: 22.88px; word-wrap: break-word">
+                        Home Decor only releases contact information for Hosts and guests after a
+                        reservation is confirmed.</div>
+                    <div
+                        style="width: 228.82px; height: 54.59px; left: 0px; top: 65px; position: absolute; color: #222222; font-size: 20px; font-weight: 800; line-height: 28.60px; word-wrap: break-word">
+                        What info is shared with others?</div>
+                    <div
+                        style="width: 48px; height: 48px; left: 0px; top: 0px; position: absolute; justify-content: center; align-items: center; display: inline-flex">
+                        <div
+                            style="flex: 1 1 0; align-self: stretch; padding-left: 0.52px; padding-right: 0.52px; padding-top: 5px; padding-bottom: 5px; justify-content: center; align-items: center; display: inline-flex">
+                            <div style="width: 46.96px; height: 38px; position: relative">
+                                <div
+                                    style="width: 38.74px; height: 30px; left: 4.11px; top: 4px; position: absolute; background: rgba(184, 142, 47, 0.50)">
+                                </div>
+                                <div
+                                    style="width: 46.96px; height: 38px; left: 0px; top: 0px; position: absolute; background: #AF831D">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <h3>Account details </h3>
+        <div class="login">
+            <div class="login_form_container">
+                <div class="account_login_form">
+                    <form action="#">
+                        <p>Already have an account? <a href="#">Log in instead!</a></p>
+                        <div class="input-radio">
+                            <span class="custom-radio"><input type="radio" value="1"
+                                    name="id_gender"> Mr.</span>
+                            <span class="custom-radio"><input type="radio" value="1"
+                                    name="id_gender"> Mrs.</span>
+                        </div> <br>
+                        <div class="default-form-box mb-20">
+                            <label>First Name</label>
+                            <input type="text" name="first-name">
+                        </div>
+                        <div class="default-form-box mb-20">
+                            <label>Last Name</label>
+                            <input type="text" name="last-name">
+                        </div>
+                        <div class="default-form-box mb-20">
+                            <label>Email</label>
+                            <input type="text" name="email-name">
+                        </div>
+                        <div class="default-form-box mb-20">
+                            <label>Password</label>
+                            <input type="password" name="user-password">
+                        </div>
+                        <div class="default-form-box mb-20">
+                            <label>Birthdate</label>
+                            <input type="date" name="birthday">
+                        </div>
+                        <span class="example">
+                            (E.g.: 05/31/1970)
+                        </span>
+                        <br>
+                        <label class="checkbox-default" for="offer">
+                            <input type="checkbox" id="offer">
+                            <span>Receive offers from our partners</span>
+                        </label>
+                        <br>
+                        <label class="checkbox-default checkbox-default-more-text" for="newsletter">
+                            <input type="checkbox" id="newsletter">
+                            <span>Sign up for our newsletter<br><em>You may unsubscribe at any
+                                    moment. For that purpose, please find our contact info in the
+                                    legal notice.</em></span>
+                        </label>
+                        <div class="save_button mt-3">
+                            <button class="btn btn-md btn-black-default-hover"
+                                type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div> -->
+
+</div>
+
+
+{% endblock content %}

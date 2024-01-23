@@ -1,0 +1,68 @@
+{% extends 'user_templates/base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- ...:::: Start Breadcrumb Section:::... -->
+<div class="breadcrumb-section breadcrumb-bg-color--golden">
+    <div class="breadcrumb-wrapper">
+        <div class="container">
+            <div class="row ">
+                <div class="col-12">
+                    <h3 class="breadcrumb-title">Order</h3>
+                    <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden" >
+                        <nav aria-label="breadcrumb">
+                            <ul>
+                                <li><a href="{% url 'home' %}">Home</a></li>
+                                <li><a href="{% url 'myaccount' %}">My Account</a></li>
+                                <li class="active" aria-current="page">My Order</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- ...:::: End Breadcrumb Section:::... -->
+
+<div class=" container col-sm-12 col-md-9 col-lg-9 p-4 mb-3">
+    <!-- <div class="tab-pane justify-content-center" id="orders">
+    <h4 class="justify-content-center">Orders</h4> -->
+    <div class="table_page table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Total</th>
+                    <th>Order Placed</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td ><img src="" alt="hi">
+                        <a href="" class="view">Asgaard sofa</a></td>
+                    <td>Rs. 25,000</td>
+                    <td>May 10, 2018</td>
+                    <td>Delivered on Jan 10</td>
+                    <td><a href="cart.html" class="view">view</a></td>
+                    <td><a href="cart.html" class="view">view</a></td>
+                </tr>
+                <tr>
+                    <td ><a href="" class="view">Asgaard sofa</a></td>
+                    <td>Rs. 25,000</td>
+                    <td>May 10, 2018</td>
+                    <td>Processing</td>
+                    <td>$17.00 for 1 item </td>
+                    
+                    <td><a href="cart.html" class="view">view</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+
+{% endblock content %}

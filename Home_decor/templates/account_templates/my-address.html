@@ -1,0 +1,68 @@
+{% extends 'user_templates/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<!-- ...:::: Start Breadcrumb Section:::... -->
+<div class="breadcrumb-section breadcrumb-bg-color--golden">
+    <div class="breadcrumb-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="breadcrumb-title">My Address</h3>
+                    <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
+                        <nav aria-label="breadcrumb">
+                            <ul>
+                                <li><a href="{% url 'home' %}">Home</a></li>
+                                <li><a href="{% url 'myaccount' %}">Account</a></li>
+                                <li class="active" aria-current="page">Address</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- ...:::: End Breadcrumb Section:::... -->
+
+
+<div class="container p-3">
+    <div>
+        <p>The following addresses will be used on the checkout page by default.</p>
+        <ul class="d-flex flex-column justify-content-center">
+            <!-- Single Address Start -->
+            <li class="d-flex flex-row p-2" style="width: 200px;">
+                <label for="payment-card" class="d-flex ">
+                    <div class="flex-column">
+                        <div class="d-flex flex-row px-3 align-content-center "
+                            style="width: 400px;">
+                            <input type="radio" class="" id="payment-card"
+                                style="width: 25px; height: 16px;position: relative;bottom: -15px"
+                                name="address" value="card" />
+                            <div class="col pl-2">
+                                <h5>Jasir Jaleel</h5>
+                                <div class="col">
+                                    <span>Kakkanad</span>,
+                                    <span>Kochi</span>,
+                                    <span>Kerala</span>,
+                                    <span>India</span>,
+                                    <span>680 042</span>
+                                </div>
+                                <span>9876543210</span>
+                            </div>
+                        </div>
+                    </div>
+                </label>
+            </li>
+            <!-- Single Address End  -->
+        </ul>
+
+        <hr>
+        <div class="btn p-4 ml-2 mb-1"><a href="{% url 'addaddress' %}" style="color: #b19561;"><i
+                    class="fa-solid fa-plus" style="color: #b19561; width: 20px;"></i> Add New
+                Address</a> </div>
+
+    </div>
+</div>
+
+{% endblock content %}

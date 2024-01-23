@@ -9,6 +9,7 @@ from django.http import JsonResponse
 
 # Create your views here.
 
+
 def admin_login(request):
     if request.method == 'POST':
         email = request.POST['email']
@@ -69,8 +70,8 @@ def addproduct(request):
         price       = request.POST['price']
         stock       = request.POST['stock']
         # productslug        = request.POST['slug']
-        image       = request.FILES['image']
-      
+        image       = request.FILES['image']              
+
 
         category = Category.objects.get(id=category_id)
         product = Product(

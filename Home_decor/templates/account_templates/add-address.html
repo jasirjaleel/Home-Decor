@@ -1,0 +1,100 @@
+{% extends 'user_templates/base.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- ...:::: Start Breadcrumb Section:::... -->
+    <div class="breadcrumb-section breadcrumb-bg-color--golden">
+        <div class="breadcrumb-wrapper">
+            <div class="container">
+                <div class="row ">
+                    <div class="col-12">
+                        <h3 class="breadcrumb-title">Address</h3>
+                        <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden" >
+                            <nav aria-label="breadcrumb">
+                                <ul>
+                                    <li><a href="{% url 'home' %}">Home</a></li>
+                                    <li><a href="{% url 'myaccount' %}">My Account</a></li>
+                                    <li class="active" aria-current="page">Add Address</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- ...:::: End Breadcrumb Section:::... -->
+
+    <!-- ...:::: Start Customer Login Section :::... -->
+    <div class="customer-login">
+        <div class="container">
+            <div class="row justify-content-between mb-4 flex-column align-items-center" >
+               
+                <!--register area start-->
+                <div class="col-lg-6 col-md-6">
+                    <div class="account_form register" data-aos="fade-up" data-aos-delay="0">
+                
+                      
+                        <form method="post" >
+                            {% csrf_token %}
+                            <h3>
+                                <span class=" d-flex align-items-center justify-content-center mt-2">Add a new address</span>
+                            </h3>
+                            <div class="d-flex " style="gap: 178px; width: 260;">
+                                <div class="default-form-box"style="width: 90px; max-width: 600px; position: relative;">
+                                    <input type="text" class="mt-3"  placeholder="First Name" name="firstname" autocomplete="off" style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error"   style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
+                                </div>
+                                <div class="default-form-box"style="width: 90px; max-width: 600px; position: relative;">
+                                    <input type="text" class="mt-3"  placeholder="Last Name" name="lastname" autocomplete="off"  style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error"  style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
+                                </div>
+                            </div>
+                            <div class="d-flex " style="gap: 178px; width: 260;">
+                                <div class="default-form-box"style="width: 90px; max-width: 600px; position: relative;">
+                                    <input type="text" class="mt-3"   placeholder="Phone Number" name="phonenumber" autocomplete="off"  style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error"  style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
+                                </div>
+                                <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;margin-top: 15px;">
+                                    <input type="text"   name="city" placeholder="Town / City" autocomplete="off"  style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;" >
+                                    <span class="error"   style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
+                                </div>
+                            </div>
+                            <div class="d-flex " style="gap: 178px; width: 260;">
+                                <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;margin-top: 5px;">
+                                   
+                                    <input type="text" class="mt-1"  placeholder="Street address" name="address"  style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error"  style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;"></span>
+                                </div>
+                                <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;margin-top: 5px;">
+                                   
+                                    <input type="text" class="mt-1"  placeholder="State" name="state"  style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error"  style="position: absolute; top: 100%; left: 2px; font-size: 14px; font-weight: 400; color: red; width: 190px; transition: opacity 0.5s;"></span>
+                                </div>
+                            </div>
+                            <div class="d-flex " style="gap: 178px; width: 260;">
+                                <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;margin-top: 5px;">
+                                   
+                                    <input type="text" class="mt-1"  placeholder="Country / Region" name="country"  style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error"  style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;"></span>
+                                </div>
+                                <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;margin-top: 5px;">
+                                   
+                                    <input type="text" class="mt-1"  placeholder="ZIP code" name="zipcode"  style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error"  style="position: absolute; top: 100%; left: 2px; font-size: 14px; font-weight: 400; color: red; width: 190px; transition: opacity 0.5s;"></span>
+                                </div>
+                            </div>
+                            <div class=" d-flex login_submit pt-4 justify-content-center">
+                                <button class="btn  btn-black-default-hover  w-100"  type="submit">Submit</button>
+                            </div>
+                           
+                        </form>
+                      </div>
+                </div>
+                <!--register area end-->
+            </div>
+        </div>
+    </div> <!-- ...:::: End Address Section :::... -->
+
+
+
+    {% endblock content %}

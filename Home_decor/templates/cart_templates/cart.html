@@ -2,108 +2,121 @@
 {% load static %}
 {% block content %}
 <!-- ...:::: Start Breadcrumb Section:::... -->
-    <div class="breadcrumb-section breadcrumb-bg-color--golden">
-        <div class="breadcrumb-wrapper">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <h3 class="breadcrumb-title">Cart</h3>
-                        <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
-                            <nav aria-label="breadcrumb">
-                                <ul>
-                                    <li><a href="index.html">Home</a></li>
-                                    <li><a href="shop-grid-sidebar-left.html">Shop</a></li>
-                                    <li class="active" aria-current="page">Cart</li>
-                                </ul>
-                            </nav>
+<div class="breadcrumb-section breadcrumb-bg-color--golden">
+    <div class="breadcrumb-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="breadcrumb-title">Cart</h3>
+                    <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
+                        <nav aria-label="breadcrumb">
+                            <ul>
+                                <li><a href="index.html">Home</a></li>
+                                <li><a href="shop-grid-sidebar-left.html">Shop</a></li>
+                                <li class="active" aria-current="page">Cart</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- ...:::: End Breadcrumb Section:::... -->
+
+<!-- ...:::: Start Cart Section:::... -->
+<div class="cart-section">
+    <!-- Start Cart Table -->
+    <div class="cart-table-wrapper" data-aos="fade-up" data-aos-delay="0">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="table_desc">
+                        <div class="table_page table-responsive">
+                            <table>
+                                <!-- Start Cart Table Head -->
+                                <thead>
+                                    <tr>
+                                        <th class="product_remove">Delete</th>
+                                        <th class="product_thumb">Image</th>
+                                        <th class="product_name">Product</th>
+                                        <th class="product-price">Price</th>
+                                        <th class="product_quantity">Quantity</th>
+                                        <th class="product_total">Total</th>
+                                    </tr>
+                                </thead> <!-- End Cart Table Head -->
+                              {% comment %}  <tbody>
+                                    <!-- Start Cart Single Item-->
+                                    {% for cart_item in cart_items %}
+                                    <tr>
+                                        <td class="product_remove">
+                                            <!-- <a href="#"><i class="fa fa-trash-o"></i></a> -->
+                                            <a  onclick="deleteCartItem('{{ cart_item.id }}')"><i class="fa fa-trash-o"></i></a>
+                                        </td>
+                                        <td class="product_thumb">
+                                            <a href=""><img src="{{ cart_item.product.images.url }}" alt=""></a>
+                                        </td>
+                                        <td class="product_name">
+                                            <a href="">{{ cart_item.product.product_name }}</a>
+                                        </td>
+                                        <td class="product-price">${{ cart_item.product.price }}</td>
+                                        <td class="product_quantity">
+                                            <label>Quantity</label>
+                                            <input min="1" max="100" value="{{ cart_item.quantity }}" type="number"
+                                                onchange="updateCart('{{ cart_item.id }}', this.value)">
+                                        </td>
+                                        <td class="product_total" id="subtotal-{{ cart_item.id }}">${{ cart_item.sub_total }}</td>
+                                    </tr>
+                                    {% endfor %}<!-- End Cart Single Item-->
+
+                                </tbody>
+
+                                {% endcomment %}
+
+
+                                <tbody>
+                                    <!-- Start Cart Single Item-->
+                                    {% for cart_item in cart_items %}
+                                    <tr id="cart-item-{{ cart_item.id }}">
+                                        <td class="product_remove">
+                                            <a href="#" onclick="deleteCartItem('{{ cart_item.id }}')"><i class="fa fa-trash-o"></i></a>
+                                        </td>
+                                        <td class="product_thumb">
+                                            <a href=""><img src="{{ cart_item.product.images.url }}" alt=""></a>
+                                        </td>
+                                        <td class="product_name">
+                                            <a href="">{{ cart_item.product.product_name }}</a>
+                                        </td>
+                                        <td class="product-price">${{ cart_item.product.price }}</td>
+                                        <td class="product_quantity">
+                                            <label>Quantity</label>
+                                            <input min="1" max="100" value="{{ cart_item.quantity }}" type="number"
+                                                onchange="updateCart('{{ cart_item.id }}', this.value)">
+                                        </td>
+                                        <td class="product_total" id="subtotal-{{ cart_item.id }}">${{ cart_item.sub_total }}</td>
+                                    </tr>
+                                    {% endfor %}<!-- End Cart Single Item-->
+                                </tbody>
+                                
+
+
+
+
+                            </table>
+                        </div>
+                        <div class="cart_submit">
+                            <button class="btn btn-md btn-golden" type="submit">update cart</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div> <!-- ...:::: End Breadcrumb Section:::... -->
+    </div> <!-- End Cart Table -->
 
-    <!-- ...:::: Start Cart Section:::... -->
-    <div class="cart-section">
-        <!-- Start Cart Table -->
-        <div class="cart-table-wrapper" data-aos="fade-up" data-aos-delay="0">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="table_desc">
-                            <div class="table_page table-responsive">
-                                <table>
-                                    <!-- Start Cart Table Head -->
-                                    <thead>
-                                        <tr>
-                                            <th class="product_remove">Delete</th>
-                                            <th class="product_thumb">Image</th>
-                                            <th class="product_name">Product</th>
-                                            <th class="product-price">Price</th>
-                                            <th class="product_quantity">Quantity</th>
-                                            <th class="product_total">Total</th>
-                                        </tr>
-                                    </thead> <!-- End Cart Table Head -->
-                                    <tbody>
-                                        <!-- Start Cart Single Item-->
-                                        <tr>
-                                            <td class="product_remove"><a href="#"><i class="fa fa-trash-o"></i></a>
-                                            </td>
-                                            <td class="product_thumb"><a href="product-details-default.html"><img
-                                                        src="assets/images/product/default/home-1/default-1.jpg"
-                                                        alt=""></a></td>
-                                            <td class="product_name"><a href="product-details-default.html">Handbag
-                                                    fringilla</a></td>
-                                            <td class="product-price">$65.00</td>
-                                            <td class="product_quantity"><label>Quantity</label> <input min="1"
-                                                    max="100" value="1" type="number"></td>
-                                            <td class="product_total">$130.00</td>
-                                        </tr> <!-- End Cart Single Item-->
-                                        <!-- Start Cart Single Item-->
-                                        <tr>
-                                            <td class="product_remove"><a href="#"><i class="fa fa-trash-o"></i></a>
-                                            </td>
-                                            <td class="product_thumb"><a href="product-details-default.html"><img
-                                                        src="assets/images/product/default/home-1/default-2.jpg"
-                                                        alt=""></a></td>
-                                            <td class="product_name"><a href="product-details-default.html">Handbags
-                                                    justo</a></td>
-                                            <td class="product-price">$90.00</td>
-                                            <td class="product_quantity"><label>Quantity</label> <input min="1"
-                                                    max="100" value="1" type="number"></td>
-                                            <td class="product_total">$180.00</td>
-                                        </tr> <!-- End Cart Single Item-->
-                                        <!-- Start Cart Single Item-->
-                                        <tr>
-                                            <td class="product_remove"><a href="#"><i class="fa fa-trash-o"></i></a>
-                                            </td>
-                                            <td class="product_thumb"><a href="product-details-default.html"><img
-                                                        src="assets/images/product/default/home-1/default-3.jpg"
-                                                        alt=""></a></td>
-                                            <td class="product_name"><a href="product-details-default.html">Handbag
-                                                    elit</a></td>
-                                            <td class="product-price">$80.00</td>
-                                            <td class="product_quantity"><label>Quantity</label> <input min="1"
-                                                    max="100" value="1" type="number"></td>
-                                            <td class="product_total">$160.00</td>
-                                        </tr> <!-- End Cart Single Item-->
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="cart_submit">
-                                <button class="btn btn-md btn-golden" type="submit">update cart</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> <!-- End Cart Table -->
-
-        <!-- Start Coupon Start -->
-        <div class="coupon_area">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6">
+    <!-- Start Coupon Start -->
+    <div class="coupon_area">
+        <div class="container">
+            <div class="row">
+                <!-- <div class="col-lg-6 col-md-6">
                         <div class="coupon_code left" data-aos="fade-up" data-aos-delay="200">
                             <h3>Coupon</h3>
                             <div class="coupon_inner">
@@ -111,34 +124,181 @@
                                 <input class="mb-2" placeholder="Coupon code" type="text">
                                 <button type="submit" class="btn btn-md btn-golden">Apply coupon</button>
                             </div>
+                        </div> -->
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="coupon_code right" data-aos="fade-up" data-aos-delay="400">
+                    <h3>Cart Totals</h3>
+                    <div class="coupon_inner">
+                        <div class="cart_subtotal">
+                            <p>Subtotal</p>
+                            <p class="cart_amount">${{ total }}</p>
                         </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6">
-                        <div class="coupon_code right" data-aos="fade-up" data-aos-delay="400">
-                            <h3>Cart Totals</h3>
-                            <div class="coupon_inner">
-                                <div class="cart_subtotal">
-                                    <p>Subtotal</p>
-                                    <p class="cart_amount">$215.00</p>
-                                </div>
-                                <div class="cart_subtotal ">
-                                    <p>Shipping</p>
-                                    <p class="cart_amount"><span>Flat Rate:</span> $255.00</p>
-                                </div>
-                                <a href="#">Calculate shipping</a>
-
-                                <div class="cart_subtotal">
-                                    <p>Total</p>
-                                    <p class="cart_amount">$215.00</p>
-                                </div>
-                                <div class="checkout_btn">
-                                    <a href="#" class="btn btn-md btn-golden">Proceed to Checkout</a>
-                                </div>
-                            </div>
+                        <div class="cart_subtotal ">
+                            <p>Tax</p>
+                            <p class="cart_amount cart_tax">${{ tax }}</p>
+                        </div>
+                        <hr>
+                        <div class="cart_subtotal">
+                            <p>Total</p>
+                            <p class="cart_amount cart_grandtotal">${{ grandtotal }}</p>
+                        </div>
+            
+                        <div class="checkout_btn">
+                            <a href="#" class="btn btn-md btn-golden">Proceed to Checkout</a>
                         </div>
                     </div>
                 </div>
             </div>
-        </div> <!-- End Coupon Start -->
-    </div> <!-- ...:::: End Cart Section:::... -->
-    {% endblock content %}
+
+        </div>
+    </div>
+</div> <!-- End Coupon Start -->
+</div> <!-- ...:::: End Cart Section:::... -->
+
+<!-- <script>
+    function updateCart(cartItemId, newQuantity) {
+        fetch(`/update_cart/${cartItemId}/${newQuantity}/`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update the subtotal in your HTML
+                    document.getElementById(`subtotal-${cartItemId}`).innerText = `$${data.subtotal}`;
+                } else {
+                    console.error(data.message);
+                    // Handle the error, e.g., display an alert to the user
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle the error, e.g., display an alert to the user
+            });
+    }
+</script> -->
+
+<script>
+
+
+
+
+
+
+function deleteCartItem(cartItemId) {
+    fetch(`/delete_cart_item/${cartItemId}/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Remove the deleted item from the HTML
+                const deletedItem = document.getElementById(`cart-item-${cartItemId}`);
+                deletedItem.remove();
+
+                // Check if the cart is empty
+                const cartTable = document.getElementById('cart-table');
+                if (cartTable && !cartTable.querySelector('tbody tr')) {
+                    // Cart is empty, redirect to the cart page
+                    window.location.href = '/cart/';
+                }
+            } else {
+                console.error(data.message);
+                // Handle the error, e.g., display an alert to the user
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Handle the error, e.g., display an alert to the user
+        });
+
+    // Prevent the default action (page reload) of the link click
+    event.preventDefault();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // function deleteCartItem(cartItemId) {
+    //     fetch(`/delete_cart_item/${cartItemId}/`)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             if (data.success) {
+    //                 // Remove the deleted item from the HTML
+    //                 const deletedItem = document.getElementById(`subtotal-${cartItemId}`).parentNode;
+    //                 deletedItem.remove();
+
+    //                 // Check if the cart is empty
+    //                 const cartTable = document.getElementById('cart-table');
+    //                 if (cartTable && !cartTable.querySelector('tbody tr')) {
+    //                     // Cart is empty, redirect to empty cart page or show a message
+    //                     window.location.href = '/empty-cart/';
+    //                 }
+    //             } else {
+    //                 console.error(data.message);
+    //                 // Handle the error, e.g., display an alert to the user
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error('Error:', error);
+    //             // Handle the error, e.g., display an alert to the user
+    //         });
+
+    //     // Prevent the default action (page reload) of the link click
+    //     event.preventDefault();
+    // }
+
+
+    function updateCart(cartItemId, newQuantity) {
+    fetch(`/update_cart/${cartItemId}/${newQuantity}/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update the subtotal in your HTML
+                console.log(`Updating subtotal for ${cartItemId} to ${data.subtotal}`);
+                document.getElementById(`subtotal-${cartItemId}`).innerText = `$${data.subtotal}`;
+
+                // Call the endpoint to update the cart total
+                updateCartTotal();
+            } else {
+                console.error(data.message);
+                // Handle the error, e.g., display an alert to the user
+                alert(`Error: ${data.message}`);
+            }
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+            // Handle the fetch error, e.g., display an alert to the user
+            alert('Error updating cart. Please try again.');
+        });
+}
+
+function updateCartTotal() {
+    fetch('/get_cart_total/')
+        .then(response => response.json())
+        .then(data => {
+            // Update the cart total in your HTML
+            console.log(`Updating cart total to ${data.total}`);
+            document.querySelector('.cart_amount').innerText = `$${data.total}`;
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+            // Handle the fetch error, e.g., display an alert to the user
+            alert('Error updating cart total. Please try again.');
+        });
+}
+
+</script>
+
+
+{% endblock content %}

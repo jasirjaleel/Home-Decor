@@ -70,7 +70,11 @@ def verify_otp(request):
             user = Account.objects.get(email=storedemail)
             user.is_active = True
             user.save()
-            messages.success(request,'User is Successfully Registered')
+            subject = "Successful Login - Home Decor Ecommerce Store"
+            sender_mail = "noreply@homedecorestore.com"
+            message = "Dear User,\n\nYour login to Home Decor Ecommerce Store was successful.\n\nThank you for choosing Home Decor Ecommerce Store."
+
+            send_mail(subject, message, sender_mail,[storedemail])
             login(request,user)
             return redirect ('home')
         else:
@@ -107,10 +111,11 @@ def userlogout(request):
         messages.success(request,("You Were Logged Out!"))
     return redirect('userlogin')
 
-def productdetails(request,product_id):
-    products = Product.objects.get(id=product_id)
+def productdetails(request, product_id):
+    product = Product.objects.get(id=product_id)
+    
     context = {
-        'products':products,
+        'products': product
     }
     return render(request,'user_templates/productdetails.html',context)
 
@@ -123,5 +128,5 @@ def shop(request):
     } 
     return render(request,'user_templates/shop.html',context)
 
-def myaccount(request):
-    return render(request,'user_templates/my-account.html')
+
+    

@@ -143,7 +143,7 @@
                                 </div>
 
                                 <div class="product-add-to-cart-btn">
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#modalAddcart">+ Add To Cart</a>
+                                    <a href="{% url 'addtocart' product_id=products.id %}">+ Add To Cart</a>
                                 </div>
                             </div>
                             <!-- Start  Product Details Meta Area-->
@@ -465,7 +465,7 @@
                                             </a>
                                             <div class="action-link">
                                                 <div class="action-link-left">
-                                                    <a href="#" data-bs-toggle="modal"
+                                                    <a href="" data-bs-toggle="modal"
                                                         data-bs-target="#modalAddcart">Add to Cart</a>
                                                 </div>
                                                 <div class="action-link-right">

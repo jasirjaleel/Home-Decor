@@ -1,0 +1,135 @@
+{% extends 'user_templates/base.html' %} {% load static %} {% block content %}
+
+
+
+<!-- ...:::: Start Breadcrumb Section:::... -->
+<div class="breadcrumb-section breadcrumb-bg-color--golden">
+  <div class="breadcrumb-wrapper">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h3 class="breadcrumb-title">Payment</h3>
+          <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
+            <nav aria-label="breadcrumb">
+              <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop-grid-sidebar-left.html">Cart</a></li>
+                <li class="active" aria-current="page">Payment</li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ...:::: End Breadcrumb Section:::... -->
+
+<div class="container">
+  <div class="row" >
+
+    <div class="col-lg-6 col-md-6">
+      <div class="coupon_code " data-aos="fade-up" data-aos-delay="0">
+        <!-- <form method="POST"> -->
+
+        <h3>Payment Method</h3>
+        <ul class="d-flex flex-column justify-content-center p-2">
+          <li class="d-flex flex-row p-2">
+            <label for="payment-card" class="d-flex flex-row">
+              <input type="radio" id="payment-card" style="width: 20px;" name="payment-method" value="card" />
+              <h5 class="ml-2 w-100">Credit/Debit Card</h5>
+            </label>
+          </li>
+          <li class="d-flex flex-row p-2">
+            <label for="payment-card" class="d-flex flex-row">
+              <input type="radio" id="payment-card" style="width: 20px;" name="payment-method" value="card" />
+              <h5 class="ml-2 w-100">UPI Payment</h5>
+            </label>
+          </li>
+          <li class="d-flex flex-row p-2">
+            <label for="payment-card" class="d-flex flex-row">
+              <input type="radio" id="payment-card" style="width: 20px;" name="payment-method" value="card" />
+              <h5 class="ml-2 w-100">Cash on Delivery</h5>
+            </label>
+          </li>
+        </ul>
+
+        <!-- </form> -->
+      </div>
+      <div class="coupon_code" data-aos="fade-up" data-aos-delay="0">
+        <h3>Your Address</h3>
+        <ul class="d-flex flex-column justify-content-center">
+          <!-- Single Address Start -->
+          <li class="d-flex flex-row p-2" style="width: 200px;">
+            <label for="payment-card" class="d-flex ">
+              <div class="flex-column">
+                <div class="d-flex flex-row px-3 align-content-center " style="width: 400px;">
+                  <input type="radio" class="" id="payment-card"
+                    style="width: 25px; height: 16px;position: relative;bottom: -3px" name="address" value="card" />
+                  <div class="col pl-2">
+                    <h5>Jasir Jaleel</h5>
+                    <div class="col">
+                      <span>Kakkanad</span>,
+                      <span>Kochi</span>,
+                      <span>Kerala</span>,
+                      <span>India</span>,
+                      <span>680 042</span>
+                    </div>
+                    <span>9876543210</span>
+                  </div>
+                </div>
+              </div>
+            </label>
+          </li>
+        <!-- Single Address End  -->
+        </ul>
+        
+        <hr>
+        <div class="btn p-4 ml-2 mb-1"><a href=""style="color: #b19561;"><i class="fa-solid fa-plus" style="color: #b19561; width: 20px;"></i> Add New Address</a> </div>
+
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-md-6 mb-5">
+      <div class="coupon_code right" data-aos="fade-up" data-aos-delay="0">
+        <h3>Cart Totals</h3>
+        <div class="coupon_inner">
+          <div class="cart_subtotal">
+            <p>Subtotal</p>
+            <p class="cart_amount">${{ total }}</p>
+          </div>
+          <div class="cart_subtotal">
+            <p>Tax</p>
+            <p class="cart_amount cart_tax">${{ tax }}</p>
+          </div>
+          <hr />
+          <div class="cart_subtotal">
+            <p>Total</p>
+            <p class="cart_amount cart_grandtotal">${{ grandtotal }}</p>
+          </div>
+
+          <div class="checkout_btn">
+            <a href="#" class="btn btn-md btn-golden">Place Order</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-6">
+        <div class="coupon_code right " data-aos="fade-up" data-aos-delay="100">
+            <h3>Coupon</h3>
+            <div class="coupon_inner">
+                <p>Enter your coupon code if you have one.</p>
+                <input class="mb-2" placeholder="Coupon code" type="text">
+                <button type="submit" class="btn btn-md btn-golden">Apply coupon</button>
+            </div>
+        </div>
+
+      </div>
+
+  </div>
+
+  </div>
+    
+
+</div>
+
+{% endblock %}
