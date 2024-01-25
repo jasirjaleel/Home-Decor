@@ -1,0 +1,83 @@
+{% extends 'admin_templates/base.html' %}
+{% load static %}
+{% block content %}
+<section class="content-main">
+    <div class="row">
+        <form method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label class="form-label">Product</label>
+                            <select class="form-select" name="product">
+                                {% for product in products %}
+                                <option value="{{product.id}}">{{product.product_name}}</option>
+                                {% endfor %}
+
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">SKU ID</label>
+                            <input type="text" placeholder="Type here" class="form-control" name="sku_id">
+                        </div>
+                        <div class="row gx-3">
+                            {% for attribute_name, attribute_values in attribute_dict.items %} 
+                            <!-- <option>{{atribute}}</option> -->
+                            <div class="col-md-4  mb-3">
+                                <label class="form-label">{{attribute_name}}</label>
+                                <select class="form-select" name="attributes[]">
+                                    <option value="None">----------</option>
+                                    {% for value in attribute_values %}
+                                    <option value="{{ value.id }}">{{ value.attribute_value }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="row gx-3">
+
+                            <div class="col-md-4  mb-3">
+                                <label for="product_size" class="form-label">Max Price</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="product_size"
+                                    name="max_price">
+                            </div>
+
+
+                            <div class="col-md-4  mb-3">
+                                <label for="product_size" class="form-label">Sale price</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="product_size"
+                                    name="sale_price">
+                            </div>
+                            <div class="col-md-4  mb-3">
+                                <label for="product_size" class="form-label">Stock</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="product_size"
+                                    name="stock">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-4">
+                        <!-- <div class="card-body">
+                            <div>
+                                <label class="form-label">Thumbnail-Images</label>
+                                <input class="form-control" type="file" name="thumbnail_image">
+                            </div>
+                        </div> -->
+                        <div class="card-body">
+                            <div>
+                                <label class="form-label">Product-Images</label>
+                                <input class="form-control" type="file" name="product_image" id="product_image"
+                                    multiple>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn  btn-md rounded font-sm hover-up" style="margin-left: 20px;">ADD
+                            </button>
+                        </div>
+                    </div> <!-- card end// -->
+                </div> <!-- card end// -->
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock content %}

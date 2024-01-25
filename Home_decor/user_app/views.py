@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django.views.decorators.cache import never_cache,cache_control
 from django.contrib import messages
 from django.http import JsonResponse
-from admin_app.models import Product
 from .models import Account
 from django.core.mail import send_mail
 import random 
@@ -112,20 +111,20 @@ def userlogout(request):
     return redirect('userlogin')
 
 def productdetails(request, product_id):
-    product = Product.objects.get(id=product_id)
+    # product = Product.objects.get(id=product_id)
     
-    context = {
-        'products': product
-    }
+    # context = {
+    #     'products': product
+    # }
     return render(request,'user_templates/productdetails.html',context)
 
 def shop(request):
-    products = Product.objects.all().filter(is_available=True)
-    products_count = products.count()
-    context  = {
-        'products':products,
-        'products_count':products_count,
-    } 
+    # products = Product.objects.all().filter(is_available=True)
+    # products_count = products.count()
+    # context  = {
+    #     'products':products,
+    #     'products_count':products_count,
+    # } 
     return render(request,'user_templates/shop.html',context)
 
 

@@ -39,105 +39,84 @@ def adminlogout(request):
     messages.success(request,'Successfuly Logged Out')
     return redirect('home')
 
-def productdetail(request):
-    products = Product.objects.all().order_by('-id')
-    product_count = products.count()
-    context= {
-        'products': products,
-        'products_count':product_count,
-    }
-    return render(request,"admin_templates/products-list.html",context)
-
-@never_cache
-def deactivateproduct(request,product_id):
-    product = Product.objects.get(id=product_id)
-    product.is_available = False
-    product.save()
-    return redirect('productdetail')
-
-@never_cache
-def activateproduct(request,product_id):
-    product = Product.objects.get(id=product_id)
-    product.is_available = True
-    product.save()
-    return redirect('productdetail')
-
-def addproduct(request):
-    if request.method == "POST":
-        productname        = request.POST['product_name']
-        category_id        = request.POST['category_id']
-        description = request.POST['description']
-        price       = request.POST['price']
-        stock       = request.POST['stock']
-        # productslug        = request.POST['slug']
-        image       = request.FILES['image']              
 
 
-        category = Category.objects.get(id=category_id)
-        product = Product(
-            product_name = productname,
-            category     = category,
-            # slug         = productslug,
-            description  = description,
-            price        = price,
-            stock        = stock,
-            images       = image   
-        )
-
-        product.save()
+# def addproduct(request):
+#     if request.method == "POST":
+#         productname   = request.POST['product_name']
+#         category_id   = request.POST['category_id']
+#         description   = request.POST['description']
+#         price         = request.POST['price']
+#         stock         = request.POST['stock']
+#         # productslug = request.POST['slug']
+#         image         = request.FILES['image']              
 
 
-        messages.success(request, 'Product Added.')
-        return redirect('productdetail')
+        # category = Category.objects.get(id=category_id)
+#         product = Product(
+#             product_name = productname,
+#             category     = category,
+#             # slug         = productslug,
+#             description  = description,
+#             price        = price,
+#             stock        = stock,
+#             images       = image   
+#         )
 
-    categories = Category.objects.all()
-    context = {
-        'categories':categories
-    }
-    return render(request,"admin_templates/addproduct.html",context)
+#         product.save()
 
 
-@never_cache
-@login_required(login_url='adminhome')
-def editproduct(request,product_id):
-    if request.method ==  "POST":
+#         messages.success(request, 'Product Added.')
+#         return redirect('productdetail')
 
-        productname        = request.POST['product_name']
-        productslug        = slugify(productname)
-        productdescription = request.POST['description']
-        productprice       = request.POST['price']
-        productstock       = request.POST['stock']
-        productimages      = request.FILES.get('image')
-        productcategory    = request.POST['category_id']
+#     categories = Category.objects.all()
+#     context = {
+#         'categories':categories
+#     }
+#     return render(request,"admin_templates/addproduct.html",context)
 
-        category = Category.objects.get(id=productcategory)
 
-        product              = Product.objects.get(id=product_id)
-        product.product_name = productname
-        product.slug         = productslug
-        product.description  = productdescription
-        product.stock        = productstock
-        product.category     = category
-        product.price        = productprice
-        product.offerprice   = productprice
+# @never_cache
+# @login_required(login_url='adminhome')
+# def editproduct(request,product_id):
+#     if request.method ==  "POST":
 
-        if productimages is not None:
-            product.images = productimages
-        product.save()
-        messages.success(request,'Successfully Saved')
-        return redirect('productdetail')
+#         productname        = request.POST['product_name']
+#         productslug        = slugify(productname)
+#         productdescription = request.POST['description']
+#         productprice       = request.POST['price']
+#         productstock       = request.POST['stock']
+#         productimages      = request.FILES.get('image')
+#         productcategory    = request.POST['category_id']
+
+#         category = Category.objects.get(id=productcategory)
+
+#         product              = Product.objects.get(id=product_id)
+#         product.product_name = productname
+#         product.slug         = productslug
+#         product.description  = productdescription
+#         product.stock        = productstock
+#         product.category     = category
+#         product.price        = productprice
+#         product.offerprice   = productprice
+
+#         if productimages is not None:
+#             product.images = productimages
+#         product.save()
+#         messages.success(request,'Successfully Saved')
+#         return redirect('productdetail')
 
         
-    category = Category.objects.all()
+#     category = Category.objects.all()
 
 
-    pros = Product.objects.get(id=product_id)
-    context = {
-        'product':pros,
-        'category':category,
-    }
+#     pros = Product.objects.get(id=product_id)
+#     context = {
+#         'product':pros,
+#         'category':category,
+#     }
 
-    return render(request,'admin_templates/editproduct.html',context)
+#     return render(request,'admin_templates/editproduct.html',context)
 
 
 
@@ -156,36 +135,7 @@ def user_management(request):
     
     
     # return render(request,"admin_templates/usermanagement.html")
-@never_cache
-def categorymanagement(request):
-    categories = Category.objects.all().order_by('-id')
-    # paginator = Paginator(categories,10)
-    # page = request.GET.get('page')
-    # paged_categories = paginator.get_page(page)
-    category_count = categories.count()
-    context = {
-        'categories':categories,
-        # 'categories':paged_categories,
-        'category_count':category_count
-    }
-    return render(request,"admin_templates/categorymanagement.html",context)
 
-@never_cache
-@login_required(login_url='adminhome')
-def addcategory(request):
-    if request.method == "POST":
-        category_name = request.POST.get('category_name')
-        description   = request.POST.get('category_description')
-
-        category = Category(
-            category_name = category_name,
-            # slug          = slug,
-            description   = description
-        )
-
-        category.save()
-        return redirect('categorymanagement')
-    return render(request,'admin_templates/addcategory.html')
 
 def blockuser(request, user_id):
     user1 = Account.objects.get(id=user_id)

@@ -18,6 +18,8 @@
     <link rel="shortcut icon" type="image/x-icon" href="">
     <!-- Template CSS -->
     <link href="{% static 'assets2/css/main.css' %}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css">
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/sharp-light.css">
     
     <style>
         .submenu {
@@ -46,23 +48,30 @@
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
+              
                 <li class="menu-item has-submenu {% if request.path == '/admin/product/' or request.path == '/admin/add-product/' %}active{% endif %}">
                     <a class="menu-link  "> <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
                     </a>
-                    <div class="submenu">
-                        <a class="{% if request.path == '/admin/product/' %}active{% endif %}" href="{% url 'productdetail' %}">
+                    <div class="submenu">  
+                        <a class="{% if request.path == '/admin/product/' %}active{% endif %}" href="{% url 'all-product' %}">
                             <i class="icon material-icons md-menu_open"></i>
                             <span class="text">Product List</span>
                         </a>
-                        <a class="{% if request.path == '/admin/add-product/' %}active{% endif %}" href="{% url 'addproduct' %}"> <i class="icon material-icons md-add_box"></i>
-                            <span class="text">Add product</span>
+                     
+                        <a class="{% if request.path == '/admin/add-product/' %}active{% endif %}" href="{% url 'create_product' %}"> <i class="icon material-icons md-add_box"></i>
+                            <span class="text">Add Product</span>
+                        </a>
+
+                        <a class="{% if request.path == '/admin/add_product_variant/' %}active{% endif %}" href="{% url 'add_product_variant' %}"> <i class="icon material-icons md-add_box"></i>
+                            <span class="text">Add Product Variant</span>
                         </a>
                         <!-- <a href="page-products-grid.html">Product grid</a>
                         <a href="page-products-grid-2.html">Product grid 2</a>
                         <a href="page-categories.html">Categories</a> -->
                     </div>
                 </li>
+                {% comment %}
                 <!-- <li class="menu-item has-submenu">
                     <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Orders</span>
@@ -92,7 +101,7 @@
                         
                     </div>
                 </li> -->
-                
+                {% endcomment %}
                 <li class="menu-item has-submenu  {% if request.path == '/admin/user-management/' %}active{% endif %}">
                     <a class="menu-link " href="{% url 'user_management' %}"> <i class="icon material-icons md-people"></i>
                         <span class="text">Users</span>
@@ -108,24 +117,58 @@
                         </a>
                     </div>
                 </li>
+                {% comment %}
                 <!-- <li class="menu-item {% if request.path == '/admin/category-management/' %}active{% endif %}">
                     <a class="menu-link " href="{% url 'categorymanagement' %}"> <img src="{% static 'assets/images/icon/categorypng' %}" alt="">
                         <span class="text">Category</span>
                     </a>
                 </li> -->
-
+                {% endcomment %}
+                
                 <li class="menu-item has-submenu  {% if request.path == '/admin/category-management/' or request.path == '/admin/add-category/' %}active{% endif %}" >
                     <a class="menu-link " > <i class="icon material-icons md-people"></i>
                         <span class="text">Category</span>
                     </a>
                     <div class="submenu">
-                        <a class="{% if request.path == '/admin/category-management/' %}active{% endif %}  p-2" href="{% url 'categorymanagement' %}">
-                            <!-- <i class="icon material-icons md-people"></i> -->
+                        <a class="{% if request.path == '/admin/manage_category/' %}active{% endif %}  p-2" href="{% url 'manage_category' %}">
+                  
                             <span class="text">Category List</span>
                         </a>
                         <a class="{% if request.path == '/admin/add-category/' %}active{% endif %} p-2" href="{% url 'addcategory' %}"> 
-                            <!-- <i class="icon material-icons md-add_box"></i> -->
+             
                             <span class="text">Add Category</span>
+                        </a>
+                    </div>
+                </li>
+               
+                <li class="menu-item has-submenu  {% if request.path == '/admin/add-attribute/' or request.path == '/admin/add-attribute-value/' or request.path == '/admin/add-brand/' %}active{% endif %}" >
+                    <a class="menu-link " ><i class="fa-sharp fa-regular fa-bars-progress" ></i>
+                        <span class="text">Management</span>
+                    </a>
+                    <div class="submenu">
+                        <a class="{% if request.path == '/admin/category-management/' %}active{% endif %}  p-2" href="{% url 'attribute' %}">
+                            <!-- <i class="icon material-icons md-people"></i> -->
+                            <span class="text">Attribute</span>
+                        </a>
+                        <a class="{% if request.path == '/admin/category-management/' %}active{% endif %}  p-2" href="{% url 'attribute-values' %}">
+                            <!-- <i class="icon material-icons md-people"></i> -->
+                            <span class="text">Attribute Value</span>
+                        </a>
+                        <a class="{% if request.path == '/admin/category-management/' %}active{% endif %}  p-2" href="{% url 'brand' %}">
+                            <!-- <i class="icon material-icons md-people"></i> -->
+                            <span class="text">Brand</span>
+                        </a>
+                        <a class="{% if request.path == '/admin/add-attribute/' %}active{% endif %} p-2" href="{% url 'add-attribute' %}"> 
+                            <!-- <i class="icon material-icons md-add_box"></i> -->
+                            <span class="text">Add Attribute</span>
+                        </a>
+                        <a class="{% if request.path == '/admin/add-attribute-value/' %}active{% endif %} p-2" href="{% url 'add-attribute-value' %}"> 
+                            <!-- <i class="icon material-icons md-add_box"></i> -->
+                            <span class="text">Add Attribute Value</span>
+                        </a>
+                        <a class="{% if request.path == '/admin/add-brand/' %}active{% endif %} p-2" href="{% url 'add-brand' %}"> 
+                            <!-- <i class="icon material-icons md-add_box"></i> -->
+                            <span class="text">Add Brand</span>
                         </a>
                     </div>
                 </li>

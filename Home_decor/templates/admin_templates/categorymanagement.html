@@ -50,7 +50,6 @@
                     <thead >
                         <tr  >
                             <th>Category</th>
-                            <th>Description</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -64,12 +63,10 @@
                                     </div>
                                 </div>
                             </td>
+                            
                             <td>
-                                <div class="col-price"> <span>{{category.description}}</span> </div>
-                            </td>
-                            <td>
-                                <a href="" class="btn btn-danger">Deactivate</a>
-                                <a href="" class="btn btn-success">Activate</a>
+                                <a href="" class="btn btn-sm font-sm alert-danger rounded">Deactivate</a>
+                                <a href="" class="btn btn-sm font-sm alert-success rounded">Activate</a>
                             </td>
                         </tr>
                         {% endfor %}

@@ -1,0 +1,51 @@
+{% extends 'admin_templates/base.html' %}
+{% load static %}
+{% block content %}
+<section class="content-main">
+    <div class="row">
+        <div class="col-9">
+            <div class="content-header">
+                <h2 class="content-title">Add Attribute Value</h2>
+                
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <!-- <div class="card-header">
+                </div> -->
+                <div class="card-body">
+                    <form method="post" action="{% url 'add-attribute-value' %}">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <div class="card mb-4 p-2">
+                                    <h4>Attribute</h4>
+                                    <div class="row">
+                                        <div class="col-sm-6 mb-3">
+                                            <select class="form-select"  aria-label="Default select example" name="attribute_id">
+                                                <option selected disabled>Select Attribute</option>
+                                                {%for at in attr %}
+                                                <option value="{{ at.id }}">{{at.attribute_name}}</option>
+                                                {%endfor%}
+                                            </select>
+                                       
+                                        
+                                    </div> <!-- row.// -->
+                                </div>
+                            </div> <!-- card end// -->
+                        </div>
+                        <div class="mb-4">
+                            <label for="product_name" class="form-label">Attribute Value</label>
+                            <input type="text" placeholder="Type here" class="form-control"  name="attribute_value" required autocomplete="off">
+                        </div>
+                        <div>
+                            
+                            <button class="btn btn-md rounded font-sm hover-up" type="submit">Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div> <!-- card end// -->
+            
+        </div>
+    </div>
+</section> <!-- content-main end// -->
+{% endblock content %}

@@ -1,0 +1,71 @@
+{% extends 'admin_templates/base.html' %}
+{% load static %}
+{% block content %}
+<section class="content-main">
+    <div class="row">
+        <div class="col-9">
+            <div class="content-header">
+                <h2 class="content-title">Add New Product</h2>
+
+            </div>
+        </div>
+        <!-- Add new product form  -->
+        <form method="POST" action="{% url 'create_product' %}">
+            {% csrf_token %}
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label for="product_title" class="form-label">Product title</label>
+                            <input type="text" placeholder="Type here" name="product_title" class="form-control"
+                                id="product_title">
+                        </div>
+                        <div class="row gx-3">
+                            <div class="col-md-4  mb-3">
+                                <label class="form-label">category</label>
+
+                                <select class="form-select" name="category_id">
+                                    {% for i in category %}
+                                    <option value="{{i.id}}">{{i.category_name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-4  mb-3">
+                                <label class="form-label">Brand</label>
+                                <select class="form-select" name="Brand">
+                                    {% for brand in brand %}
+                                    <option value="{{brand.id}}">{{brand.brand_name}}</option>
+                                    {% endfor %}
+
+                                </select>
+                            </div>
+                            <!-- <div class="col-md-4  mb-3">
+                            <label for="product_size" class="form-label">Size</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="product_size">
+                        </div> -->
+                        </div>
+
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div>
+                                <label class="form-label">Description</label>
+                                <textarea placeholder="Type here" class="form-control" rows="4"
+                                    name="description"></textarea>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn  btn-md rounded font-sm hover-up"
+                                style="margin-left: 20px;">ADD </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!-- end add new product form  -->
+        <!-- product attribute setting -->
+
+
+    </div>
+</section>
+{% endblock content %}
