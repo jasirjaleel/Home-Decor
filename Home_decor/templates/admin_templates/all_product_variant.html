@@ -1,27 +1,26 @@
 {% extends 'admin_templates/base.html' %}
 {% load static %}
 {% block content %}
-
-
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
         <section class="content-main">
             <div class="content-header">
                 <div>
                     <h2 class="content-title card-title">Products List</h2>
+                    <p>Lorem ipsum dolor sit amet.</p>
                 </div>
                 <div>
-                    <a href="{% url 'create_product' %}" class="btn btn-primary btn-sm rounded">Add new</a>
+                    <a href="#" class="btn btn-light rounded font-md">Export</a>
+                    <a href="#" class="btn btn-light rounded  font-md">Import</a>
+                    <a href="#" class="btn btn-primary btn-sm rounded">Create new</a>
                 </div>
             </div>
             <div class="card mb-4">
                 <header class="card-header">
                     <div class="row align-items-center">
-                        <!-- <div class="col col-check flex-grow-0">
+                        <div class="col col-check flex-grow-0">
                             <div class="form-check ms-2">
                                 <input class="form-check-input" type="checkbox" value="">
                             </div>
-                        </div> -->
+                        </div>
                         <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
                             <select class="form-select">
                                 <option selected>All category</option>
@@ -44,52 +43,41 @@
                     </div>
                 </header> <!-- card-header end// -->
                 <div class="card-body">
-                    {% for product in products %}
-
-
+                    {% for i in product_variant %}
                     <article class="itemlist">
                         <div class="row align-items-center">
+                            <div class="col col-check flex-grow-0">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox">
+                                </div>
+                            </div>
                             <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
                                 <a class="itemside" href="#">
                                     <div class="left">
-                                        <img src="{{ product. }}" class="img-sm img-thumbnail" alt="Item">
+                                        <img src="{{ i.additional_product_images.first }}" class="img-sm img-thumbnail" alt="Item">
                                     </div>
                                     <div class="info">
-                                   <a href="{% url 'all-variant-product' product_id=product.id %}"><h6 class="">{{product.product_name}}</h6></a>  
-                                        <span>{{product.category}}</span>
+                                        <h6 class="mb-0">{{i.sku_id}}</h6>
+                                        <span>{{i.product_variant_slug}}</span>
                                     </div>
                                 </a>
                             </div>
-                            <div class="col-lg-2 col-sm-2 col-4 col-price"> <span>{{product.brand.brand_name}}</span> </div>
-                            {% if product.is_available   == True %}
-                            <div class="col-lg-2 col-sm-2 col-4 col-status">
+                            <div class="col-lg-1 col-sm-2 col-4 col-price"> <span>{{i.max_price|floatformat:0}}</span> </div>
+                            <div class="col-lg-1 col-sm-2 col-4 col-price"> <span>{{i.sale_price|floatformat:0}}</span> </div>
+                            <div class="col-lg-1 col-sm-2 col-4 col-price"> <span>{{i.stock}}</span> </div>
+                            <div class="col-lg-1 col-sm-2 col-4 col-status">
                                 <span class="badge rounded-pill alert-success">Active</span>
                             </div>
-                            {% else %}
-                            <div class="col-lg-2 col-sm-2 col-4 col-status">
-                                <span class="badge rounded-pill alert-danger">Blocked</span>
-                            </div>
-                            {% endif %}
                             <div class="col-lg-1 col-sm-2 col-4 col-date">
-                                <span>{{product.created_date|date:"j M Y" }}</span>
+                                <span>02.11.2021</span>
                             </div>
                             <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
-                                {% comment %}
-                                <a href="{% url 'editproduct' product_id=product.id %}" class="btn btn-sm font-sm rounded btn-brand">
-                                    <i class="material-icons md-edit"></i>
+                                <a href="#" class="btn btn-sm font-sm rounded btn-brand">
+                                    <i class="material-icons md-edit"></i> Edit
                                 </a>
-                                {% endcomment %}
-                                {% if product.is_available   == True %}
-                                <a   href="{% url 'unlist-product' product_id=product.id %}"  class="btn btn-sm font-sm alert-danger rounded block-user-btn">
-                                    Unlist
+                                <a href="#" class="btn btn-sm font-sm btn-light rounded">
+                                    <i class="material-icons md-delete_forever"></i> Delete
                                 </a>
-                                {% else %}
-                                <a   href="{% url 'list-product' product_id=product.id %}" class="btn btn-sm font-sm alert-success rounded unblock-user-btn">
-                                    List
-                                </a>
-                                {% endif %}
-                               
-        
                             </div>
                         </div> <!-- row .// -->
                     </article> <!-- itemlist  .// -->
@@ -109,49 +97,4 @@
                 </nav>
             </div>
         </section> <!-- content-main end// -->
-
-<!-- 
-        <script>
-            // Add this script to your HTML template or a separate JS file
-        
-           
-                var base_url = "{% url 'adminhome' %}";
-        
-                $('.block-user-btn').click(function () {
-                    var productId = $(this).data('product-id');
-        
-                    $.ajax({
-                        url: base_url + 'deactivateproduct/' + productId + '/',
-                        type: 'GET',  // You can use POST if needed
-                        success: function (response) {
-                            // alert('deac');
-                            // console.log('hi');
-                            location.reload();
-                        },
-                        error: function (error) {
-                            console.log(error);
-                        }
-                    });
-                });
-        
-                $('.unblock-user-btn').click(function () {
-                    var productId = $(this).data('product-id');
-                    $.ajax({
-                        url: base_url + 'activateproduct/' + productId + '/',
-                        type: 'GET',  // You can use POST if needed
-                        success: function (response) {
-                            alert("active");
-                            location.reload();
-                        },
-                        error: function (error) {
-                            console.log(error);
-                        }
-                    });
-                });
-            
-        
-        
-           
-        
-        </script> -->
         {% endblock content %}

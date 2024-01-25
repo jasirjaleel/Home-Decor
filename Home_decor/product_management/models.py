@@ -85,7 +85,7 @@ class Product_Variant(models.Model):
     sale_price           = models.DecimalField(max_digits=8, decimal_places=2)
     stock                = models.IntegerField()
     product_variant_slug = models.SlugField(unique=True, blank=True,max_length=200)
-    # thumbnail_image      = models.ImageField(upload_to='product_variant/images/')
+    thumbnail_image      = models.ImageField(upload_to='product_variant/images/')
     is_active            = models.BooleanField(default=True)
     created_at           = models.DateTimeField(auto_now_add=True)
     updated_at           = models.DateTimeField(auto_now=True)

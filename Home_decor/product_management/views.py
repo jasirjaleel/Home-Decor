@@ -55,6 +55,19 @@ def create_product(request):
     return render(request,"admin_templates/add_product.html",context)
 
 
+##############   ALL VARIANT OF PRODUCT   #############
+
+def all_variant_product(request,product_id):
+    product         = Product.objects.get(id=product_id)
+    product_variant = Product_Variant.objects.filter(product=product)
+
+    context = {
+        'product_variant':product_variant,
+        
+    }
+    return render (request,"admin_templates/all_product_variant.html",context)
+
+
 ##############   ADDING VARITION TO A PRODUCT   #############
 def add_product_variant(request):
     attributes = Attribute.objects.prefetch_related('attribute_value_set').filter(is_active=True)
@@ -76,12 +89,12 @@ def add_product_variant(request):
         product_image   = request.FILES.getlist('product_image')
         sale_price      = request.POST.get('sale_price')
         stock           = request.POST.get('stock')      
-        # thumbnail_image = request.POST.get('thumbnail_image')      
+        thumbnail_image = request.POST.get('thumbnail_image')      
        
         #getting all atributes
         attribute_ids=[]
         for i in range(1,attribute_values_count+1):
-            req_atri = request.POST.getlist('attributes[]')[i-1]
+            req_atri = request.POST.getlist('attributes')[i-1]
             if req_atri != 'None':
                 attribute_ids.append(req_atri)
 
@@ -94,7 +107,7 @@ def add_product_variant(request):
             max_price       = max_price, 
             sale_price      = sale_price, 
             stock           = stock, 
-            # thumbnail_image = thumbnail_image
+            thumbnail_image = thumbnail_image
         )   
         
         product_varient.save()

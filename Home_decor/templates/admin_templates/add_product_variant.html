@@ -26,7 +26,7 @@
                             <!-- <option>{{atribute}}</option> -->
                             <div class="col-md-4  mb-3">
                                 <label class="form-label">{{attribute_name}}</label>
-                                <select class="form-select" name="attributes[]">
+                                <select class="form-select" name="attributes">
                                     <option value="None">----------</option>
                                     {% for value in attribute_values %}
                                     <option value="{{ value.id }}">{{ value.attribute_value }}</option>
@@ -57,12 +57,12 @@
                         </div>
                     </div>
                     <div class="card mb-4">
-                        <!-- <div class="card-body">
+                        <div class="card-body">
                             <div>
                                 <label class="form-label">Thumbnail-Images</label>
                                 <input class="form-control" type="file" name="thumbnail_image">
                             </div>
-                        </div> -->
+                        </div>
                         <div class="card-body">
                             <div>
                                 <label class="form-label">Product-Images</label>

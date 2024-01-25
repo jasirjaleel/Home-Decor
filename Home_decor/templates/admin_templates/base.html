@@ -49,21 +49,21 @@
                     </a>
                 </li>
               
-                <li class="menu-item has-submenu {% if request.path == '/admin/product/' or request.path == '/admin/add-product/' %}active{% endif %}">
+                <li class="menu-item has-submenu {% if request.path == '/admin/all-product/' or request.path == '/admin/create-product/' or request.path == '/admin/add-product-variant/' %}active{% endif %}">
                     <a class="menu-link  "> <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
                     </a>
                     <div class="submenu">  
-                        <a class="{% if request.path == '/admin/product/' %}active{% endif %}" href="{% url 'all-product' %}">
+                        <a class="{% if request.path == '/admin/all-product/' %}active{% endif %}" href="{% url 'all-product' %}">
                             <i class="icon material-icons md-menu_open"></i>
                             <span class="text">Product List</span>
                         </a>
                      
-                        <a class="{% if request.path == '/admin/add-product/' %}active{% endif %}" href="{% url 'create_product' %}"> <i class="icon material-icons md-add_box"></i>
+                        <a class="{% if request.path == '/admin/create-product/' %}active{% endif %}" href="{% url 'create_product' %}"> <i class="icon material-icons md-add_box"></i>
                             <span class="text">Add Product</span>
                         </a>
 
-                        <a class="{% if request.path == '/admin/add_product_variant/' %}active{% endif %}" href="{% url 'add_product_variant' %}"> <i class="icon material-icons md-add_box"></i>
+                        <a class="{% if request.path == '/admin/add-product-variant/' %}active{% endif %}" href="{% url 'add_product_variant' %}"> <i class="icon material-icons md-add_box"></i>
                             <span class="text">Add Product Variant</span>
                         </a>
                         <!-- <a href="page-products-grid.html">Product grid</a>
@@ -125,12 +125,12 @@
                 </li> -->
                 {% endcomment %}
                 
-                <li class="menu-item has-submenu  {% if request.path == '/admin/category-management/' or request.path == '/admin/add-category/' %}active{% endif %}" >
+                <li class="menu-item has-submenu  {% if request.path == '/admin/manage-category/' or request.path == '/admin/add-category/' %}active{% endif %}" >
                     <a class="menu-link " > <i class="icon material-icons md-people"></i>
                         <span class="text">Category</span>
                     </a>
                     <div class="submenu">
-                        <a class="{% if request.path == '/admin/manage_category/' %}active{% endif %}  p-2" href="{% url 'manage_category' %}">
+                        <a class="{% if request.path == '/admin/manage-category/' %}active{% endif %}  p-2" href="{% url 'manage_category' %}">
                   
                             <span class="text">Category List</span>
                         </a>
@@ -141,20 +141,20 @@
                     </div>
                 </li>
                
-                <li class="menu-item has-submenu  {% if request.path == '/admin/add-attribute/' or request.path == '/admin/add-attribute-value/' or request.path == '/admin/add-brand/' %}active{% endif %}" >
+                <li class="menu-item has-submenu  {% if request.path == '/admin/attribute/' or request.path == '/admin/attribute-value/' or request.path == '/admin/brand/' or request.path == '/admin/add-brand/' or request.path == '/admin/add-attribute-value/'   or  request.path == '/admin/add-attribute/' %}active{% endif %}" >
                     <a class="menu-link " ><i class="fa-sharp fa-regular fa-bars-progress" ></i>
                         <span class="text">Management</span>
                     </a>
                     <div class="submenu">
-                        <a class="{% if request.path == '/admin/category-management/' %}active{% endif %}  p-2" href="{% url 'attribute' %}">
+                        <a class="{% if request.path == '/admin/attribute/' %}active{% endif %}  p-2" href="{% url 'attribute' %}">
                             <!-- <i class="icon material-icons md-people"></i> -->
                             <span class="text">Attribute</span>
                         </a>
-                        <a class="{% if request.path == '/admin/category-management/' %}active{% endif %}  p-2" href="{% url 'attribute-values' %}">
+                        <a class="{% if request.path == '/admin/attribute-value/' %}active{% endif %}  p-2" href="{% url 'attribute-values' %}">
                             <!-- <i class="icon material-icons md-people"></i> -->
                             <span class="text">Attribute Value</span>
                         </a>
-                        <a class="{% if request.path == '/admin/category-management/' %}active{% endif %}  p-2" href="{% url 'brand' %}">
+                        <a class="{% if request.path == '/admin/brand/' %}active{% endif %}  p-2" href="{% url 'brand' %}">
                             <!-- <i class="icon material-icons md-people"></i> -->
                             <span class="text">Brand</span>
                         </a>
