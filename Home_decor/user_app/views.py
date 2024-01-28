@@ -7,11 +7,8 @@ from django.http import JsonResponse
 from .models import Account
 from django.core.mail import send_mail
 import random 
+from django.contrib.auth.hashers import check_password
 # Create your views here.
-@never_cache
-def home(request):
-    return render(request,'user_templates/index.html')
-
 @never_cache
 def usersignup(request):
     if request.method == "POST":
@@ -82,7 +79,32 @@ def verify_otp(request):
     return render(request,'user_templates/otp.html',context)
 
 
-@never_cache
+# def userlogin(request):
+#     if request.user.is_authenticated:
+#         return redirect('home')
+#     if request.method=="POST":
+#         email = request.POST.get('email')
+#         password = request.POST.get('password')  
+#         if not Account.objects.filter(email=email).exists():
+#             messages.error(request,("Email Doesn't exist"))
+#         else:
+#             account = Account.objects.get(email=email)
+#             if not check_password(password,account.password):
+#                 messages.error(request, "Incorrect password")
+#             else:
+#                 user = authenticate(email=email,password=password)
+#                 if user is not None and  user.is_blocked == False and user.is_superadmin == False:
+#                     login(request,user)
+#                     return redirect('home')
+#                 elif user is not None and user.is_blocked == True:
+#                     messages.error(request,'You are Blocked!')
+#                     return redirect('userlogin')
+#                 else:
+#                     messages.error(request,('There Was An Error Loggin In, Try Again...'))
+#                     return redirect('userlogin')
+#     else:
+#         return render(request,'user_templates/login.html')
+
 def userlogin(request):
     if request.user.is_authenticated:
         return redirect('home')
@@ -110,22 +132,7 @@ def userlogout(request):
         messages.success(request,("You Were Logged Out!"))
     return redirect('userlogin')
 
-def productdetails(request, product_id):
-    # product = Product.objects.get(id=product_id)
-    
-    # context = {
-    #     'products': product
-    # }
-    return render(request,'user_templates/productdetails.html',context)
 
-def shop(request):
-    # products = Product.objects.all().filter(is_available=True)
-    # products_count = products.count()
-    # context  = {
-    #     'products':products,
-    #     'products_count':products_count,
-    # } 
-    return render(request,'user_templates/shop.html',context)
 
 
     

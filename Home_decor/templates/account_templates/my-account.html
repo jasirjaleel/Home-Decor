@@ -1,4 +1,4 @@
-{% extends 'user_templates/base.html' %}
+{% extends 'store_templates/base.html' %}
 {% load static %}
 {% block content %}
 <!-- ...:::: Start Breadcrumb Section:::... -->
@@ -71,7 +71,7 @@
                 <div class="flex-column" style=" flex-direction: column;height: 50px; ">
                     <div class="pb-2 pt-2"
                         style="color: #222222; font-size: 16px; font-weight: 800; line-height: 20px; word-wrap: break-word">
-                        Login & security</div>
+                         <a href="{% url 'forget_password' %}">Login & security</a></div>
                     <div class="ProvidePersonalDetailsAndHowWeCanReachYou"
                         style="width: 258.89px; color: #717171; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
                         Update your password and secure your account</div>

@@ -1,4 +1,4 @@
-{% extends 'user_templates/base.html' %}
+{% extends 'store_templates/base.html' %}
 {% load static %}
 {% block content %}
 
@@ -32,20 +32,24 @@
                 <div class="col-lg-6 col-md-6">
                     <div class="account_form" data-aos="fade-up" data-aos-delay="0">
 
-                            <form method="POST">
+                            <form method="POST" id="loginForm">
                                 <h3>Welcome !</h3>
                                 {% csrf_token %}
                                 <h3>
                                     <span>Login to your account.</span>
                                 </h3>
                                 <div class="default-form-box">
-                                    <input type="email" class="mt-3" placeholder="Email" name="email" autocomplete="off">
+                                    <input type="email" id="email" class="mt-3" placeholder="Email" name="email" autocomplete="off">
+                                    <span class="error"  id="emailError" style="top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
+                                   
                                 </div>
                                 <div class="default-form-box">
-                                    <input type="password" class="mt-3" placeholder="Password" name="password" required>
+                                    <input type="password" id="password" class="mt-3" placeholder="Password" name="password" >
+                                    <span class="error" id="passwordError" style="top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;"></span>
+                              
                                     {% if messages %}
                                     {% for message in messages %}
-                                    <span class="error" style="top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">{{message}}</span>
+                                    <span  style="top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">{{message}}</span>
                                     {% endfor %}
                                     {% endif %}
                                 </div>
@@ -59,7 +63,7 @@
                                             </label> -->
                                         </div>
                                         <div class="d-flex  ">
-                                            <a href="#" class="">Forget password?</a>
+                                            <a href="{% url 'forget_password' %}" class="">Forget password?</a>
                                         </div>
                                     </div>
                                     <button class="btn btn-black-default-hover m-4 w-25" type="submit">login</button>
@@ -76,5 +80,66 @@
         </div>
     </div> <!-- ...:::: End Customer Login Section :::... -->
     
+    <script>
+        function validateEmail() {
+            const email = document.getElementById('email').value;
+            const emailError = document.getElementById('emailError');
+
+            console.log(email);
+    
+            if (email === "") {
+                emailError.innerHTML = "Enter your email address";
+                return false;
+            }
+    
+            // You can add additional email validation logic here if needed
+    
+            emailError.innerHTML = null;
+            return true;
+        }
+    
+        function validatePassword() {
+            const password = document.getElementById('password').value;
+            const passwordError = document.getElementById('passwordError');
+    
+            if (password === "") {
+                passwordError.innerHTML = "Enter password";
+                return false;
+            }
+
+            // if(password)
+    
+            // You can add additional password validation logic here if needed
+    
+            passwordError.innerHTML = null;
+            return true;
+        }
+    
+        function validation() {
+            const isValidEmail = validateEmail();
+            const isValidPassword = validatePassword();
+    
+            return isValidEmail && isValidPassword;
+        }
+    
+        document.addEventListener('DOMContentLoaded', function () {
+            const loginForm = document.getElementById('loginForm');
+    
+            loginForm.addEventListener('submit', function (e) {
+                // alert("hi")
+                e.preventDefault();
+                console.log(validation())
+                 // Prevent the default form submission behavior
+    
+                // Your validation and other logic here
+                if (validation()) {
+                    console.log('Login form submitted successfully');
+                    this.submit(); // Manually submit the form
+                } else {
+                    console.log('Login form not submitted due to validation error');
+                }
+            });
+        });
+    </script>
 
     {% endblock content %}

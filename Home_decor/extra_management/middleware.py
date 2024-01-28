@@ -8,6 +8,6 @@ class RestrictAdminMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.path.startswith('/admin/') and not request.user.is_superadmin:
+        if request.path.startswith('/admin/') and hasattr(request.user, 'is_authenticated') and request.user.is_authenticated and not request.user.is_superadmin:
             return HttpResponseRedirect(reverse('home'))  # Redirect to your home URL
         return self.get_response(request)

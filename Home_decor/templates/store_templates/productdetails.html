@@ -1,6 +1,27 @@
-{% extends 'user_templates/base.html' %}
+{% extends 'store_templates/base.html' %}
 {% load static %}
 {% block content %}
+<div class="breadcrumb-section breadcrumb-bg-color--golden">
+    <div class="breadcrumb-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="breadcrumb-title">Shop</h3>
+                    <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
+                        <nav aria-label="breadcrumb">
+                            <ul>
+                                <li><a href="{% url 'home' %}">Home</a></li>
+                                <li><a href="shop-grid-sidebar-left.html">Shop</a></li>
+                                <li class="active" aria-current="page">Shop Full Width</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- ...:::: End Breadcrumb Section:::... -->
+
     <!-- Start Product Details Section -->
     <div class="product-details-section">
         <div class="container">
@@ -11,46 +32,24 @@
                         <!-- Start Large Image -->
                         <div class="product-large-image product-large-image-vartical swiper-container ml-5">
                             <div class="swiper-wrapper">
+                                {% for image in images %}
                                 <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img src="{{ products.images.url }}" alt="">
+                                    <img src="{{ image }}" alt="">
                                 </div>
-                                <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img src="{{ products.images.url }}" alt="">
-                                </div>
-                                <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img src="{{ products.images.url }}" alt="">
-                                </div>
-                                <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img src="{{ products.images.url }}" alt="">
-                                </div>
-                                <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img src="{{ products.images.url }}" alt="">
-                                </div>
-                                <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img src="{{ products.images.url }}" alt="">
-                                </div>
+                               {% endfor %}
                             </div>
                         </div>
                         <!-- End Large Image -->
                         <!-- Start Thumbnail Image -->
                         <div class="product-image-thumb product-image-thumb-vartical swiper-container pos-relative">
                             <div class="swiper-wrapper">
+                                {% for image in images %}
                                 <div class="product-image-thumb-single swiper-slide">
-                                    <img class="img-fluid" src="{{ products.images.url }}"
+                                    <img class="img-fluid" src="{{ image }}"
                                         alt="">
                                 </div>
-                                <div class="product-image-thumb-single swiper-slide">
-                                    <img class="img-fluid" src="{{ products.images.url }}"
-                                        alt="">
-                                </div>
-                                <div class="product-image-thumb-single swiper-slide">
-                                    <img class="img-fluid" src="{{ products.images.url }}"
-                                        alt="">
-                                </div>
-                                <div class="product-image-thumb-single swiper-slide">
-                                    <img class="img-fluid" src="{{ products.images.url }}"
-                                        alt="">
-                                </div>
+                                
+                                {% endfor %}
                             </div>
                         </div>
                         <!-- End Thumbnail Image -->
@@ -61,7 +60,10 @@
                         data-aos-delay="200">
                         <!-- Start  Product Details Text Area-->
                         <div class="product-details-text">
-                            <h4 class="title">{{products.product_name}} </h4>
+                            {% for product in products %}
+                            <h4 class="title">{{product.product.product_name}} </h4>
+                            
+                            
                             <div class="d-flex align-items-center">
                                 <ul class="review-star">
                                     <li class="fill"><i class="ion-android-star"></i></li>
@@ -72,9 +74,10 @@
                                 </ul>
                                 <a href="#" class="customer-review ml-2">(customer review )</a>
                             </div>
-                            <div class="price">{{products.price}}</div>
-                            <p>{{products.description}}</p>
+                            <div class="price">{{product.max_price}}</div>
+                            <p>{{product.product.description}}</p>
                         </div>
+                        {% endfor %}
                         <!-- End  Product Details Text Area-->
                         <!-- Start Product Variable Area -->
                         <div class="product-details-variable">
@@ -86,7 +89,27 @@
                             </div> -->
                             <!-- Product Variable Single Item -->
                             <div class="variable-single-item">
-                                <span>Color</span>
+                          
+                            
+
+                                
+                                {% for i in variant %}
+                                    {% for attribute in i.attributes.all %}
+                                        {% if attribute.attribute.attribute_name == 'Color' %}
+                                            <span>{{ attribute.attribute_value }}</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endfor %}
+
+                                {% for i in variant %}
+                                    {% for attribute in i.attributes.all %}
+                                        {% if attribute.attribute.attribute_name == 'Material' %}
+                                            <span>{{ attribute.attribute_value }}</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endfor %}
+
+                                <span>Metrial</span>
                                 <div class="product-variable-color">
                                     <label for="product-color-red">
                                         <input name="product-color" id="product-color-red" class="color-select"
@@ -133,6 +156,7 @@
                                     <option value="6">xxl</option>
                                 </select>
                             </div>
+                        
                             <!-- Product Variable Single Item -->
                             <div class="d-flex align-items-center ">
                                 <div class="variable-single-item ">
@@ -141,9 +165,11 @@
                                         <input min="1" max="100" value="1" type="number">
                                     </div>
                                 </div>
-
+                                
                                 <div class="product-add-to-cart-btn">
+                                    {% comment %}
                                     <a href="{% url 'addtocart' product_id=products.id %}">+ Add To Cart</a>
+                                    {% endcomment %}
                                 </div>
                             </div>
                             <!-- Start  Product Details Meta Area-->

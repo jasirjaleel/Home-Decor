@@ -8,25 +8,25 @@ from django.db.models import UniqueConstraint, Q,F,Avg,Count
 
 # Atribute Table - COLOR , SIZE
 class Attribute(models.Model):
-    attribute_name = models.CharField(max_length=50,unique=True)
-    is_active = models.BooleanField(default=True)
+    attribute_name  = models.CharField(max_length=50,unique=True)
+    is_active       = models.BooleanField(default=True)
 
     def __str__(self):
         return self.attribute_name
     
 # Atribute Value - RED,BLUE,GREEN, L, XL XXL,XXXL
 class Attribute_Value(models.Model):
-    attribute = models.ForeignKey(Attribute,on_delete=models.CASCADE)
+    attribute       = models.ForeignKey(Attribute,on_delete=models.CASCADE)
     attribute_value = models.CharField(max_length=50,unique=True)
-    is_active = models.BooleanField(default=True)
+    is_active       = models.BooleanField(default=True)
 
     def __str__(self):
         return self.attribute_value+"-"+self.attribute.attribute_name
     
 # Brand IKEA , HOME DECOR , DOIR 
 class Brand(models.Model):
-    brand_name = models.CharField(max_length=50,unique=True)
-    is_active = models.BooleanField(default=True)
+    brand_name  = models.CharField(max_length=50,unique=True)
+    is_active   = models.BooleanField(default=True)
 
     def __str__(self):
         return self.brand_name
@@ -78,7 +78,7 @@ class Product_VariantManager(models.Manager):
 
 
 class Product_Variant(models.Model):
-    product              = models.ForeignKey(Product,on_delete=models.CASCADE)
+    product              = models.ForeignKey(Product,on_delete=models.CASCADE,related_name='products')
     sku_id               = models.CharField(max_length=30)
     attributes           = models.ManyToManyField(Attribute_Value,related_name='attributes')
     max_price            = models.DecimalField(max_digits=8, decimal_places=2)
@@ -128,8 +128,8 @@ class Product_Variant(models.Model):
    # FOR ADDITIONAL IMAGES
 class Additional_Product_Image(models.Model):
     product_variant = models.ForeignKey(Product_Variant,on_delete=models.CASCADE,related_name='additional_product_images')
-    image = models.ImageField(upload_to='photos/additional_photos')
-    is_active = models.BooleanField(default=True)
+    image           = models.ImageField(upload_to='photos/additional_photos')
+    is_active       = models.BooleanField(default=True)
 
     def __str__(self):
         return self.image.url

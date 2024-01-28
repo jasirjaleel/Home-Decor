@@ -1,6 +1,11 @@
-{% extends 'user_templates/base.html' %}
+{% extends 'store_templates/base.html' %}
 {% load static %}
 {% block content %}
+<!-- Add these links to your HTML head to include Bootstrap CSS and JS -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
 
 
 <!-- ...:::: Start Breadcrumb Section:::... -->
@@ -31,29 +36,30 @@
         <p>The following addresses will be used on the checkout page by default.</p>
         <ul class="d-flex flex-column justify-content-center">
             <!-- Single Address Start -->
-            <li class="d-flex flex-row p-2" style="width: 200px;">
-                <label for="payment-card" class="d-flex ">
+            {% for i in address %}
+            <li class="d-flex flex-row p-2" style="width: 200px;border: #000000 20px;">
+                <label for="address-{{ i.id }}" class="d-flex ">
                     <div class="flex-column">
-                        <div class="d-flex flex-row px-3 align-content-center "
-                            style="width: 400px;">
-                            <input type="radio" class="" id="payment-card"
-                                style="width: 25px; height: 16px;position: relative;bottom: -15px"
-                                name="address" value="card" />
+                        <div class="d-flex flex-row px-3 align-content-center " style="width: 400px;">
+                            <input type="radio" class="address-radio" onclick="sweet_alert('{{ i.id }}')" id="address-{{ i.id }}"style="width: 25px; height: 16px;position: relative;bottom: -15px" name="address" value="{{ i.id }}" {% if i.is_default %}checked{% endif %} />
                             <div class="col pl-2">
-                                <h5>Jasir Jaleel</h5>
+
+                                <h5>{{i.first_name}} {{i.last_name}}</h5>
                                 <div class="col">
-                                    <span>Kakkanad</span>,
-                                    <span>Kochi</span>,
-                                    <span>Kerala</span>,
-                                    <span>India</span>,
-                                    <span>680 042</span>
+                                    <span>{{i.street_address}}</span>,
+                                    <span>{{i.town_city}}</span>,
+                                    <span>{{i.state}}</span>,
+                                    <span>{{i.country_region}}</span>,
+                                    <span>{{i.zip_code}}</span>
                                 </div>
-                                <span>9876543210</span>
+                                <span>{{i.phone_number}}</span>
+
                             </div>
                         </div>
                     </div>
                 </label>
             </li>
+            {% endfor %}
             <!-- Single Address End  -->
         </ul>
 
@@ -64,5 +70,137 @@
 
     </div>
 </div>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- <script>
 
+    function sweet_alert(){
+         Swal.fire({
+  title: "Are you sure?",
+  text: "You won't be able to revert this!",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "Yes, delete it!"
+}).then((result) => {
+  if (result.isConfirmed) {
+    Swal.fire({
+      title: "Deleted!",
+      text: "Your file has been deleted.",
+      icon: "success"
+    });
+
+     
+     
+  }
+});
+    }
+
+   
+</script> -->
+
+<script>
+//     $(document).ready(function () {
+//     // Handle radio button change
+//     $('.address-radio').change(function () {
+//         // Show confirmation modal
+//         var addressId = $(this).val();
+//         sweet_alert(addressId);
+//     });
+
+//     // Handle confirmation button click
+//     $('#confirmSetDefault').click(function () {
+//         // Get the address ID from the checked radio button
+//         var addressId = $('.address-radio:checked').val();
+
+//         // Make a fetch request to update is_default in the backend
+//         fetch('/my-address/', {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'X-CSRFToken': getCookie('csrftoken'), // Include CSRF token
+//             },
+//             body: JSON.stringify({ 'addressId': addressId }),
+//         })
+//             .then(response => response.json())
+//             .then(data => {
+//                 // Handle the response from the server
+//                 console.log(data);
+//                 if (data.success) {
+//                     // Success message
+//                     Swal.fire('Success', data.message, 'success');
+//                 } else {
+//                     // Error message
+//                     Swal.fire('Error', data.message, 'error');
+//                 }
+//             })
+//             .catch(error => {
+//                 console.error('Error:', error);
+//                 // Handle other errors
+//                 Swal.fire('Error', 'An unexpected error occurred', 'error');
+//             });
+//     });
+// });
+
+function sweet_alert(addressId) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "Make this your default address",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#b19361",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes"
+    }).then((result) => {
+        // If the user confirms
+        console.log(addressId);
+        if (result.isConfirmed) {
+            // Make a fetch request to update is_default in the backend
+            fetch('/myaccount/my-address/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'), // Include CSRF token
+                },
+                // body: JSON.stringify({ 'addressId':addressId }),
+                body: JSON.stringify({ 'addressId':addressId }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response from the server
+                    console.log(data);
+                    if (data.success) {
+                        // Success message
+                        Swal.fire('Success', data.message, 'success');
+                    } else {
+                        // Error message
+                        Swal.fire('Error', data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle other errors
+                    Swal.fire('Error', 'An unexpected error occurred', 'error');
+                });
+        }
+    });
+}
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Check if the cookie name matches the provided name
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+</script>
 {% endblock content %}

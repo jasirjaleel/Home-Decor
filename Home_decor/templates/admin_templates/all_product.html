@@ -52,7 +52,11 @@
                             <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
                                 <a class="itemside" href="#">
                                     <div class="left">
-                                        <img src="{{ product. }}" class="img-sm img-thumbnail" alt="Item">
+                                        
+                                        <img src="{{ product.products.thumbnail_image.url.first }}" class="img-sm img-thumbnail" alt="Item">
+                                        {% comment %}
+                                        <img src="{{ product.products.thumbnail_image }}" class="img-sm img-thumbnail" alt="Item">
+                                        {% endcomment %}
                                     </div>
                                     <div class="info">
                                    <a href="{% url 'all-variant-product' product_id=product.id %}"><h6 class="">{{product.product_name}}</h6></a>  

@@ -1,4 +1,4 @@
-{% extends 'user_templates/base.html' %}
+{% extends 'store_templates/base.html' %}
 {% load static %}
 {% block content %}
 <div class="breadcrumb-section breadcrumb-bg-color--golden">
@@ -91,15 +91,17 @@
                                                         data-aos="fade-up" data-aos-delay="0">
                                                         <div class="image-box">
                                                             <a href="{% url 'productdetails' product_id=product.id %}" class="image-link">
-                                                                <img src="{{ product.images.url }}"
+                                                                <img src="{{ product.thumbnail_image.url }}"
                                                                     alt="">
-                                                                <img src="{{ product.images.url }}"
+                                                                <img src="{{ product.thumbnail_image.url }}"
                                                                     alt="">
                                                             </a>
                                                             <div class="action-link">
                                                                 <div class="action-link-left">
+                                                                    {% comment %}
                                                                     <a href="{% url 'addtocart' product_id=product.id %}" data-bs-toggle="modal"
-                                                                        data-bs-target="#modalAddcart">Add to Cart</a>
+                                                                    data-bs-target="#modalAddcart">Add to Cart</a>
+                                                                    {% endcomment %}
                                                                 </div>
                                                                 <div class="action-link-right">
                                                                     <a href="#" data-bs-toggle="modal"
@@ -115,7 +117,7 @@
                                                         <div class="content">
                                                             <div class="content-left">
                                                                 <h6 class="title"><a
-                                                                        href="product-details-default.html">{{ product.product_name }}</a></h6>
+                                                                        href="product-details-default.html">{{ product.product.product_name }}</a></h6>
                                                                 <ul class="review-star">
                                                                     <li class="fill"><i class="ion-android-star"></i>
                                                                     </li>
@@ -130,7 +132,7 @@
                                                                 </ul>
                                                             </div>
                                                             <div class="content-right">
-                                                                <span class="price">$ {{ product.price }}</span>
+                                                                <span class="price">$ {{ product.sale_price }}</span>
                                                             </div>
 
                                                         </div>
@@ -143,22 +145,22 @@
                                         <!-- Start List View Product -->
                                         <div class="tab-pane sort-layout-single" id="layout-list">
                                             <div class="row">
-                                                {% for product in products  %}
+                                                {% for product in products %}
                                                 <div class="col-12">
                                                     <!-- Start Product Defautlt Single -->
                                                     <div class="product-list-single product-color--golden">
-                                                        <a href="{% url 'productdetails' product_id=product.id %}"
+                                                        <a href=""
                                                             class="product-list-img-link">
                                                             <img class="img-fluid"
-                                                                src="{{ product.images.url }} "
+                                                                src="{{ product.thumbnail_image.url }} "
                                                                 alt="">
                                                             <img class="img-fluid"
-                                                                src="{{ product.images.url }}"
+                                                                src="{{ product.thumbnail_image.url }}"
                                                                 alt="">
                                                         </a>
                                                         <div class="product-list-content">
                                                             <h5 class="product-list-link"><a
-                                                                    href="product-details-default.html">{{ product.product_name }}</a></h5>
+                                                                    href="product-details-default.html">{{ product.product.product_name }}</a></h5>
                                                             <ul class="review-star">
                                                                 <li class="fill"><i class="ion-android-star"></i></li>
                                                                 <li class="fill"><i class="ion-android-star"></i></li>
@@ -166,14 +168,16 @@
                                                                 <li class="fill"><i class="ion-android-star"></i></li>
                                                                 <li class="empty"><i class="ion-android-star"></i></li>
                                                             </ul>
-                                                            <span class="product-list-price"><del>$30.12</del>
-                                                                {{ product.price }}</span>
-                                                            <p>{{ product.description }}</p>
+                                                            <span class="product-list-price"><del>{{ product.max_price }}</del>
+                                                                {{ product.sale_price }}</span>
+                                                            <p>{{ product.product.description }}</p>
                                                             <div class="product-action-icon-link-list">
+                                                                {% comment %}
                                                                 <a href="{% url 'addtocart' product_id=product.id %}" data-bs-toggle="modal"
-                                                                    data-bs-target="#modalAddcart"
-                                                                    class="btn btn-lg btn-black-default-hover">Add to
-                                                                    cart</a>
+                                                                data-bs-target="#modalAddcart"
+                                                                class="btn btn-lg btn-black-default-hover">Add to
+                                                                cart</a>
+                                                                {% endcomment %}
                                                                 <a href="#" data-bs-toggle="modal"
                                                                     data-bs-target="#modalQuickview"
                                                                     class="btn btn-lg btn-black-default-hover"><i

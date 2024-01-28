@@ -60,7 +60,6 @@ def create_product(request):
 def all_variant_product(request,product_id):
     product         = Product.objects.get(id=product_id)
     product_variant = Product_Variant.objects.filter(product=product)
-
     context = {
         'product_variant':product_variant,
         
@@ -89,7 +88,7 @@ def add_product_variant(request):
         product_image   = request.FILES.getlist('product_image')
         sale_price      = request.POST.get('sale_price')
         stock           = request.POST.get('stock')      
-        thumbnail_image = request.POST.get('thumbnail_image')      
+        thumbnail_image = request.FILES.get('thumbnail_image')
        
         #getting all atributes
         attribute_ids=[]

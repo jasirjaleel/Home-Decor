@@ -43,21 +43,24 @@ INSTALLED_APPS = [
     'user_app',
     'cart_app',
     'account',
+    'store',
     'extra_management',
     'product_management',
     'category_management',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'extra_management.middleware.RestrictAdminMiddleware',
-
+    'account.middleware.RestrictMyAccountMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -152,3 +155,9 @@ EMAIL_USE_TLS       = os.environ["EMAIL_USE_TLS"]
 EMAIL_PORT          = os.environ["EMAIL_PORT"]
 EMAIL_HOST_USER     = os.environ["EMAIL_HOST_USER"]
 EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
+
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]

@@ -1,4 +1,4 @@
-{% extends 'user_templates/base.html' %}
+{% extends 'store_templates/base.html' %}
 {% load static %}
 {% block content %}
 
@@ -34,56 +34,63 @@
                     <div class="account_form register" data-aos="fade-up" data-aos-delay="0">
                 
                       
-                        <form method="post" >
+                        <form method="post" id="addressForm">
                             {% csrf_token %}
                             <h3>
                                 <span class=" d-flex align-items-center justify-content-center mt-2">Add a new address</span>
                             </h3>
                             <div class="d-flex " style="gap: 178px; width: 260;">
                                 <div class="default-form-box"style="width: 90px; max-width: 600px; position: relative;">
-                                    <input type="text" class="mt-3"  placeholder="First Name" name="firstname" autocomplete="off" style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
-                                    <span class="error"   style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
+                                    <input type="text" id="firstname" class="mt-3"  placeholder="First Name" name="first_name" autocomplete="off" onkeyup="validateFname()"autocomplete="off" style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error"  id="fnameError" style="position: absolute;top: 100%;left: 2px;font-size:12px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
                                 </div>
                                 <div class="default-form-box"style="width: 90px; max-width: 600px; position: relative;">
-                                    <input type="text" class="mt-3"  placeholder="Last Name" name="lastname" autocomplete="off"  style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
-                                    <span class="error"  style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
+                                    <input type="text" id="lastname" class="mt-3"  placeholder="Last Name" name="last_name" autocomplete="off" onkeyup="validateLname()"autocomplete="off" style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error" id="lnameError" style="position: absolute;top: 100%;left: 2px;font-size:12px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
                                 </div>
                             </div>
                             <div class="d-flex " style="gap: 178px; width: 260;">
                                 <div class="default-form-box"style="width: 90px; max-width: 600px; position: relative;">
-                                    <input type="text" class="mt-3"   placeholder="Phone Number" name="phonenumber" autocomplete="off"  style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
-                                    <span class="error"  style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
+                                    <input type="text" id="phone_number" class="mt-3"   placeholder="Phone Number" name="phone_number"  onkeyup="validatePhoneNumber()"autocomplete="off" style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error" id="phoneError"  style="position: absolute;top: 100%;left: 2px;font-size:12px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
                                 </div>
                                 <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;margin-top: 15px;">
-                                    <input type="text"   name="city" placeholder="Town / City" autocomplete="off"  style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;" >
-                                    <span class="error"   style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
+                                    <input type="text"  id="town_city" placeholder="Town / City" autocomplete="off" name="town_city" onkeyup="validateTown()"autocomplete="off" style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;" >
+                                    <span class="error" id="townError"  style="position: absolute;top: 100%;left: 2px;font-size:12px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
                                 </div>
                             </div>
                             <div class="d-flex " style="gap: 178px; width: 260;">
                                 <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;margin-top: 5px;">
                                    
-                                    <input type="text" class="mt-1"  placeholder="Street address" name="address"  style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
-                                    <span class="error"  style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;"></span>
+                                    <input type="text" id="street_address" class="mt-1"  placeholder="Street address" name="street_address" autocomplete="off" onkeyup="validateStreet()" style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error" id="streetError" style="position: absolute;top: 100%;left: 2px;font-size:12px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;"></span>
                                 </div>
                                 <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;margin-top: 5px;">
                                    
-                                    <input type="text" class="mt-1"  placeholder="State" name="state"  style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
-                                    <span class="error"  style="position: absolute; top: 100%; left: 2px; font-size: 14px; font-weight: 400; color: red; width: 190px; transition: opacity 0.5s;"></span>
+                                    <input type="text" id="state" class="mt-1"  placeholder="State" name="state" onkeyup="validateState()" autocomplete="off" style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error" id="stateError" style="position: absolute; top: 100%; left: 2px; font-size: 12px; font-weight: 400; color: red; width: 190px; transition: opacity 0.5s;"></span>
                                 </div>
                             </div>
                             <div class="d-flex " style="gap: 178px; width: 260;">
                                 <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;margin-top: 5px;">
                                    
-                                    <input type="text" class="mt-1"  placeholder="Country / Region" name="country"  style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
-                                    <span class="error"  style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;"></span>
+                                    <input type="text" id="country_region"  class="mt-1"  placeholder="Country / Region" onkeyup="validateCountry()" autocomplete="off" name="country_region"  style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error" id="countryError" style="position: absolute;top: 100%;left: 2px;font-size:12px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;"></span>
                                 </div>
                                 <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;margin-top: 5px;">
                                    
-                                    <input type="text" class="mt-1"  placeholder="ZIP code" name="zipcode"  style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
-                                    <span class="error"  style="position: absolute; top: 100%; left: 2px; font-size: 14px; font-weight: 400; color: red; width: 190px; transition: opacity 0.5s;"></span>
+                                    <input type="text" id="zip_code" class="mt-1"  placeholder="ZIP code" name="zip_code"  onkeyup="validateZip()" autocomplete="off" style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error" id="zipError" style="position: absolute; top: 100%; left: 2px; font-size: 12px; font-weight: 400; color: red; width: 190px; transition: opacity 0.5s;"></span>
                                 </div>
                             </div>
+                            <div class="form-check justify-content-center align-items-center">
+                                <input class="form-check-input al" type="checkbox" name="make_default">
+                                <label class="form-check-label">
+                                  Make as default 
+                                </label>
+                              </div>
                             <div class=" d-flex login_submit pt-4 justify-content-center">
+            
                                 <button class="btn  btn-black-default-hover  w-100"  type="submit">Submit</button>
                             </div>
                            
@@ -95,6 +102,168 @@
         </div>
     </div> <!-- ...:::: End Address Section :::... -->
 
+    <script>
+        function validateFname() {
+            const fname = document.getElementById('firstname').value;
+            const fnameError = document.getElementById('fnameError');
+    
+            if (fname === "" || !fname.trim()) {
+                fnameError.innerHTML = 'Enter your First Name';
+                return false;
+            }
+            if (!fname.match(/^[a-zA-Z\s-,]+$/)) {
+                fnameError.innerHTML = 'Numbers and symbols are not allowed';
+                return false;
+            }
+            if (fname.length < 3) {
+                fnameError.innerHTML = "Must be 3 characters";
+                return false;
+            }
+            fnameError.innerHTML = null;
+            return true;
+        }
+    
+        function validateLname() {
+            const lname = document.getElementById('lastname').value;
+            const lnameError = document.getElementById('lnameError');
+    
+            if (lname === "" || !lname.trim()) {
+                lnameError.innerHTML = 'Enter your Last Name';
+                return false;
+            }
+            if (!lname.match(/^[a-zA-Z\s-,]+$/)) {
+                lnameError.innerHTML = 'Numbers and symbols are not allowed';
+                return false;
+            }
+            if (lname.length < 3) {
+                lnameError.innerHTML = "Must be 3 char";
+                return false;
+            }
+            lnameError.innerHTML = null;
+            return true;
+        }
+    
+        function validatePhoneNumber() {
+            const phoneNumber = document.getElementById('phone_number').value;
+            const phoneNumberError = document.getElementById('phoneError');
+    
+            if (phoneNumber === "" || !phoneNumber.trim()) {
+                phoneNumberError.innerHTML = 'Enter your Phone Number';
+                return false;
+            }
+            if  (phoneNumber.length >10  && phoneNumber.match(/^[0-9]+$/) || phoneNumber.length <10 && phoneNumber.match(/^[0-9]+$/)) {
+                phoneNumberError.innerHTML = "Must be 10 numbers";
+                return false;
+            }
+            if (!phoneNumber.match(/^[0-9]+$/)) {
+                phoneNumberError.innerHTML = 'Should only contain numbers.';
+                return false;
+            }
+            // You can add more specific validation for phone numbers if needed
+    
+            phoneNumberError.innerHTML = null;
+            return true;
+        }
 
+        function validateTown() {
+            const town = document.getElementById('town_city').value;
+            const townError = document.getElementById('townError');
+    
+            if (town === "" || !town.trim()) {
+                townError.innerHTML = 'Required';
+                return false;
+            }
+            townError.innerHTML = null;
+            return true;
+        }
+        
+        function validateStreet() {
+            const street = document.getElementById('street_address').value;
+            const streetError = document.getElementById('streetError');
+    
+            if (street === "" || !street.trim()) {
+                streetError.innerHTML = 'Required';
+                return false;
+            }
+            streetError.innerHTML = null;
+            return true;
+        }
+        
+        function validateState() {
+            const state = document.getElementById('state').value;
+            const stateError = document.getElementById('stateError');
+    
+            if (state === "" || !state.trim()) {
+                stateError.innerHTML = 'Required';
+                return false;
+            }
+            stateError.innerHTML = null;
+            return true;
+        }
+
+        function validateCountry() {
+            const country_region = document.getElementById('country_region').value;
+            const countryError = document.getElementById('countryError');
+    
+            if (country_region === "" || !country_region.trim()) {
+                countryError.innerHTML = 'Required';
+                return false;
+            }
+            countryError.innerHTML = null;
+            return true;
+        }
+
+        function validateZip() {
+            const zip_code = document.getElementById('zip_code').value;
+            const zipError = document.getElementById('zipError');
+    
+            if (zip_code === "" || !zip_code.trim()) {
+                zipError.innerHTML = 'Required';
+                return false;
+            }
+            if (!zip_code.match(/^[0-9]+$/)) {
+                zipError.innerHTML = 'Should only contain numbers.';
+                return false;
+            }
+            zipError.innerHTML = null;
+            return true;
+        }
+    
+    
+    
+        // Add more validation functions for other fields if needed
+    
+        function validation() {
+            const isValidFname          = validateFname();
+            const isValidLname          = validateLname();
+            const isValidPhoneNumber    = validatePhoneNumber();
+            const isValidTown           = validateTown();
+            const isValidStreet         = validateStreet();
+            const isValidState          = validateState();
+            const isValidCountry        = validateCountry();
+            const isValidZip            = validateZip();
+            
+            // Add validations for other fields
+    
+            return isValidFname && isValidLname && isValidPhoneNumber && isValidTown && isValidStreet && isValidState && isValidCountry && isValidZip;
+        }
+    
+        document.addEventListener('DOMContentLoaded', function () {
+            const addressForm = document.getElementById('addressForm');
+    
+            addressForm.addEventListener('submit', function (e) {
+                e.preventDefault(); // Prevent the default form submission behavior
+    
+                // Your validation and other logic here
+                if (validation()) {
+                    console.log('Address form submitted successfully');
+                    this.submit(); // Manually submit the form
+                } else {
+                    console.log('Address form not submitted due to validation error');
+                }
+            });
+        });
+    </script>
+    
 
     {% endblock content %}
