@@ -37,6 +37,7 @@ class Product(models.Model):
     slug            = models.SlugField(max_length=200, unique=True)
     description     = models.TextField(max_length=500, blank=True)
     is_available    = models.BooleanField(default=True)
+    base_price      = models.DecimalField(max_digits=8, decimal_places=2)
     brand           = models.ForeignKey(Brand,on_delete=models.CASCADE)
     category        = models.ForeignKey(Category,on_delete=models.CASCADE)
     created_date    = models.DateTimeField(auto_now_add=True)
@@ -85,7 +86,7 @@ class Product_Variant(models.Model):
     sale_price           = models.DecimalField(max_digits=8, decimal_places=2)
     stock                = models.IntegerField()
     product_variant_slug = models.SlugField(unique=True, blank=True,max_length=200)
-    thumbnail_image      = models.ImageField(upload_to='product_variant/images/')
+    thumbnail_image      = models.ImageField(upload_to='media/phtots/product_variant/')
     is_active            = models.BooleanField(default=True)
     created_at           = models.DateTimeField(auto_now_add=True)
     updated_at           = models.DateTimeField(auto_now=True)
@@ -128,7 +129,7 @@ class Product_Variant(models.Model):
    # FOR ADDITIONAL IMAGES
 class Additional_Product_Image(models.Model):
     product_variant = models.ForeignKey(Product_Variant,on_delete=models.CASCADE,related_name='additional_product_images')
-    image           = models.ImageField(upload_to='photos/additional_photos')
+    image           = models.ImageField(upload_to='media/photos/additional_photos')
     is_active       = models.BooleanField(default=True)
 
     def __str__(self):

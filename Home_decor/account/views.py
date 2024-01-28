@@ -8,6 +8,7 @@ import random
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
+from django.contrib.auth import login
 # Create your views here.
 
 def my_account(request):
@@ -91,50 +92,34 @@ def forget_password(request):
 
 
 def verif_forget_password(request):
+    if 'storedemail' not in request.session or not request.session['storedemail']:
+        return redirect('forget_password')
     if request.method == "POST":
         otp = request.POST.get('enteredotp')
         storedotp=request.session['storedotp']
-        # storedemail = request.session['storedemail']
 
         if otp == storedotp:
-            print('hi')
-            # user = Account.objects.get(email=storedemail)
-            
-            # user.save()
-            # subject = "Password Reset Successful - Home Decor Ecommerce Store"
-            # sender_mail = "noreply@homedecorestore.com"
-            # message = "Dear User,\n\nYour password reset for Home Decor Ecommerce Store was successful.\n\nIf you did not initiate this password reset, please contact our support team immediately.\n\nThank you for choosing Home Decor Ecommerce Store."
-
-
-            # send_mail(subject, message, sender_mail,[storedemail])
-
-            return redirect ('enter_password')
+            return redirect ('new_password')
     return render(request,'account_templates/verify_forget_password.html')
 
 
 # @login_required(login_url='userlogin') 
 def enter_new_password(request):
+    if 'storedemail' not in request.session or not request.session['storedemail']:
+        return redirect('forget_password')
     if request.method == "POST":
         password           = request.POST.get('password')
         confirm_password   = request.POST.get('confirm_password')
         if password == confirm_password:
-            # storedemail = request.session['storedemail']
-
-
-            user = request.user
-            # Assuming you have a custom user model (Account)
-            user.set_password(password)
-            user.save()
-
-            # account = Account.objects.get(email=storedemail)
-            # print(account.username)
-
-            # account.set_password(password)
-            # account.save()
+    
+            userr = request.user         # Assuming you have a custom user model (Account)
+            userr.set_password(password)
+            userr.save()
+            login(request, userr)
             subject = "Password Reset Successful - Home Decor Ecommerce Store"
             sender_mail = "noreply@homedecorestore.com"
             message = "Dear User,\n\nYour password reset for Home Decor Ecommerce Store was successful.\n\nIf you did not initiate this password reset, please contact our support team immediately.\n\nThank you for choosing Home Decor Ecommerce Store."
-            send_mail(subject, message, sender_mail,[user])
+            send_mail(subject, message, sender_mail,[userr])
             messages.success(request, "Resetting Password Completed")
             return redirect('myaccount')
     return render(request,'account_templates/enter_new_password.html')

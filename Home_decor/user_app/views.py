@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User
 from django.views.decorators.cache import never_cache,cache_control
@@ -8,6 +8,13 @@ from .models import Account
 from django.core.mail import send_mail
 import random 
 from django.contrib.auth.hashers import check_password
+from django.views import View
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+
+
 # Create your views here.
 @never_cache
 def usersignup(request):
@@ -134,5 +141,77 @@ def userlogout(request):
 
 
 
+
+class ForgetPasswordView(View):
+    template_name = 'user_templates/forget_password.html'
+
+    def post(self, request, *args, **kwargs):
+        email = self.request.POST.get('email')
+        random_otp = str(random.randint(100000, 999999))
+        self.request.session['storedotp'] = random_otp
+        self.request.session['storedemail'] = email
+        self.request.session.modified = True 
+        self.request.session.set_expiry(600)
+
+        subject = "Verify Your One-Time Password (OTP) - Home Decor Ecommerce Store"
+        sender_mail = "noreply@homedecorestore.com"
+        otp_message = f"Dear User,\n\n Your One-Time Password (OTP) for reset password: {random_otp}\n\nThank you for choosing Home Decor Ecommerce Store."
+        send_mail(subject, otp_message, sender_mail, [email])
+        return redirect('verify_password_login')
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
+
+class VerifyForgetPasswordView(View):
+    template_name = 'user_templates/verify_forget_password.html'
+
+    def post(self, request, *args, **kwargs):
+        entered_otp = self.request.POST.get('enteredotp')
+        stored_otp = self.request.session.get('storedotp')
+
+        if entered_otp == stored_otp:
+            return redirect('new_password_login')
+
+        return render(request, self.template_name)
+
+    def get(self, request, *args, **kwargs):
+        if 'storedemail' not in request.session or not request.session['storedemail']:
+            return redirect('forget_password_login')
+
+        return render(request, self.template_name)
+
+
+class EnterNewPasswordView(View):
+    template_name = 'user_templates/enter_new_password.html'
+
+    def post(self, request, *args, **kwargs):
+        if 'storedemail' not in self.request.session or not self.request.session['storedemail']:
+            return redirect('forget_password_login')
+
+        password = self.request.POST.get('password')
+        confirm_password = self.request.POST.get('confirm_password')
+
+        if password == confirm_password:
+            stored_email = self.request.session.get('storedemail')
+            user = Account.objects.get(email=stored_email)
+            user.set_password(password)
+            user.save()
+
+            subject = "Password Reset Successful - Home Decor Ecommerce Store"
+            sender_mail = "noreply@homedecorestore.com"
+            message = "Dear User,\n\nYour password reset for Home Decor Ecommerce Store was successful.\n\nIf you did not initiate this password reset, please contact our support team immediately.\n\nThank you for choosing Home Decor Ecommerce Store."
+            send_mail(subject, message, sender_mail, [user.email])
+
+            messages.success(self.request, "Resetting Password Completed")
+            return redirect('userlogin')
+
+        return render(request, self.template_name)
+
+    def get(self, request, *args, **kwargs):
+        if 'storedemail' not in self.request.session or not self.request.session['storedemail']:
+            return redirect('forget_password_login')
+
+        return render(request, self.template_name)
 
     

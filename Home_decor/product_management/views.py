@@ -37,6 +37,7 @@ def create_product(request):
         category_id     = request.POST.get('category_id')
         brand_id        = request.POST.get('Brand')
         description     = request.POST.get('description')
+        base_price     = request.POST.get('price')
         category        = Category.objects.get(id=category_id)
         brand           = Brand.objects.get(id=brand_id)
         
@@ -45,6 +46,7 @@ def create_product(request):
             category     = category,
             brand        = brand,
             description  = description, 
+            base_price   = base_price
         )
 
         product.save()
