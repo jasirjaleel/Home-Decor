@@ -16956,6 +16956,31 @@ table {
 .product-variable-color label .product-color-red {
     background: red;
 }
+
+.product-variable-color label .product-color-white {
+    background: white;
+}
+
+.product-variable-color label .product-color-grey {
+    background: grey;
+}
+
+.product-variable-color label .product-color-black {
+    background: black;
+}
+
+.product-variable-color label .product-color-brown {
+    background: brown;
+}
+
+.product-variable-color label .product-color-yellow {
+    background: yellow;
+}
+
+.product-variable-color label .product-color-orange {
+    background: orange;
+}
+
 .product-variable-color label .product-color-tomato {
     background: tomato;
 }

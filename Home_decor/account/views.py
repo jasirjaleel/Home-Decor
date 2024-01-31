@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
 from django.contrib.auth import login
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 def my_account(request):
@@ -63,6 +64,20 @@ def add_address(request):
         address.save()
         return redirect('myaddress')
     return render(request,'account_templates/add-address.html')
+
+def delete_address(request):
+    address_id = request.GET.get('id')
+    print(address_id)
+    address = get_object_or_404(Address, id = address_id)
+    print(address.first_name)
+    
+    user_address = Address.objects.filter(first_name = address.first_name )
+    if not user_address:
+        return redirect('myaddress')
+    
+    user_address.delete()
+    messages.success(request, 'Address deleted successfully.')
+    return redirect('myaddress')
 
 def my_order(request):
     return render(request,'account_templates/orders.html')

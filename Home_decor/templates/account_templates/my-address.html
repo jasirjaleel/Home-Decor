@@ -53,9 +53,9 @@
                                     <span>{{i.zip_code}}</span>
                                 </div>
                                 <span>{{i.phone_number}}</span>
-
                             </div>
                         </div>
+                        <div class="btn px-3 align-content-center" onclick="delete_add('{{ i.id }}')"><i class="fa-duotone fa-trash" style="--fa-primary-color: #b19561; --fa-secondary-color: #b19561; "></i></div>
                     </div>
                 </label>
             </li>
@@ -100,47 +100,27 @@
 </script> -->
 
 <script>
-//     $(document).ready(function () {
-//     // Handle radio button change
-//     $('.address-radio').change(function () {
-//         // Show confirmation modal
-//         var addressId = $(this).val();
-//         sweet_alert(addressId);
-//     });
+    function delete_add(addressId){
 
-//     // Handle confirmation button click
-//     $('#confirmSetDefault').click(function () {
-//         // Get the address ID from the checked radio button
-//         var addressId = $('.address-radio:checked').val();
+        fetch(`/myaccount/delete-address/?id=${addressId}`, {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        // Other headers as needed
+    },
+})
+    .then(response => response.json())
+    .then(data => {
+        // Handle the response data
+        console.log(data);
+    })
+    .catch(error => {
+        // Handle errors
+        console.error('Error:', error);
+    });
 
-//         // Make a fetch request to update is_default in the backend
-//         fetch('/my-address/', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 'X-CSRFToken': getCookie('csrftoken'), // Include CSRF token
-//             },
-//             body: JSON.stringify({ 'addressId': addressId }),
-//         })
-//             .then(response => response.json())
-//             .then(data => {
-//                 // Handle the response from the server
-//                 console.log(data);
-//                 if (data.success) {
-//                     // Success message
-//                     Swal.fire('Success', data.message, 'success');
-//                 } else {
-//                     // Error message
-//                     Swal.fire('Error', data.message, 'error');
-//                 }
-//             })
-//             .catch(error => {
-//                 console.error('Error:', error);
-//                 // Handle other errors
-//                 Swal.fire('Error', 'An unexpected error occurred', 'error');
-//             });
-//     });
-// });
+    }
+    
 
 function sweet_alert(addressId) {
     Swal.fire({

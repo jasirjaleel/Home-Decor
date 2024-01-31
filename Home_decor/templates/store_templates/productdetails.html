@@ -24,19 +24,21 @@
 
     <!-- Start Product Details Section -->
     <div class="product-details-section">
-        <div class="container">
+        <div class="container" id="dynamicContent">
             <div class="row">
                 <div class="col-xl-5 col-lg-6">
                     <div class="product-details-gallery-area product-details-gallery-area-vartical product-details-gallery-area-vartical-left"
-                        data-aos="fade-up" data-aos-delay="0">
+                         >
                         <!-- Start Large Image -->
                         <div class="product-large-image product-large-image-vartical swiper-container ml-5">
                             <div class="swiper-wrapper">
+                                
                                 {% for image in images %}
                                 <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img src="{{ image }}" alt="">
+                                    <img src="{{ image.url }}" alt="">
                                 </div>
                                {% endfor %}
+                            
                             </div>
                         </div>
                         <!-- End Large Image -->
@@ -45,7 +47,7 @@
                             <div class="swiper-wrapper">
                                 {% for image in images %}
                                 <div class="product-image-thumb-single swiper-slide">
-                                    <img class="img-fluid" src="{{ image }}"
+                                    <img class="img-fluid" src="{{ image.url }}"
                                         alt="">
                                 </div>
                                 
@@ -56,12 +58,13 @@
                     </div>
                 </div>
                 <div class="col-xl-7 col-lg-6">
-                    <div class="product-details-content-area product-details--golden" data-aos="fade-up"
-                        data-aos-delay="200">
+                    <div class="product-details-content-area product-details--golden" 
+                        >
                         <!-- Start  Product Details Text Area-->
+                        {% for i in variants %}
                         <div class="product-details-text">
-                            {% for product in products %}
-                            <h4 class="title">{{product.product.product_name}} </h4>
+                            
+                            <h4 class="title">{{i.product.product_name}} </h4>
                             
                             
                             <div class="d-flex align-items-center">
@@ -74,9 +77,10 @@
                                 </ul>
                                 <a href="#" class="customer-review ml-2">(customer review )</a>
                             </div>
-                            <div class="price">{{product.max_price}}</div>
-                            <p>{{product.product.description}}</p>
+                            <div class="price">   {{i.total_price}}</div><span><del>{{ i.max_price }}</del></span>
+                            <p>{{i.product.description}}</p>
                         </div>
+                   
                         {% endfor %}
                         <!-- End  Product Details Text Area-->
                         <!-- Start Product Variable Area -->
@@ -89,80 +93,41 @@
                             </div> -->
                             <!-- Product Variable Single Item -->
                             <div class="variable-single-item">
-                          
                             
+                            
+                                
+
+
+                                <div class="variable-single-item">
+                                    <span>Colors</span>
+                                    <select class="product-variable-size"  id="colorSelect" onchange="sendColorToBackend(this.value, document.getElementById('materialSelect').value)">
+                                        <!-- onchange="sendColorToBackend('{{ i }}','{{ product_id }}')" -->
+                                        {% for i in unique_colors %}
+                                        <label for="product-color-{{ i|lower }}">
+                                                    <option value="{{ i }}" {% if i in att_list %} selected {% endif %} >{{ i }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
 
                                 
-                                {% for i in variant %}
-                                    {% for attribute in i.attributes.all %}
-                                        {% if attribute.attribute.attribute_name == 'Color' %}
-                                            <span>{{ attribute.attribute_value }}</span>
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endfor %}
 
-                                {% for i in variant %}
-                                    {% for attribute in i.attributes.all %}
-                                        {% if attribute.attribute.attribute_name == 'Material' %}
-                                            <span>{{ attribute.attribute_value }}</span>
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endfor %}
-
-                                <span>Metrial</span>
-                                <div class="product-variable-color">
-                                    <label for="product-color-red">
-                                        <input name="product-color" id="product-color-red" class="color-select"
-                                            type="radio" checked>
-                                        <span class="product-color-red"></span>
-                                    </label>
-                                    <label for="product-color-tomato">
-                                        <input name="product-color" id="product-color-tomato" class="color-select"
-                                            type="radio">
-                                        <span class="product-color-tomato"></span>
-                                    </label>
-                                    <label for="product-color-green">
-                                        <input name="product-color" id="product-color-green" class="color-select"
-                                            type="radio">
-                                        <span class="product-color-green"></span>
-                                    </label>
-                                    <label for="product-color-light-green">
-                                        <input name="product-color" id="product-color-light-green" class="color-select"
-                                            type="radio">
-                                        <span class="product-color-light-green"></span>
-                                    </label>
-                                    <label for="product-color-blue">
-                                        <input name="product-color" id="product-color-blue" class="color-select"
-                                            type="radio">
-                                        <span class="product-color-blue"></span>
-                                    </label>
-                                    <label for="product-color-light-blue">
-                                        <input name="product-color" id="product-color-light-blue" class="color-select"
-                                            type="radio">
-                                        <span class="product-color-light-blue"></span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <!-- Product Variable Single Item -->
                             <div class="variable-single-item">
-                                <span>Size</span>
-                                <select class="product-variable-size">
-                                    <option selected value="1"> size in option</option>
-                                    <option value="2">s</option>
-                                    <option value="3">m</option>
-                                    <option value="4">l</option>
-                                    <option value="5">xl</option>
-                                    <option value="6">xxl</option>
+                                <span>Material</span>
+                                <select class="product-variable-size" id="materialSelect" onchange="sendColorToBackend(document.getElementById('colorSelect').value, this.value)" >
+                                    <!-- onchange="sendColorToBackend('{{ i }}','{{ product_id }}')" -->
+                                    {% for i in unique_materials %}
+                                                <option value="{{ i }}"  {% if i in att_list %} selected {% endif %}>{{ i }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
+                            
                         
                             <!-- Product Variable Single Item -->
                             <div class="d-flex align-items-center ">
                                 <div class="variable-single-item ">
                                     <span>Quantity</span>
                                     <div class="product-variable-quantity">
-                                        <input min="1" max="100" value="1" type="number">
+                                        <input min="1" max="100" value="1" type="number" >
                                     </div>
                                 </div>
                                 
@@ -218,7 +183,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <div class="product-details-content-tab-wrapper" data-aos="fade-up" data-aos-delay="0">
+                    <div class="product-details-content-tab-wrapper"  >
 
                         <!-- Start Product Details Tab Button -->
                         <ul class="nav tablist product-details-content-tab-btn d-flex justify-content-center">
@@ -457,7 +422,7 @@
     <!-- Start Product Default Slider Section -->
     <div class="product-default-slider-section section-top-gap-100 section-fluid">
         <!-- Start Section Content Text Area -->
-        <div class="section-title-wrapper" data-aos="fade-up" data-aos-delay="0">
+        <div class="section-title-wrapper"  >
             <div class="container">
                 <div class="row">
                     <div class="col-12">
@@ -472,7 +437,7 @@
             </div>
         </div>
         <!-- Start Section Content Text Area -->
-        <div class="product-wrapper" data-aos="fade-up" data-aos-delay="0">
+        <div class="product-wrapper"  >
             <div class="container">
                 <div class="row">
                     <div class="col-12">
@@ -822,5 +787,80 @@
         </div>
     </div>
     <!-- End Product Default Slider Section -->
+    <script>
+        function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+    const csrftoken = getCookie('csrftoken');
+   
+    function sendColorToBackend(color,material) {
+    console.log(color,material);
+
+    // Assuming `id` is defined somewhere in your code
+  // Replace with the actual product id
+
+    // Use the URLSearchParams API to construct the query string
+    var queryParams = new URLSearchParams({
+        'selectedColor': color,
+        'selectedMaterial': material
+    });
+
+    // Get the current URL
+    var currentURL = window.location.href;
+
+    // Append the query string to the current URL
+    var urlWithQueryParams = `${currentURL}?${queryParams.toString()}`;
+
+    // Make a fetch request to your backend API
+    fetch(urlWithQueryParams, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,  // Include additional headers like CSRF token if needed
+        },
+        body: JSON.stringify({}),  // Include any other data in the request body if needed
+    })
+    .then(response => response.json())
+    
+    .then(data => {
+        // Handle the response from the server if needed
+        console.log(data);
+       
+        // updateDynamicContent(data)
+    })
+    .catch(error => {
+        // Handle errors
+        console.error('Error:', error); 
+   
+    });
+}
+    // var currentURL = window.location.href;
+    // console.log(currentURL);
+
+//     function updateDynamicContent(data) {
+//         console.log('Received data from server:', data);
+//     // Assuming 'dynamicContent' is the id of the element you want to update
+//     var dynamicContentElement = document.getElementById('dynamicContent');
+
+//     // Update the content based on the response data
+//     dynamicContentElement.innerHTML = data;
+//     // You may need to adjust this based on the actual structure of your response data
+// }
+    </script>
+
+
     
     {% endblock content %}

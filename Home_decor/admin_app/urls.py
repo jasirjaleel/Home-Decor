@@ -22,7 +22,7 @@ urlpatterns = [
     path('manage-category/',categoryView.manage_category,name='manage_category'),
 
     path('user-management/', views.user_management, name='user_management'),
-    path('blockuser/<int:user_id>/', views.blockuser, name='blockuser'),
+    path('blockuser/', views.blockuser, name='blockuser'),
     path('unblockuser/<int:user_id>/', views.unblockuser, name='unblockuser'),
 
     

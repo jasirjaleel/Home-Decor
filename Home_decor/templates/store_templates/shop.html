@@ -90,7 +90,8 @@
                                                     <div class="product-default-single-item product-color--golden"
                                                         data-aos="fade-up" data-aos-delay="0">
                                                         <div class="image-box">
-                                                            <a href="{% url 'productdetails' product_id=product.id %}" class="image-link">
+                                                
+                                                            <a href="{% url 'product_detail' slug=product.product_variant_slug %}" class="image-link">
                                                                 <img src="{{ product.thumbnail_image.url }}"
                                                                     alt="">
                                                                 <img src="{{ product.thumbnail_image.url }}"
@@ -132,7 +133,7 @@
                                                                 </ul>
                                                             </div>
                                                             <div class="content-right">
-                                                                <span class="price">$ {{ product.sale_price }}</span>
+                                                                <span class="price">$ {{ product.total_price }}</span>
                                                             </div>
 
                                                         </div>

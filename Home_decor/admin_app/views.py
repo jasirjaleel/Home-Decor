@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from user_app.models import Account
 from .models import *
 from django.http import JsonResponse
+import json
 
 # Create your views here.
 
@@ -91,7 +92,8 @@ def adminlogout(request):
 
 #         category = Category.objects.get(id=productcategory)
 
-#         product              = Product.objects.get(id=product_id)
+#         product              = Product.objects.get(id=product_id) 
+
 #         product.product_name = productname
 #         product.slug         = productslug
 #         product.description  = productdescription
@@ -136,16 +138,50 @@ def user_management(request):
     
     # return render(request,"admin_templates/usermanagement.html")
 
+def blockuser(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        selected_user_id = data.get('userId')
+        print(selected_user_id)
 
-def blockuser(request, user_id):
-    user1 = Account.objects.get(id=user_id)
-    if request.user.is_authenticated and request.user == user1:
-        logout(request)
-        # request.session.flush()
-    user1.is_blocked = True
-    user1.save()
-    # return JsonResponse({'message': 'User blocked successfully'})
-    return redirect('user_management')
+        if selected_user_id:
+            try:
+                user = Account.objects.get(id=selected_user_id)
+                if user.is_blocked:
+                    # User is currently blocked, so unblock
+                    user.is_blocked = False
+                    user.save()
+                    message = 'User unblocked successfully'
+                else:
+                    # User is not blocked, so block
+                    user.is_blocked = True
+                    user.save()
+                    message = 'User blocked successfully'
+
+                return JsonResponse({'success': True, 'message': message})
+            except Account.DoesNotExist:
+                return JsonResponse({'success': False, 'message': 'User not found'})
+        else:
+            return JsonResponse({'success': False, 'message': 'No user ID provided'})
+
+    return render(request, "admin_templates/usermanagement.html", {})
+    # if request.user.is_authenticated and request.user == user1:
+    #     logout(request)
+    #     request.session.flush()
+    # user1.is_blocked = True
+    # user1.save()
+    # # return JsonResponse({'message': 'User blocked successfully'})
+    # return redirect('user_management')
+
+# def blockuser(request, user_id):
+#     user1 = Account.objects.get(id=user_id)
+#     if request.user.is_authenticated and request.user == user1:
+#         logout(request)
+#         request.session.flush()
+#     user1.is_blocked = True
+#     user1.save()
+#     # return JsonResponse({'message': 'User blocked successfully'})
+#     return redirect('user_management')
 
 def unblockuser(request, user_id):
     user = Account.objects.get(id=user_id)

@@ -7,8 +7,7 @@ class RestrictMyAccountMiddleware:
     def __call__(self, request):
         if request.path.startswith('/myaccount/') and (
             not hasattr(request.user, 'is_authenticated') or 
-            not request.user.is_authenticated or 
-            request.user.is_superadmin
+            not request.user.is_authenticated
         ):
             return HttpResponseRedirect(reverse('home'))  # Redirect to your home URL
         return self.get_response(request)

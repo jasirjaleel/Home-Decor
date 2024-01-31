@@ -95,6 +95,8 @@ class Product_Variant(models.Model):
     objects = models.Manager()
     variants = Product_VariantManager()
 
+    def total_price(self):
+        return self.sale_price + self.product.base_price
 
     def save(self, *args, **kwargs):
         product_variant_slug_name = f'{self.product.brand.brand_name}-{self.product.product_name}-{self.product.category.category_name}-{self.sku_id}'

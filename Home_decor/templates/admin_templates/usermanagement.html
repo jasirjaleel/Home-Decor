@@ -102,7 +102,7 @@
                                 </div>
                                 {% elif user.is_active %}
                                 <div class="align-items-center col-status">
-                                    <span class="badge rounded-pill alert-success">Active</span>
+                                    <span class="badge rounded-pill alert-success" >Active</span>
                                 </div>
                                 {% else %}
                                 <div class="align-items-center col-status">
@@ -116,12 +116,12 @@
 
 
                                     {% if user.is_blocked %}
-                                    <button class="btn  alert-success unblock-user-btn" 
-                                    data-user-id="{{ user.id }}">Unblock
+                                    <button class="btn  alert-success unblock-user-btn"  onclick="sweet_alert('{{user.id}}')"
+                                  >Unblock
                                         User</button>
                                     {% else %}
-                                    <button class="btn alert-danger block-user-btn" 
-                                    data-user-id="{{ user.id }}">Block
+                                    <button class="btn alert-danger block-user-btn" onclick="sweet_alert('{{user.id}}')"
+                                  >Block
                                         User</button>
                                     {% endif %}
                                 </div>
@@ -150,43 +150,106 @@
         </div>
 </section> <!-- content-main end// -->
 
-
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     // Add this script to your HTML template or a separate JS file
 
    
-        var base_url = "{% url 'adminhome' %}";
-
-        $('.block-user-btn').click(function () {
-            var userId = $(this).data('user-id');
-
-            $.ajax({
-                url: base_url + 'blockuser/' + userId + '/',
-                type: 'GET',  // You can use POST if needed
-                success: function (response) {
-                    // alert(response.message);
-                    location.reload();
-                },
-                error: function (error) {
-                    console.log(error);
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
                 }
-            });
-        });
+            }
+        }
+        return cookieValue;
+    }
+    
+    const csrftoken = getCookie('csrftoken');
 
-        $('.unblock-user-btn').click(function () {
-            var userId = $(this).data('user-id');
-            $.ajax({
-                url: base_url + 'unblockuser/' + userId + '/',
-                type: 'GET',  // You can use POST if needed
-                success: function (response) {
-                    // alert(response.message);
-                    location.reload();
+        function sweet_alert(userId) {
+    Swal.fire({
+        title: "Are you sure?",
+        // text: "Block the user?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#b19361",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes"
+    }).then((result) => {
+        // If the user confirms
+        console.log(userId);
+        if (result.isConfirmed) {
+            // Make a fetch request to update is_default in the backend
+            fetch('/admin/blockuser/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken,
                 },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
-        });
+                // body: JSON.stringify({ 'addressId':addressId }),
+                body: JSON.stringify({ 'userId':userId }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response from the server
+                    console.log(data);
+                    if (data.success) {
+                        // Success message
+                        Swal.fire('Success', data.message, 'success');
+                        location.reload()
+                        // updateUI(data.is_blocked, userId);
+                    } else {
+                        // Error message
+                        Swal.fire('Error', data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle other errors
+                    Swal.fire('Error', 'An unexpected error occurred', 'error');
+                });
+        }
+    });
+}
+            
+      
+        // $('.block-user-btn').click(function () {
+        //     var userId = $(this).data('user-id');
+
+        //     $.ajax({
+        //         url: base_url + 'blockuser/' + userId + '/',
+        //         type: 'GET',  // You can use POST if needed
+        //         success: function (response) {
+        //             // alert(response.message);
+        //             location.reload();
+        //         },
+        //         error: function (error) {
+        //             console.log(error);
+        //         }
+        //     });
+        // });
+
+        // $('.unblock-user-btn').click(function () {
+        //     var userId = $(this).data('user-id');
+        //     $.ajax({
+        //         url: base_url + 'unblockuser/' + userId + '/',
+        //         type: 'GET',  // You can use POST if needed
+        //         success: function (response) {
+        //             // alert(response.message);
+        //             location.reload();
+        //         },
+        //         error: function (error) {
+        //             console.log(error);
+        //         }
+        //     });
+        // });
     
 
 
