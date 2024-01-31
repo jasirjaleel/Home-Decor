@@ -10,54 +10,6 @@ from django.shortcuts import render, get_object_or_404
 def home(request):
     return render(request,'store_templates/index.html')
 
-# def productdetails(request, product_id):
-#     if request.method == 'POST':
-#         data = json.loads(request.body)
-#         selected_color = data.get('selectedColor')
-#         print(selected_color)
-#         single_product_variant = Product_Variant.objects.select_related('product').prefetch_related('attributes').filter(id=product_id)
-#         white_variants = Product_Variant.objects.filter(attributes__attribute_value=selected_color)
-#         print(white_variants)
-#         # Add logic to filter variants based on the selected color
-#         # and send the filtered data as a JsonResponse
-#         return JsonResponse({'status': 'success', 'selectedColor': selected_color})
-
-#     else:
-#         single_product_variant = Product_Variant.objects.select_related('product').prefetch_related('attributes').filter(id=product_id)
-#         # for i in single_product_variant:
-#         for product_variant in single_product_variant:
-#             variant = Product_Variant.objects.select_related('product').filter(product=product_variant.product)
-#             images  = Additional_Product_Image.objects.filter(product_variant=product_variant.id)
-#             # print(variant.product_variant_slug )
-#         unique_colors = set()
-#         unique_materials = set()    
-#         for i in variant:
-#             for attribute in i.attributes.all():
-#                 if attribute.attribute.attribute_name == 'Color':
-#                     unique_colors.add(attribute.attribute_value)
-#                 elif attribute.attribute.attribute_name == 'Material':
-#                     unique_materials.add(attribute.attribute_value)
-#         # for i in variant:
-#         #     for attribute in i.attributes.all():
-#         #         # if attribute.attribute_value == 'White':
-#         #         #     print('h')
-#         #         print(attribute.attribute_value)
-        
-        
-        
-        
-    
-            
-#         context = {
-#             'product': single_product_variant,
-#             'variant' : variant,
-#             'unique_colors': unique_colors,
-#             'unique_materials': unique_materials,
-#             'images':images,
-#             'product_id':product_id
-#         }
-#         return render(request,'store_templates/productdetails.html',context)
-
 # def shop(request):
 #     products = Product.objects.all().filter(is_available=True)
 #     prod_list = []
@@ -153,126 +105,6 @@ def home(request):
     
 #     return render(request, 'store/store.html',context)
 
-
-# def productdetails(request, product_id):
-#     if request.method == 'POST':
-#         print("=======================")
-#         data = json.loads(request.body)
-#         selected_color = data.get('selectedColor')
-
-#         # Filter variants based on selected color
-#         selected_variants = Product_Variant.objects.select_related('product').prefetch_related('attributes').filter(
-#             product=product_id,
-#             attributes__attribute_value=selected_color
-#         )
-#         images = Additional_Product_Image.objects.filter(product_variant__in=selected_variants)
-        
-
-
-#         unique_materials = set()
-#         for variant in selected_variants:
-#             for attribute in variant.attributes.all():
-#                 if attribute.attribute.attribute_name == 'Material':
-#                     unique_materials.add(attribute.attribute_value)
-
-#         context = {
-#             'products': selected_variants,
-#             'variant': selected_variants,  # Assuming you want details of the first variant
-#             # 'unique_colors': unique_colors,
-#             'unique_materials': unique_materials,
-#             # 'images': images,
-#             'product_id': product_id
-#         }
-
-        
-#         # Add logic to filter variants based on the selected color
-#         # and send the filtered data as a JsonResponse
-#         # return JsonResponse({'status': 'success', 'selectedColor': selected_color})
-#         # return render(request,'store_templates/productdetails.html',context)
-#         return redirect("productdetails2")
-#     else:
-#         print("+++++++++++++")
-#         product_variant = Product_Variant.objects.select_related('product').prefetch_related('attributes').filter(id=product_id)
-        
-#         # Filter all variants based on the product of the product variant
-#         # variants = Product_Variant.objects.select_related('product').filter(product=product_variant.product)
-#         # associated_products = [variant.product for variant in product_variant]
-#         # variants = Product_Variant.objects.select_related('product').filter(product__in=associated_products)
-
-#         # image_ids = [variant.id for variant in variants]
-#         # images = Additional_Product_Image.objects.filter(product_variant__id__in=image_ids)
-
-#         for variant in product_variant:
-#             variants = Product_Variant.objects.select_related('product').filter(product=variant.product)
-#             images  = Additional_Product_Image.objects.filter(product_variant=variant.id)
-#         unique_colors = set()
-#         unique_materials = set()
-
-#         for variant in variants:
-#             for attribute in variant.attributes.all():
-#                 if attribute.attribute.attribute_name == 'Color':
-#                     unique_colors.add(attribute.attribute_value)
-#                 elif attribute.attribute.attribute_name == 'Material':
-#                     unique_materials.add(attribute.attribute_value)
-
-#         context = {
-#             # 'products': product_variant,
-#             'product': variants.first(),  # Assuming you want details of the first variant
-#             'unique_colors': unique_colors,
-#             'unique_materials': unique_materials,
-#             'images': images,
-#             'product_id': product_id
-#         }
-        
-#     return render(request,'store_templates/productdetails.html',context)
-
-# def productdetails(request, product_id):
-#     product_variant = Product_Variant.objects.select_related('product').prefetch_related('attributes').filter(id=product_id)
-
-#     for variant in product_variant:
-#         variants = Product_Variant.objects.select_related('product').filter(product=variant.product)
-#         print(variants)
-#         images  = Additional_Product_Image.objects.filter(product_variant=variant.id)
-#     unique_colors = set()
-#     unique_materials = set()
-
-#     for variant in variants:
-#         for attribute in variant.attributes.all():
-#             if attribute.attribute.attribute_name == 'Color':
-#                 unique_colors.add(attribute.attribute_value)
-#             elif attribute.attribute.attribute_name == 'Material':
-#                 unique_materials.add(attribute.attribute_value)
-
-#     context = {
-#         # 'products': product_variant,
-#         'products': variants,  # Assuming you want details of the first variant
-#         'unique_colors': unique_colors,
-#         'unique_materials': unique_materials,
-#         'images': images,
-#         'product_id': product_id
-#     }
-    
-    # if request.method == 'POST':
-    #     data = json.loads(request.body)
-    #     selected_color = data.get('selectedColor')
-    #     # Filter variants based on selected color
-    #     selected_variants = Product_Variant.objects.select_related('product').prefetch_related('attributes').filter(
-    #         product=product_id,
-    #         attributes__attribute_value=selected_color
-    #     )
-    #     images = Additional_Product_Image.objects.filter(product_variant__in=selected_variants)
-    #     unique_materials = set()
-    #     for variant in selected_variants:
-    #         for attribute in variant.attributes.all():
-    #             if attribute.attribute.attribute_name == 'Material':
-    #                 unique_materials.add(attribute.attribute_value)
-
-    #     context = {
-    #         'products2': selected_variants
-    # #     }
-
-    # return render(request, 'store_templates/productdetails.html', context)
-
 class ShopView(View):
     template_name = 'store_templates/shop.html'
 
@@ -283,33 +115,8 @@ class ShopView(View):
 class ProductDetailView(View):
     template_name = 'store_templates/productdetails.html'
 
-    def post(self, request, slug):
-         if request.method == 'POST':
-            selected_color = self.request.GET.get('selectedColor')
-            selected_material = self.request.GET.get('selectedMaterial')
-
-
-            variants = (
-            Product_Variant.objects
-            .filter( attributes__attribute__attribute_name='Color', attributes__attribute_value=selected_color)
-            .filter(attributes__attribute__attribute_name='Material', attributes__attribute_value=selected_material)
-            )
-            
-            for i in variants:
-               product_slug = i.product_variant_slug
-            print(f"Selected Color: {selected_color}, Selected Material: {selected_material}, Product Slug: {product_slug}")
-
-
-            # request.session['product_slug'] = product_slug
-            
-            # return redirect(f'http://127.0.0.1:8000/product/{product_slug}/') 
-            return redirect('product_detail', slug=product_slug)
-
-
     def get(self, request, slug):
-        print(slug)
         variants = Product_Variant.objects.select_related('product').prefetch_related('attributes').filter(product_variant_slug=slug)
-        print(variants)
         images_list = []
         att_list = []
         for variant in variants:
@@ -317,12 +124,14 @@ class ProductDetailView(View):
             variant_id = variant.id
             variant_att = variant.attributes.all()
             variant_pro= variant.product
+            variant_pro_id= variant.product.id
             # Query the images related to the current variant
             variant_images = Additional_Product_Image.objects.filter(product_variant=variant_id)
 
         m = Product_Variant.objects.prefetch_related('attributes').filter(product=variant_pro)
         unique_colors = set()
         unique_materials = set()
+        print(variant_pro_id)
 
         for variant in m:
             # Iterate over related attributes for each variant
@@ -341,6 +150,9 @@ class ProductDetailView(View):
                 # Append the queryset to the list
                 images_list.append(i.image)
 
+        request.session['variant_pro_id'] = variant_pro_id
+        request.session.modified = True 
+        request.session.set_expiry(100)
 
         context = {
             'variants'          : variants,
@@ -351,3 +163,27 @@ class ProductDetailView(View):
 
         }
         return render(request, self.template_name, context)
+    
+
+class ProductUpdateView(View):
+    # template_name = 'your_template.html'  # Create a template for updating the product
+
+
+    def post(self, request):
+        selected_color = self.request.GET.get('selectedColor')
+        selected_material = self.request.GET.get('selectedMaterial')
+        variant_pro_id = request.session['variant_pro_id']
+
+        variants = (
+            Product_Variant.objects
+            .filter(  product=variant_pro_id, attributes__attribute__attribute_name='Color', attributes__attribute_value=selected_color)
+            .filter(attributes__attribute__attribute_name='Material', attributes__attribute_value=selected_material)
+            )
+            
+        if variants.exists():
+            for i in variants:
+                product_slug = i.product_variant_slug
+        
+            return JsonResponse({'success': True, 'slug': product_slug})
+        else:
+            return JsonResponse({'success': False, 'errors': 'No matching product variant found.'})

@@ -787,6 +787,7 @@
         </div>
     </div>
     <!-- End Product Default Slider Section -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function getCookie(name) {
         let cookieValue = null;
@@ -819,7 +820,8 @@
     });
 
     // Get the current URL
-    var currentURL = window.location.href;
+    // var currentURL = window.location.href;
+    var currentURL = '/product/';
 
     // Append the query string to the current URL
     var urlWithQueryParams = `${currentURL}?${queryParams.toString()}`;
@@ -836,29 +838,34 @@
     .then(response => response.json())
     
     .then(data => {
-        // Handle the response from the server if needed
         console.log(data);
-       
-        // updateDynamicContent(data)
-    })
+        if (data.success) {
+
+
+        const slug = data.slug;
+
+  
+        console.log(slug);
+
+ 
+        window.location.href = `/product/${slug}/`;
+    }else{
+        Swal.fire({
+        title: "Product Unavalable",
+        // text: "That thing is still around?",
+        icon: "error"
+         });
+    }
+
+
+})
     .catch(error => {
         // Handle errors
         console.error('Error:', error); 
    
     });
 }
-    // var currentURL = window.location.href;
-    // console.log(currentURL);
-
-//     function updateDynamicContent(data) {
-//         console.log('Received data from server:', data);
-//     // Assuming 'dynamicContent' is the id of the element you want to update
-//     var dynamicContentElement = document.getElementById('dynamicContent');
-
-//     // Update the content based on the response data
-//     dynamicContentElement.innerHTML = data;
-//     // You may need to adjust this based on the actual structure of your response data
-// }
+  
     </script>
 
 
