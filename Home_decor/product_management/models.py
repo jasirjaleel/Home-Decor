@@ -95,6 +95,9 @@ class Product_Variant(models.Model):
     objects = models.Manager()
     variants = Product_VariantManager()
 
+    def is_available(self):
+        return self.stock > 0
+        
     def total_price(self):
         return self.sale_price + self.product.base_price
 

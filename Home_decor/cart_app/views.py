@@ -1,106 +1,121 @@
-# from django.shortcuts import render,redirect
-# from .models import CartItem
-# from django.contrib import messages
-# from django.http import JsonResponse
-# from admin_app.models import Product
-# from django.views.decorators.cache import never_cache
-# from django.contrib.auth.decorators import login_required
-# # Create your views here.
-# @never_cache
-# def cart(request):
-#     total = 0
-#     quantity = 0
-#     cart_items = None
+from django.shortcuts import render,redirect
+from .models import CartItem
+from django.contrib import messages
+from django.http import JsonResponse
+from product_management.models import Product_Variant
+from .models import Cart,CartItem
+from django.views.decorators.cache import never_cache
+from django.contrib.auth.decorators import login_required
+# Create your views here.
+def _cart_id(request):
+    cart = request.session.session_key
+    if not cart:
+        cart = request.session.create()
+    return cart
 
-#     if request.user.is_authenticated:
-#         tax = 0
-#         grandtotal = 0
-#         cart_items = CartItem.objects.filter( currentuser=request.user)
+@login_required(login_url='userlogin')
+@never_cache
+def cart(request):
+    total = 0
+    quantity = 0
+    cart_items = None
 
-#         if not cart_items.exists():  # Check if the cart is empty
-#             return render(request, 'cart_templates/empty-cart.html')  #
+    if request.user.is_authenticated:
+        tax = 0
+        grandtotal = 0
+        cart_items = CartItem.objects.filter(user=request.user)
 
-#         for cart_item in cart_items:
-#             total += round((cart_item.product.price * cart_item.quantity), 2)
-#             quantity += cart_item.quantity
+        if not cart_items.exists():
+            return render(request, 'cart_templates/empty-cart.html')
 
-#         tax = round(total / 100 * 15, 2)
-#         grandtotal = round(tax + total, 2)
+        for cart_item in cart_items:
+            total += round((cart_item.product.total_price() * cart_item.quantity), 2)
+            quantity += cart_item.quantity
 
-#         context = {
-#             'total': total,
-#             'quantity': quantity,
-#             'cart_items': cart_items,
-#             'tax': tax,
-#             'grandtotal': grandtotal
-#         }
-#         print('hi2')
-#         return render(request, 'cart_templates/cart.html', context)
-#     else:
-#         # Handle unauthenticated user case (redirect or display message)
-#         return redirect('userlogin')  # Example redirection
-#     # return render(request,'cart_templates/cart.html')
+        tax = round(total / 100 * 5, 2)
+        grandtotal = round(tax + total, 2)
+
+        context = {
+            'total': total,
+            'quantity': quantity,
+            'cart_items': cart_items,
+            'tax': tax,
+            'grandtotal': grandtotal
+        }
+        print('hi2')
+        return render(request, 'cart_templates/cart.html', context)
+    else:
+        # Handle unauthenticated user case (redirect or display message)
+        return redirect('userlogin')  # Example redirection
+    # return render(request,'cart_templates/cart.html')
 
 
-# @never_cache
-# def add_to_cart(request, product_id):
-#     if request.user.is_authenticated:
-#         try:
-#             product = Product.objects.get(id=product_id)
-#             if product.is_available:
-#                 try:
-#                     cart_item = CartItem.objects.get(currentuser=request.user, product=product)
-#                     # cart_item.quantity += 1
-#                     if cart_item.product.stock < cart_item.quantity:
-#                         messages.error(request, 'Out of Stock')
-#                     else:
-#                         cart_item.save()
+@never_cache
+def add_to_cart(request, slug):
+    current_user = request.user
+    product = Product_Variant.objects.get(product_variant_slug=slug)
 
-#                 except CartItem.DoesNotExist:
-#                     cart_item = CartItem.objects.create(
-#                         product=product,
-#                         quantity=1,
-#                         currentuser=request.user,
-#                     )
-#                     cart_item.save()
+    if request.user.is_authenticated:
+        try:
+            cart = Cart.objects.get(cart_id=_cart_id(request))
+        except Cart.DoesNotExist:
+            cart = Cart.objects.create(
+                cart_id=_cart_id(request)
+            )
+            cart.save()
+    
+        if product.is_available:
+            try:
+                cart_item = CartItem.objects.get(user=current_user, product=product)
+                # cart_item.quantity += 1
+                # if cart_item.product.stock < cart_item.quantity:
+                #     messages.error(request, 'Out of Stock')
+                # else:
+                cart_item.quantity += 1
+                cart_item.save()
 
-#                 # Calculate totals
-#                 tax = 0
-#                 grandtotal = 0
-#                 total = 0
-#                 quantity = 0
-#                 cart_items = CartItem.objects.filter(currentuser=request.user)
+            except CartItem.DoesNotExist:
+                cart_item = CartItem.objects.create(
+                    product=product,
+                    quantity=1,
+                    cart=cart,
+                    user=request.user,
+                )
+                cart_item.save()
 
-#                 for cart_item1 in cart_items:
-#                     total += round((cart_item1.product.price * cart_item1.quantity), 2)
-#                     quantity += cart_item1.quantity
+            # Calculate totals
+            tax = 0
+            grandtotal = 0
+            total = 0
+            quantity = 0
+            cart_items = CartItem.objects.filter(user=request.user)
 
-#                 tax = round(total / 100 * 5, 2)
-#                 grandtotal = round(tax + total, 2)
+            for cart_item1 in cart_items:
+                total += round((cart_item1.product.total_price() * cart_item1.quantity), 2)
+                quantity += cart_item1.quantity
 
-#                 context = {
-#                     'total': total,
-#                     'quantity': quantity,
-#                     'cart_items': cart_items,
-#                     'tax': tax,
-#                     'grandtotal': grandtotal
-#                 }
-#                 print('hi')
-#                 messages.success(request, "Item added to cart")
-#                 # return render(request, 'cart_templates/cart.html', context)
-#                 return redirect('cart')
+            tax = round(total / 100 * 5, 2)
+            grandtotal = round(tax + total, 2)
 
-#             else:
-#                 messages.success(request, 'Product is currently unavailable')
-#                 return redirect('shop')
+            context = {
+                'total': total,
+                'quantity': quantity,
+                'cart_items': cart_items,
+                'tax': tax,
+                'grandtotal': grandtotal
+            }
+            print('hi')
+            messages.success(request, "Item added to cart")
+            # return render(request, 'cart_templates/cart.html', context)
+            return redirect('cart')
 
-#         except Product.DoesNotExist:
-#             messages.error(request, 'Product does not exist')
-#             return redirect('shop')
+        else:
+            messages.success(request, 'Product is currently unavailable')
+            return redirect('shop')
 
-#     else:
-#         messages.error(request, 'You should sign in first to add an item to your cart')
-#         return redirect('userlogin')
+    else:
+        messages.error(request, 'You should sign in first to add an item to your cart')
+        return redirect('userlogin')
 
 
 # @never_cache

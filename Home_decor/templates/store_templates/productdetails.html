@@ -132,9 +132,9 @@
                                 </div>
                                 
                                 <div class="product-add-to-cart-btn">
-                                    {% comment %}
-                                    <a href="{% url 'addtocart' product_id=products.id %}">+ Add To Cart</a>
-                                    {% endcomment %}
+                                   {% for i in variants %}
+                                    <a href="{% url 'addtocart' slug=i.product_variant_slug %}">+ Add To Cart</a>
+                                    {% endfor %}
                                 </div>
                             </div>
                             <!-- Start  Product Details Meta Area-->

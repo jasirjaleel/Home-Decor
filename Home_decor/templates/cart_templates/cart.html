@@ -1,4 +1,4 @@
-{% extends 'user_templates/base.html' %}
+{% extends 'store_templates/base.html' %}
 {% load static %}
 {% block content %}
 <!-- ...:::: Start Breadcrumb Section:::... -->
@@ -58,13 +58,13 @@
                                         <td class="product_name">
                                             <a href="">{{ cart_item.product.product_name }}</a>
                                         </td>
-                                        <td class="product-price">${{ cart_item.product.price }}</td>
+                                        <td class="product-price">${{ cart_item.product.sub_total }}</td>
                                         <td class="product_quantity">
                                             <label>Quantity</label>
                                             <input min="1" max="100" value="{{ cart_item.quantity }}" type="number"
                                                 onchange="updateCart('{{ cart_item.id }}', this.value)">
                                         </td>
-                                        <td class="product_total" id="subtotal-{{ cart_item.id }}">${{ cart_item.sub_total }}</td>
+                                        <td class="product_total" id="subtotal-{{ cart_item.id }}">${{ cart_item.product.sub_total }}</td>
                                     </tr>
                                     {% endfor %}<!-- End Cart Single Item-->
 
@@ -86,13 +86,13 @@
                                         <td class="product_name">
                                             <a href="">{{ cart_item.product.product_name }}</a>
                                         </td>
-                                        <td class="product-price">${{ cart_item.product.price }}</td>
+                                        <td class="product-price">${{ cart_item.product.sub_total }}</td>
                                         <td class="product_quantity">
                                             <label>Quantity</label>
                                             <input min="1" max="100" value="{{ cart_item.quantity }}" type="number"
                                                 onchange="updateCart('{{ cart_item.id }}', this.value)">
                                         </td>
-                                        <td class="product_total" id="subtotal-{{ cart_item.id }}">${{ cart_item.sub_total }}</td>
+                                        <td class="product_total" id="subtotal-{{ cart_item.id }}">${{ cart_item.product.sub_total }}</td>
                                     </tr>
                                     {% endfor %}<!-- End Cart Single Item-->
                                 </tbody>
