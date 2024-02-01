@@ -27,20 +27,23 @@ def cart(request):
 
         if not cart_items.exists():
             return render(request, 'cart_templates/empty-cart.html')
-
+        
         for cart_item in cart_items:
-            total += round((cart_item.product.total_price() * cart_item.quantity), 2)
+            total += round(cart_item.sub_total(), 2)
             quantity += cart_item.quantity
-
+        print(total)
+        shipping = 100
         tax = round(total / 100 * 5, 2)
-        grandtotal = round(tax + total, 2)
-
+        grandtotal = round(tax + total + shipping, 2)
+        print(tax,grandtotal,quantity)
+      
         context = {
-            'total': total,
-            'quantity': quantity,
+            'total' : total,
+            'quantity'  : quantity,
             'cart_items': cart_items,
-            'tax': tax,
-            'grandtotal': grandtotal
+            'tax'       : tax,
+            'grandtotal': grandtotal,
+            'shipping'  : shipping
         }
         print('hi2')
         return render(request, 'cart_templates/cart.html', context)
@@ -52,15 +55,15 @@ def cart(request):
 
 @never_cache
 def add_to_cart(request, slug):
-    current_user = request.user
-    product = Product_Variant.objects.get(product_variant_slug=slug)
+    current_user    = request.user
+    product         = Product_Variant.objects.get(product_variant_slug=slug)
 
     if request.user.is_authenticated:
         try:
             cart = Cart.objects.get(cart_id=_cart_id(request))
         except Cart.DoesNotExist:
             cart = Cart.objects.create(
-                cart_id=_cart_id(request)
+                cart_id = _cart_id(request)
             )
             cart.save()
     
@@ -76,33 +79,37 @@ def add_to_cart(request, slug):
 
             except CartItem.DoesNotExist:
                 cart_item = CartItem.objects.create(
-                    product=product,
-                    quantity=1,
-                    cart=cart,
-                    user=request.user,
+                    product  = product,
+                    quantity = 1,
+                    cart     = cart,
+                    user     = request.user,
                 )
                 cart_item.save()
+            
 
             # Calculate totals
-            tax = 0
-            grandtotal = 0
-            total = 0
-            quantity = 0
-            cart_items = CartItem.objects.filter(user=request.user)
+            tax         = 0
+            grandtotal  = 0
+            total       = 0
+            quantity    = 0
+            cart_items  = CartItem.objects.filter(user=request.user)
 
             for cart_item1 in cart_items:
-                total += round((cart_item1.product.total_price() * cart_item1.quantity), 2)
-                quantity += cart_item1.quantity
-
-            tax = round(total / 100 * 5, 2)
-            grandtotal = round(tax + total, 2)
+                total       += round(cart_item1.sub_total(), 2)
+                quantity    += cart_item1.quantity
+            shipping=100
+            tax         = round(total / 100 * 5, 2)
+            grandtotal  = round(tax + total + shipping, 2)
+            print(quantity)
+            print(tax)
 
             context = {
-                'total': total,
-                'quantity': quantity,
+                'total'     : total,
+                'quantity'  : quantity,
                 'cart_items': cart_items,
-                'tax': tax,
-                'grandtotal': grandtotal
+                'tax'       : tax,
+                'grandtotal': grandtotal,
+                
             }
             print('hi')
             messages.success(request, "Item added to cart")
@@ -118,53 +125,79 @@ def add_to_cart(request, slug):
         return redirect('userlogin')
 
 
-# @never_cache
-# def update_cart(request, cart_item_id, new_quantity):
-#     cart_item = CartItem.objects.get(id=cart_item_id)
 
-#     try:
-#         new_quantity = int(new_quantity)
-#     except ValueError:
-#         response_data = {
-#             'success': False,
-#             'message': 'Invalid quantity format',
-#         }
-#         return JsonResponse(response_data)
+@login_required(login_url='userlogin')
+@never_cache
+def order_summary(request):
+    # Your existing code to calculate order summary
+    total = 0
+    quantity = 0
+    shipping = 100
 
-#     if new_quantity > 0:
-#         cart_item.quantity = new_quantity
-#         cart_item.save()
+    # Calculate total, quantity, tax, and grandtotal
+    for cart_item in CartItem.objects.filter(user=request.user):
+        total += round(cart_item.sub_total(), 2)
+        quantity += cart_item.quantity
 
-#         response_data = {
-#             'success': True,
-#             'subtotal': cart_item.sub_total(),
-#         }
-#     else:
-#         response_data = {
-#             'success': False,
-#             'message': 'Invalid quantity',
-#         }
+    tax = round(total / 100 * 5, 2)
+    grandtotal = round(tax + total + shipping, 2)
 
-#     return JsonResponse(response_data)
+    # Return JSON response
+    return JsonResponse({
+        'total': total,
+        'quantity': quantity,
+        'shipping': shipping,
+        'tax': tax,
+        'grandtotal': grandtotal,
+    })
+
+@never_cache
+def update_cart(request, cart_item_id, new_quantity):
+    cart_item = CartItem.objects.get(id=cart_item_id)
+
+    try:
+        new_quantity = int(new_quantity)
+    except ValueError:
+        response_data = {
+            'success': False,
+            'message': 'Invalid quantity format',
+        }
+        return JsonResponse(response_data)
+
+    if new_quantity > 0:
+        cart_item.quantity = new_quantity
+        cart_item.save()
+
+        response_data = {
+            'success': True,
+            'subtotal': cart_item.sub_total(),
+        }
+    else:
+        response_data = {
+            'success': False,
+            'message': 'Invalid quantity',
+        }
+
+    return JsonResponse(response_data)
 
 
-# @login_required
-# def delete_cart_item(request, cart_item_id):
-#     try:
-#         cart_item = CartItem.objects.get(id=cart_item_id, currentuser=request.user)
-#         cart_item.delete()
+@login_required
+def delete_cart_item(request, cart_item_id):
+    try:
+        cart_item = CartItem.objects.get(id=cart_item_id, user=request.user)
+        cart_item.delete()
 
-#         response_data = {
-#             'success': True,
-#             'message': 'Item deleted successfully',
-#         }
-#     except CartItem.DoesNotExist:
-#         response_data = {
-#             'success': False,
-#             'message': 'Item not found',
-#         }
+        response_data = {
+            'success': True,
+            'message': 'Item deleted successfully',
+        }
+    except CartItem.DoesNotExist:
+        response_data = {
+            'success': False,
+            'message': 'Item not found',
+        }
 
-#     return JsonResponse(response_data)
+    return JsonResponse(response_data)
 
 
 # def get_cart_total(request):

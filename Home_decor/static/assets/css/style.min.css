@@ -17825,7 +17825,7 @@ table {
 }
 
 .table_page table tbody tr td.product_remove {
-    min-width: 100px;
+    min-width: 50px;
     font-size: 20px
 }
 
@@ -17857,7 +17857,7 @@ table {
 
 .table_page table tbody tr td.product_quantity label {
     font-weight: 600;
-    margin-right: 5px
+    margin-right: 0px
 }
 
 .table_page table tbody tr td.product_quantity input {

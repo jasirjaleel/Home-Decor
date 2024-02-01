@@ -1,6 +1,220 @@
 {% extends 'store_templates/base.html' %}
 {% load static %}
 {% block content %}
+<style>
+    .main {
+  max-width: 1100px;
+  padding-left: 30px;
+  padding-right: 30px;
+
+  margin-top: 140px;
+  margin-bottom: 100px;
+
+  /* margin-left: auto;
+     margin-right auto;
+     Is a trick for centering an element horizontally
+     without needing a container. */
+  margin-left: auto;
+  margin-right: auto;
+}
+.page-title {
+  font-weight: 700;
+  font-size: 22px;
+  margin-bottom: 18px;
+}
+
+.checkout-grid {
+  display: grid;
+  /* Here, 1fr means the first column will take
+     up the remaining space in the grid. */
+  grid-template-columns: 1fr 350px;
+  column-gap: 12px;
+
+  /* Use align-items: start; to prevent the elements
+     in the grid from stretching vertically. */
+  align-items: start;
+}
+
+@media (max-width: 1000px) {
+  .main {
+    max-width: 500px;
+  }
+
+  .checkout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cart-item-container,
+.payment-summary {
+  border: 1px solid rgb(222, 222, 222);
+  border-radius: 4px;
+  padding: 18px;
+}
+
+.cart-item-container {
+  margin-bottom: 12px;
+}
+
+.payment-summary {
+  padding-bottom: 5px;
+}
+
+@media (max-width: 1000px) {
+  .payment-summary {
+    /* grid-row: 1 means this element will be placed into row
+      1 in the grid. (Normally, the row that an element is
+      placed in is determined by the order of the elements in
+      the HTML. grid-row overrides this default ordering). */
+    grid-row: 1;
+    margin-bottom: 12px;
+  }
+}
+
+.delivery-date {
+  color: rgb(0, 118, 0);
+  font-weight: 700;
+  font-size: 19px;
+  margin-top: 5px;
+  margin-bottom: 22px;
+}
+
+.cart-item-details-grid {
+  display: grid;
+  /* 100px 1fr 1fr; means the 2nd and 3rd column will
+     take up half the remaining space in the grid
+     (they will divide up the remaining space evenly). */
+  grid-template-columns: 100px 1fr 1fr;
+  column-gap: 25px;
+}
+
+@media (max-width: 1000px) {
+  .cart-item-details-grid {
+    grid-template-columns: 100px 1fr;
+    row-gap: 30px;
+  }
+}
+
+.product-image {
+  max-width: 100%;
+  max-height: 120px;
+
+  /* margin-left: auto;
+     margin-right auto;
+     Is a trick for centering an element horizontally
+     without needing a container. */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.product-name {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.product-price {
+  color: rgb(177, 39, 4);
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.product-quantity .link-primary {
+  margin-left: 3px;
+}
+
+@media (max-width: 1000px) {
+  .delivery-options {
+    /* grid-column: 1 means this element will be placed
+       in column 1 in the grid. (Normally, the column that
+       an element is placed in is determined by the order
+       of the elements in the HTML. grid-column overrides
+       this default ordering).
+       
+       / span 2 means this element will take up 2 columns
+       in the grid (Normally, each element takes up 1
+       column in the grid). */
+    grid-column: 1 / span 2;
+  }
+}
+
+.delivery-options-title {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.delivery-option {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+.delivery-option-input {
+  margin-left: 0px;
+  cursor: pointer;
+}
+
+.delivery-option-date {
+  color: rgb(0, 118, 0);
+  font-weight: 500;
+  margin-bottom: 3px;
+}
+
+.delivery-option-price {
+  color: rgb(120, 120, 120);
+  font-size: 15px;
+}
+
+.payment-summary-title {
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.payment-summary-row {
+  display: grid;
+  /* 1fr auto; means the width of the 2nd column will be
+     determined by the elements inside the column (auto).
+     The 1st column will take up the remaining space. */
+  grid-template-columns: 1fr auto;
+
+  font-size: 15px;
+  margin-bottom: 9px;
+}
+
+.payment-summary-money {
+  text-align: right;
+}
+
+.subtotal-row .payment-summary-money {
+  border-top: 1px solid rgb(222, 222, 222);
+}
+
+.subtotal-row div {
+  padding-top: 9px;
+}
+
+.total-row {
+  color: rgb(177, 39, 4);
+  font-weight: 700;
+  font-size: 18px;
+
+  border-top: 1px solid rgb(222, 222, 222);
+  padding-top: 18px;
+}
+
+.place-order-button {
+  width: 100%;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-radius: 8px;
+
+  margin-top: 11px;
+  margin-bottom: 15px;
+}
+
+</style>
+
 <!-- ...:::: Start Breadcrumb Section:::... -->
 <div class="breadcrumb-section breadcrumb-bg-color--golden">
     <div class="breadcrumb-wrapper">
@@ -24,12 +238,11 @@
 </div> <!-- ...:::: End Breadcrumb Section:::... -->
 
 <!-- ...:::: Start Cart Section:::... -->
-<div class="cart-section">
-    <!-- Start Cart Table -->
-    <div class="cart-table-wrapper" data-aos="fade-up" data-aos-delay="0">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
+
+
+        <div class="container-fluid container-fluid cart-section">
+            <div class="row px-xl-5">
+                <div class="col-8 table-responsive mb-5">
                     <div class="table_desc">
                         <div class="table_page table-responsive">
                             <table>
@@ -44,7 +257,7 @@
                                         <th class="product_total">Total</th>
                                     </tr>
                                 </thead> <!-- End Cart Table Head -->
-                              {% comment %}  <tbody>
+                             <tbody>
                                     <!-- Start Cart Single Item-->
                                     {% for cart_item in cart_items %}
                                     <tr>
@@ -53,64 +266,82 @@
                                             <a  onclick="deleteCartItem('{{ cart_item.id }}')"><i class="fa fa-trash-o"></i></a>
                                         </td>
                                         <td class="product_thumb">
-                                            <a href=""><img src="{{ cart_item.product.images.url }}" alt=""></a>
+                                            <a href=""><img src="{{ cart_item.product.thumbnail_image.url }}" alt=""></a>
                                         </td>
                                         <td class="product_name">
-                                            <a href="">{{ cart_item.product.product_name }}</a>
+                                            <a href="{% url 'product_detail' slug=cart_item.product.product_variant_slug %}">{{ cart_item.product.get_product_name  }}</a>
                                         </td>
-                                        <td class="product-price">${{ cart_item.product.sub_total }}</td>
+                                        <td class="product-price">${{ cart_item.product.total_price }}</td>
                                         <td class="product_quantity">
-                                            <label>Quantity</label>
+                                     
                                             <input min="1" max="100" value="{{ cart_item.quantity }}" type="number"
                                                 onchange="updateCart('{{ cart_item.id }}', this.value)">
                                         </td>
-                                        <td class="product_total" id="subtotal-{{ cart_item.id }}">${{ cart_item.product.sub_total }}</td>
+                                        <td class="product_total" id="subtotal-{{ cart_item.id }}">${{ cart_item.sub_total }}</td>
                                     </tr>
                                     {% endfor %}<!-- End Cart Single Item-->
 
                                 </tbody>
 
-                                {% endcomment %}
-
-
-                                <tbody>
-                                    <!-- Start Cart Single Item-->
-                                    {% for cart_item in cart_items %}
-                                    <tr id="cart-item-{{ cart_item.id }}">
-                                        <td class="product_remove">
-                                            <a href="#" onclick="deleteCartItem('{{ cart_item.id }}')"><i class="fa fa-trash-o"></i></a>
-                                        </td>
-                                        <td class="product_thumb">
-                                            <a href=""><img src="{{ cart_item.product.images.url }}" alt=""></a>
-                                        </td>
-                                        <td class="product_name">
-                                            <a href="">{{ cart_item.product.product_name }}</a>
-                                        </td>
-                                        <td class="product-price">${{ cart_item.product.sub_total }}</td>
-                                        <td class="product_quantity">
-                                            <label>Quantity</label>
-                                            <input min="1" max="100" value="{{ cart_item.quantity }}" type="number"
-                                                onchange="updateCart('{{ cart_item.id }}', this.value)">
-                                        </td>
-                                        <td class="product_total" id="subtotal-{{ cart_item.id }}">${{ cart_item.product.sub_total }}</td>
-                                    </tr>
-                                    {% endfor %}<!-- End Cart Single Item-->
-                                </tbody>
-                                
-
-
+                    
 
 
                             </table>
                         </div>
-                        <div class="cart_submit">
-                            <button class="btn btn-md btn-golden" type="submit">update cart</button>
-                        </div>
+
                     </div>
                 </div>
+
+                <div class="checkout-grid col-lg-4">
+                    <div class="order-summary js-order-summary"></div>
+                
+                    
+                
+                    <div class="payment-summary">
+                        {% comment %}
+                        <div class="">
+                            <input id='coupon' type="text" class="" placeholder="Coupon Code" name="coupon">
+                            <div class="">
+                                <button type="submit" class="btn btn-sm btn-golden">Apply Coupon</button>
+                            </div>
+                        </div>
+                        {% endcomment %}
+                      <div class="payment-summary-title">Order Summary</div>
+                
+                      <div class="payment-summary-row">
+                        <div id="quantity">Subtotal ({{quantity}} Items):</div>
+                        <div class="payment-summary-money" id="total">${{total}}</div>
+                      </div>
+                
+                      <div class="payment-summary-row">
+                        <div>Shipping &amp; handling:</div>
+                        <div class="payment-summary-money" id="shipping">${{shipping}}</div>
+                      </div>
+                
+                      <div class="payment-summary-row subtotal-row">
+                        <div>Total before tax:</div>
+                        <div class="payment-summary-money" id="before_tax">${{ total|add:shipping }}</div>
+                      </div>
+                
+                      <div class="payment-summary-row">
+                        <div>Estimated tax (5%):</div>
+                        <div class="payment-summary-money" id="tax">${{tax}}</div>
+                      </div>
+                
+                      <div class="payment-summary-row total-row">
+                        <div>Order total:</div>
+                        <div class="payment-summary-money" id="grandtotal">${{grandtotal}}</div>
+                      </div>
+                
+                      <button class="btn btn-block btn-golden">
+                        Place your order
+                      </button>
+                    </div>
+                  </div>
+
             </div>
         </div>
-    </div> <!-- End Cart Table -->
+   <!-- End Cart Table -->
 
     <!-- Start Coupon Start -->
     <div class="coupon_area">
@@ -126,35 +357,14 @@
                             </div>
                         </div> -->
             </div>
-            <div class="col-lg-6 col-md-6">
-                <div class="coupon_code right" data-aos="fade-up" data-aos-delay="400">
-                    <h3>Cart Totals</h3>
-                    <div class="coupon_inner">
-                        <div class="cart_subtotal">
-                            <p>Subtotal</p>
-                            <p class="cart_amount">${{ total }}</p>
-                        </div>
-                        <div class="cart_subtotal ">
-                            <p>Tax</p>
-                            <p class="cart_amount cart_tax">${{ tax }}</p>
-                        </div>
-                        <hr>
-                        <div class="cart_subtotal">
-                            <p>Total</p>
-                            <p class="cart_amount cart_grandtotal">${{ grandtotal }}</p>
-                        </div>
-            
-                        <div class="checkout_btn">
-                            <a href="#" class="btn btn-md btn-golden">Proceed to Checkout</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+           
 
         </div>
     </div>
-</div> <!-- End Coupon Start -->
-</div> <!-- ...:::: End Cart Section:::... -->
+        </div> 
+
+<!-- End Coupon Start -->
+ <!-- ...:::: End Cart Section:::... -->
 
 <!-- <script>
     function updateCart(cartItemId, newQuantity) {
@@ -213,50 +423,28 @@ function deleteCartItem(cartItemId) {
 }
 
 
+    
+  async function updateOrderSummary() {
+      try {
+          const response = await fetch('/order-summary/');
+          const data = await response.json();
+
+          // Update DOM elements with the new data
+          document.getElementById('total').innerText      = `$${data.total}`;
+          document.getElementById('quantity').innerText   = `Subtotal (${data.quantity} items)`;
+          document.getElementById('shipping').innerText   = `$${data.shipping}`;
+          document.getElementById('before_tax').innerText = `$${parseInt(data.shipping) + parseInt(data.total)}`;
+          document.getElementById('tax').innerText        = `$${data.tax}`;
+          document.getElementById('grandtotal').innerText = `$${data.grandtotal}`;
+      } catch (error) {
+          console.error('Error fetching order summary:', error);
+      }
+  }
+
+  // Call the function to update order summary on page load
+  updateOrderSummary();
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // function deleteCartItem(cartItemId) {
-    //     fetch(`/delete_cart_item/${cartItemId}/`)
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             if (data.success) {
-    //                 // Remove the deleted item from the HTML
-    //                 const deletedItem = document.getElementById(`subtotal-${cartItemId}`).parentNode;
-    //                 deletedItem.remove();
-
-    //                 // Check if the cart is empty
-    //                 const cartTable = document.getElementById('cart-table');
-    //                 if (cartTable && !cartTable.querySelector('tbody tr')) {
-    //                     // Cart is empty, redirect to empty cart page or show a message
-    //                     window.location.href = '/empty-cart/';
-    //                 }
-    //             } else {
-    //                 console.error(data.message);
-    //                 // Handle the error, e.g., display an alert to the user
-    //             }
-    //         })
-    //         .catch(error => {
-    //             console.error('Error:', error);
-    //             // Handle the error, e.g., display an alert to the user
-    //         });
-
-    //     // Prevent the default action (page reload) of the link click
-    //     event.preventDefault();
-    // }
 
 
     function updateCart(cartItemId, newQuantity) {
@@ -269,7 +457,7 @@ function deleteCartItem(cartItemId) {
                 document.getElementById(`subtotal-${cartItemId}`).innerText = `$${data.subtotal}`;
 
                 // Call the endpoint to update the cart total
-                updateCartTotal();
+                updateOrderSummary();
             } else {
                 console.error(data.message);
                 // Handle the error, e.g., display an alert to the user
@@ -283,22 +471,9 @@ function deleteCartItem(cartItemId) {
         });
 }
 
-function updateCartTotal() {
-    fetch('/get_cart_total/')
-        .then(response => response.json())
-        .then(data => {
-            // Update the cart total in your HTML
-            console.log(`Updating cart total to ${data.total}`);
-            document.querySelector('.cart_amount').innerText = `$${data.total}`;
-        })
-        .catch(error => {
-            console.error('Fetch error:', error);
-            // Handle the fetch error, e.g., display an alert to the user
-            alert('Error updating cart total. Please try again.');
-        });
-}
-
 </script>
+
+
 
 
 {% endblock content %}
