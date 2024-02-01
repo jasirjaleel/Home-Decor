@@ -244,7 +244,7 @@
             <div class="row px-xl-5">
                 <div class="col-8 table-responsive mb-5">
                     <div class="table_desc">
-                        <div class="table_page table-responsive">
+                        <div class="table_page table-responsive " id="cart-table">
                             <table>
                                 <!-- Start Cart Table Head -->
                                 <thead>
@@ -263,7 +263,7 @@
                                     <tr>
                                         <td class="product_remove">
                                             <!-- <a href="#"><i class="fa fa-trash-o"></i></a> -->
-                                            <a  onclick="deleteCartItem('{{ cart_item.id }}')"><i class="fa fa-trash-o"></i></a>
+                                            <a href="#" onclick="deleteCartItem('{{ cart_item.id }}')"><i class="fa fa-trash-o"></i></a>
                                         </td>
                                         <td class="product_thumb">
                                             <a href=""><img src="{{ cart_item.product.thumbnail_image.url }}" alt=""></a>

@@ -13,7 +13,8 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-
+from cart_app.models import Cart
+from cart_app.views import _cart_id
 
 # Create your views here.
 @never_cache
@@ -44,6 +45,7 @@ def usersignup(request):
             myuser.save()
         
         randomotp = str(random.randint(100000, 999999))
+
         request.session['storedotp'] = randomotp
         request.session['storedemail']=email
         request.session.modified = True 
@@ -79,7 +81,11 @@ def verify_otp(request):
 
             send_mail(subject, message, sender_mail,[storedemail])
             login(request,user)
-            return redirect ('home')
+            if request.GET.get('next'):
+                return redirect(request.GET.get('next'))
+            else:
+                return redirect('home')
+            
         else:
             messages.error(request,'Wrong Entry')
         context = {'email': storedemail}
@@ -121,7 +127,20 @@ def userlogin(request):
         user = authenticate(email=email,password=password) 
         if user is not None and  user.is_blocked == False and user.is_superadmin == False:
             login(request,user)
-            return redirect('home')
+            try:
+                print("new try")
+                cart = Cart.objects.get(cart_id=_cart_id(request))
+            except Cart.DoesNotExist:
+                print("except")
+                cart = Cart.objects.create(
+                    cart_id = _cart_id(request)
+                )
+                cart.save()
+    
+            if request.GET.get('next'):
+                return redirect(request.GET.get('next'))
+            else:
+                return redirect('home')
         elif user is not None and user.is_blocked == True:
             messages.error(request,'You are Blocked!')
             return redirect('userlogin')

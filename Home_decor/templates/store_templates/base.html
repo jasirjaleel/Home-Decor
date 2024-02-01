@@ -216,7 +216,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#offcanvas-add-cart" class="offcanvas-toggle">
+                                    <a href="{% url 'cart' %}">
                                         <i class="icon-bag"></i>
                                         <span class="item-count">3</span>
                                     </a>
@@ -275,9 +275,9 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#offcanvas-add-cart" class="offcanvas-toggle">
+                                <a href="{% url 'cart' %}">
                                     <i class="icon-bag"></i>
-                                    <span class="item-count">3</span>
+                                    <span class="item-count"></span>
                                 </a>
                             </li>
                             <li>
@@ -473,7 +473,8 @@
         </div> <!-- End Offcanvas Header -->
 
         <!-- Start  Offcanvas Addcart Wrapper -->
-        <div class="offcanvas-add-cart-wrapper">
+        <!-- side shopping cart -->
+        <!-- <div class="offcanvas-add-cart-wrapper">
             <h4 class="offcanvas-title">Shopping Cart</h4>
             <ul class="offcanvas-cart">
                 <li class="offcanvas-cart-item-single">
@@ -507,7 +508,8 @@
              
                 <li><a href="compare.html" class=" btn btn-block btn-golden mt-5">Checkout</a></li>
             </ul>
-        </div> <!-- End  Offcanvas Addcart Wrapper -->
+        </div> -->
+         <!-- End  Offcanvas Addcart Wrapper -->
 
     </div> <!-- End  Offcanvas Addcart Section -->
 
@@ -738,7 +740,7 @@
     <button class="material-scrolltop" type="button"></button>
 
     <!-- Start Modal Add cart -->
-    <div class="modal fade" id="modalAddcart" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- <div class="modal fade" id="modalAddcart" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog  modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-body">
@@ -784,7 +786,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
      <!-- End Modal Add cart -->
 
     <!-- Start Modal Quickview cart -->

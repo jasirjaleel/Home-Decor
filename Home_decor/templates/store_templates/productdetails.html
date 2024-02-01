@@ -64,7 +64,7 @@
                         {% for i in variants %}
                         <div class="product-details-text">
                             
-                            <h4 class="title">{{i.product.product_name}} </h4>
+                            <h4 class="title">{{i.get_product_name}} </h4>
                             
                             
                             <div class="d-flex align-items-center">
@@ -127,13 +127,13 @@
                                 <div class="variable-single-item ">
                                     <span>Quantity</span>
                                     <div class="product-variable-quantity">
-                                        <input min="1" max="100" value="1" type="number" >
+                                        <input id="quantityInput" min="1" max="100" value="1" type="number" >
                                     </div>
                                 </div>
                                 
                                 <div class="product-add-to-cart-btn">
                                    {% for i in variants %}
-                                    <a href="{% url 'addtocart' slug=i.product_variant_slug %}">+ Add To Cart</a>
+                                    <a href="{% url 'addtocart' slug=i.product_variant_slug %}?quantity=" id="addToCartBtn">+ Add To Cart</a>
                                     {% endfor %}
                                 </div>
                             </div>
@@ -865,6 +865,20 @@
    
     });
 }
+
+
+
+
+    document.getElementById('addToCartBtn').addEventListener('click', function () {
+        var quantityInput = document.getElementById('quantityInput');
+        var selectedQuantity = quantityInput.value;
+
+        // Modify the href attribute to include the selected quantity
+        var addToCartBtn = document.getElementById('addToCartBtn');
+        addToCartBtn.href += selectedQuantity;
+        console.log(quantityInput);
+    });
+
   
     </script>
 

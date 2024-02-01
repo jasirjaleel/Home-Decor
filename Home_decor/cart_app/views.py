@@ -6,11 +6,14 @@ from product_management.models import Product_Variant
 from .models import Cart,CartItem
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 # Create your views here.
 def _cart_id(request):
     cart = request.session.session_key
+    print('++++++++++++++++++++++')
     if not cart:
         cart = request.session.create()
+        print('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||')
     return cart
 
 @login_required(login_url='userlogin')
@@ -53,15 +56,17 @@ def cart(request):
     # return render(request,'cart_templates/cart.html')
 
 
-@never_cache
+@login_required(login_url='userlogin')
 def add_to_cart(request, slug):
     current_user    = request.user
     product         = Product_Variant.objects.get(product_variant_slug=slug)
 
     if request.user.is_authenticated:
         try:
+            print("add try")
             cart = Cart.objects.get(cart_id=_cart_id(request))
         except Cart.DoesNotExist:
+            print("add except")
             cart = Cart.objects.create(
                 cart_id = _cart_id(request)
             )
@@ -74,7 +79,11 @@ def add_to_cart(request, slug):
                 # if cart_item.product.stock < cart_item.quantity:
                 #     messages.error(request, 'Out of Stock')
                 # else:
-                cart_item.quantity += 1
+                if request.GET.get('quantity'):
+                    quantity1 = int(request.GET.get('quantity'))
+                else:
+                    quantity1=1
+                cart_item.quantity += quantity1
                 cart_item.save()
 
             except CartItem.DoesNotExist:
@@ -114,7 +123,7 @@ def add_to_cart(request, slug):
             print('hi')
             messages.success(request, "Item added to cart")
             # return render(request, 'cart_templates/cart.html', context)
-            return redirect('cart')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
         else:
             messages.success(request, 'Product is currently unavailable')
@@ -150,36 +159,6 @@ def order_summary(request):
         'tax': tax,
         'grandtotal': grandtotal,
     })
-
-@never_cache
-def update_cart(request, cart_item_id, new_quantity):
-    cart_item = CartItem.objects.get(id=cart_item_id)
-
-    try:
-        new_quantity = int(new_quantity)
-    except ValueError:
-        response_data = {
-            'success': False,
-            'message': 'Invalid quantity format',
-        }
-        return JsonResponse(response_data)
-
-    if new_quantity > 0:
-        cart_item.quantity = new_quantity
-        cart_item.save()
-
-        response_data = {
-            'success': True,
-            'subtotal': cart_item.sub_total(),
-        }
-    else:
-        response_data = {
-            'success': False,
-            'message': 'Invalid quantity',
-        }
-
-    return JsonResponse(response_data)
-
 
 @login_required
 def delete_cart_item(request, cart_item_id):
