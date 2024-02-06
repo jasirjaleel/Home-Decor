@@ -50,7 +50,7 @@
                                 <!-- Start Cart Table Head -->
                                 <thead>
                                     <tr>
-                                        <th class="product_remove">Delete</th>
+                                  
                                         <th class="product_thumb">Image</th>
                                         <th class="product_name">Product</th>
                                         <th class="product-price">Price</th>
@@ -62,10 +62,7 @@
                                     <!-- Start Cart Single Item-->
                                     {% for cart_item in cart_items %}
                                     <tr>
-                                        <td class="product_remove">
-                                            <!-- <a href="#"><i class="fa fa-trash-o"></i></a> -->
-                                            <a href="#" onclick="deleteCartItem('{{ cart_item.id }}')"><i class="fa fa-trash-o"></i></a>
-                                        </td>
+                                        
                                         <td class="product_thumb">
                                             <a href=""><img src="{{ cart_item.product.thumbnail_image.url }}" alt=""></a>
                                         </td>
@@ -74,9 +71,8 @@
                                         </td>
                                         <td class="product-price">${{ cart_item.product.total_price }}</td>
                                         <td class="product_quantity">
-                                     
-                                            <input min="0" max="100" value="{{ cart_item.quantity }}" type="number"
-                                                onchange="updateCart('{{ cart_item.id }}', this.value)">
+                                                
+                                            
                                         </td>
                                         <td class="product_total" id="subtotal-{{ cart_item.id }}">${{ cart_item.sub_total }}</td>
                                     </tr>
@@ -121,7 +117,7 @@
                 
                       <div class="payment-summary-row subtotal-row">
                         <div>Total before tax:</div>
-                        <div class="payment-summary-money" id="before_tax">${{ total|add:shipping }}</div>
+                        <div class="payment-summary-money" id="before_tax"></div>
                       </div>
                 
                       <div class="payment-summary-row">
@@ -135,7 +131,7 @@
                       </div>
                 
                       <button class="btn btn-block btn-golden" >
-                        <a href="{% url 'payment' %}" style="color:white;">Proceed To Payment</a>
+                        <a href="{% url 'payment' %}" style="color:white;">Place Order</a>
                       </button>
                     </div>
                   </div>

@@ -41,7 +41,7 @@
                 <label for="address-{{ i.id }}" class="d-flex ">
                     <div class="flex-column">
                         <div class="d-flex flex-row px-3 align-content-center " style="width: 400px;">
-                            <input type="radio" class="address-radio" onclick="sweet_alert('{{ i.id }}')" id="address-{{ i.id }}"style="width: 25px; height: 16px;position: relative;bottom: -15px" name="address" value="{{ i.id }}" {% if i.is_default %}checked{% endif %} />
+                            <input type="radio" class="address-radio" onchange="sweet_alert('{{ i.id }}')" id="address-{{ i.id }}"style="width: 25px; height: 16px;position: relative;bottom: -15px" name="address" value="{{ i.id }}" {% if i.is_default %}checked{% endif %} />
                             <div class="col pl-2">
 
                                 <h5>{{i.first_name}} {{i.last_name}}</h5>
@@ -55,9 +55,11 @@
                                 <span>{{i.phone_number}}</span>
                             </div>
                         </div>
-                        <div class="btn px-3 align-content-center" onclick="delete_add('{{ i.id }}')"><i class="fa-duotone fa-trash" style="--fa-primary-color: #b19561; --fa-secondary-color: #b19561; "></i></div>
+                        
+                        
                     </div>
                 </label>
+                <div class="btn d-flex px-3 align-items-center" onclick="delete_add('{{ i.id }}')"><i class="fa-duotone fa-trash" style="--fa-primary-color: #b19561; --fa-secondary-color: #b19561;font-size: 25px;"></i></div>
             </li>
             {% endfor %}
             <!-- Single Address End  -->

@@ -11,17 +11,20 @@ urlpatterns = [
 
 
     path('all-product/',productView.all_product,name='all-product'), 
-    path('all-variant-product/<int:product_id>',productView.all_variant_product,name='all-variant-product'), 
+    path('all-variant-product/<int:product_id>/',productView.all_variant_product,name='all-variant-product'), 
     path('create-product/',productView.create_product,name='create_product'),
     path('add-product-variant/',productView.add_product_variant,name='add_product_variant'),
-    # path('edit-product/<int:product_id>',views.editproduct,name='editproduct'),
+    path('edit-product-variant/<int:product_id>/',productView.edit_product_variant,name='edit_product_variant'),
+    path('edit-product/',productView.edit_product,name='edit_product'),
     path('unlist-product/<int:product_id>/',productView.unlist_product,name='unlist-product'), # Making it unavailable
     path('list-product/<int:product_id>/',productView.list_product,name='list-product'),       # Making it available
+    path('toggle-product/<int:id>/',productView.toggle_product_variant,name='toggle-product-variant'),       
     
     path('add-category/',categoryView.add_category,name='addcategory'),
     path('manage-category/',categoryView.manage_category,name='manage_category'),
 
     path('user-management/', views.user_management, name='user_management'),
+    path('user-details/', views.user_details, name='user_details'),
     path('blockuser/', views.blockuser, name='blockuser'),
     path('unblockuser/<int:user_id>/', views.unblockuser, name='unblockuser'),
 

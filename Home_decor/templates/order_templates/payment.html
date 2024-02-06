@@ -1,0 +1,232 @@
+{% extends 'store_templates/base.html' %} {% load static %} {% block content %}
+<link rel="stylesheet" href="{% static 'assets/css/payment.css' %}">
+
+
+<!-- ...:::: Start Breadcrumb Section:::... -->
+<div class="breadcrumb-section breadcrumb-bg-color--golden">
+  <div class="breadcrumb-wrapper">
+    <div class="container">
+      <div class="row ">
+        <div class="col-12">
+          <h3 class="breadcrumb-title">Payment</h3>
+          <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
+            <nav aria-label="breadcrumb">
+              <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'cart' %}">Cart</a></li>
+                <li class="active" aria-current="page">Payment</li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ...:::: End Breadcrumb Section:::... -->
+
+<div class="container">
+  <div class="row" >
+
+    <div class="col-lg-6 col-md-6">
+      <div class="coupon_code " >
+        <!-- <form method="POST"> -->
+
+        <h3>Payment Method</h3>
+        <ul class="d-flex flex-column justify-content-center p-2">
+          <!-- <li class="d-flex flex-row p-2">
+            <label for="payment-card" class="d-flex flex-row">
+              <input type="radio" id="payment-card" style="width: 20px;" name="payment-method" value="card" />
+              <h5 class="ml-2 w-100">Credit/Debit Card</h5>
+            </label>
+          </li>
+          <li class="d-flex flex-row p-2">
+            <label for="payment-card" class="d-flex flex-row">
+              <input type="radio" id="payment-card" style="width: 20px;" name="payment-method" value="card" />
+              <h5 class="ml-2 w-100">UPI Payment</h5>
+            </label>
+          </li>
+          <li class="d-flex flex-row p-2">
+            <label for="payment-card" class="d-flex flex-row">
+              <input type="radio" id="payment-card" style="width: 20px;" name="payment-method" value="card" />
+              <h5 class="ml-2 w-100">Cash on Delivery</h5>
+            </label>
+          </li> -->
+          <form method="post" action="{% url 'payment' %}">
+            {% csrf_token %}
+        {% for method in payment_methods %}
+        <li class="d-flex flex-row p-2">
+          <label for="payment-{{ method.id }}" class="d-flex flex-row">
+            <input type="radio" id="payment-{{ method.id }}" style="width: 20px;" name="payment_method" value="{{ method.id }}" />
+            <h5 class="ml-2 w-100">{{ method.method_name }}</h5>
+          </label>
+        </li>
+        {% endfor %}
+
+        </ul>
+
+        <!-- </form> -->
+      </div>
+      
+      <div class="coupon_code" >
+        <h3>Your Address</h3>
+        <ul class="d-flex flex-column justify-content-center">
+          {% for i in address %}
+          <li class="d-flex flex-row p-2" style="width: 200px;">
+            <label for="payment-card" class="d-flex ">
+              <div class="flex-column">
+                <div class="d-flex flex-row px-3 align-content-center " style="width: 400px;">
+                  <input type="radio" class="address-radio" onclick="default_address('{{ i.id }}')" id="address-{{ i.id }}"style="width: 25px; height: 16px;position: relative;bottom: -15px" name="address" value="{{ i.id }}" {% if i.is_default %}checked{% endif %} />
+                  <div class="col pl-2">
+
+                      <h5>{{i.first_name}} {{i.last_name}}</h5>
+                      <div class="col">
+                          <span>{{i.street_address}}</span>,
+                          <span>{{i.town_city}}</span>,
+                          <span>{{i.state}}</span>,
+                          <span>{{i.country_region}}</span>,
+                          <span>{{i.zip_code}}</span>
+                      </div>
+                      <span>{{i.phone_number}}</span>
+                  </div>
+              </div>
+              </div>
+            </label>
+          </li>
+          {% endfor %}
+        </ul>
+        
+        <hr>
+        <div class="btn p-4 ml-2 mb-1"><a href="{% url 'addaddress' %}?next={{ request.path }}"style="color: #b19561;"><i class="fa-solid fa-plus" style="color: #b19561; width: 20px;"></i> Add New Address</a> </div>
+
+      </div>
+    </div>
+
+    <div class="checkout-grid col-lg-4">
+      <div class="order-summary js-order-summary"></div>
+  
+      
+  
+      <div class="payment-summary">
+          {% comment %}
+          <div class="">
+              <input id='coupon' type="text" class="" placeholder="Coupon Code" name="coupon">
+              <div class="">
+                  <button type="submit" class="btn btn-sm btn-golden">Apply Coupon</button>
+              </div>
+          </div>
+          {% endcomment %}
+        <div class="payment-summary-title">Order Summary</div>
+  
+        <div class="payment-summary-row">
+          <div id="quantity">Subtotal ({{quantity}} Items):</div>
+          <div class="payment-summary-money" id="total">${{total}}</div>
+        </div>
+  
+        <div class="payment-summary-row">
+          <div>Shipping &amp; handling:</div>
+          <div class="payment-summary-money" id="shipping">${{shipping}}</div>
+        </div>
+  
+        <div class="payment-summary-row subtotal-row">
+          <div>Total before tax:</div>
+          <div class="payment-summary-money" id="before_tax">${{ tax }}</div>
+        </div>
+  
+        <div class="payment-summary-row">
+          <div>Estimated tax (5%):</div>
+          <div class="payment-summary-money" id="tax">${{tax}}</div>
+        </div>
+  
+        <div class="payment-summary-row total-row">
+          <div>Order total:</div>
+          <div class="payment-summary-money" id="grandtotal">${{grandtotal}}</div>
+        </div>
+  
+        <button class="btn btn-block btn-golden" type="submit" >
+          <a   style="color:white;">Order Review</a>
+        </button>
+      </form>
+      </div>
+    </div>
+
+  </div>
+    
+
+</div>
+
+<script>
+  
+  async function updateOrderSummary() {
+      try {
+          const response = await fetch('/order-summary/');
+          const data = await response.json();
+
+          // Update DOM elements with the new data
+          document.getElementById('total').innerText      = `$${data.total}`;
+          document.getElementById('quantity').innerText   = `Subtotal (${data.quantity} items)`;
+          document.getElementById('shipping').innerText   = `$${data.shipping}`;
+          document.getElementById('before_tax').innerText = `$${parseInt(data.shipping) + parseInt(data.total)}`;
+          document.getElementById('tax').innerText        = `$${data.tax}`;
+          document.getElementById('grandtotal').innerText = `$${data.grandtotal}`;
+      } catch (error) {
+          console.error('Error fetching order summary:', error);
+      }
+  }
+
+  updateOrderSummary();
+
+function default_address(addressId) {
+            // Make a fetch request to update is_default in the backend
+            fetch('/myaccount/my-address/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'), // Include CSRF token
+                },
+                // body: JSON.stringify({ 'addressId':addressId }),
+                body: JSON.stringify({ 'addressId':addressId }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response from the server
+                    console.log(data);
+                    if (data.success) {
+                        // Success message
+                        Swal.fire('Success', data.message, 'success');
+                    } else {
+                        // Error message
+                        Swal.fire('Error', data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle other errors
+                    Swal.fire('Error', 'An unexpected error occurred', 'error');
+                });
+     
+}
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Check if the cookie name matches the provided name
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+
+
+
+
+
+</script>
+{% endblock %}

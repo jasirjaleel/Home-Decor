@@ -831,9 +831,9 @@
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRFToken': csrftoken,  // Include additional headers like CSRF token if needed
+            'X-CSRFToken': csrftoken,
         },
-        body: JSON.stringify({}),  // Include any other data in the request body if needed
+        body: JSON.stringify({}),
     })
     .then(response => response.json())
     
@@ -872,6 +872,7 @@
     document.getElementById('addToCartBtn').addEventListener('click', function () {
         var quantityInput = document.getElementById('quantityInput');
         var selectedQuantity = quantityInput.value;
+        console.log(selectedQuantity);
 
         // Modify the href attribute to include the selected quantity
         var addToCartBtn = document.getElementById('addToCartBtn');

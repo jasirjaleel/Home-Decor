@@ -77,9 +77,11 @@
                             <td>
                                 <div class="d-flex flex-row col-name">
                                     <div>
-
-                                        <h6 class="mb-0">{{ user.username }}</h6>
-                                        <span>{{ user.email }}</span>
+                                        <a href="{% url 'user_details' %}?user_id={{ user.id }}">
+                                            <h6 class="mb-0">{{ user.username }}</h6>
+                                            <span>{{ user.email }}</span>
+                                        </a>
+                                        
 
                                     </div>
 

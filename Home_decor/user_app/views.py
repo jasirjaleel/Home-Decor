@@ -46,10 +46,15 @@ def usersignup(request):
         
         randomotp = str(random.randint(100000, 999999))
 
-        request.session['storedotp'] = randomotp
-        request.session['storedemail']=email
-        request.session.modified = True 
-        request.session.set_expiry(300)
+        # request.session['storedotp'] = randomotp
+        # request.session['storedemail']=email
+        # request.session.modified = True 
+        # request.session.set_expiry(300)
+
+        request.session['storedotp'] = {'value': randomotp,}
+        request.session['storedemail'] = {'value': email, }
+        request.session.set_expiry(None)
+        request.session.modified = True
 
         subject = "Verify Your One-Time Password (OTP) - Home Decor Ecommerce Store"
         sendermail = "noreply@homedecorestore.com"
@@ -167,10 +172,10 @@ class ForgetPasswordView(View):
     def post(self, request, *args, **kwargs):
         email = self.request.POST.get('email')
         random_otp = str(random.randint(100000, 999999))
-        self.request.session['storedotp'] = random_otp
-        self.request.session['storedemail'] = email
+        self.request.session['storedotp'] = {'value': random_otp,}
+        self.request.session['storedemail'] = {'value': email,}
+        self.request.session.set_expiry(None)
         self.request.session.modified = True 
-        self.request.session.set_expiry(600)
 
         subject = "Verify Your One-Time Password (OTP) - Home Decor Ecommerce Store"
         sender_mail = "noreply@homedecorestore.com"

@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
 from user_app.models import Account
+from account.models import Address
 from .models import *
 from django.http import JsonResponse
 import json
@@ -189,3 +190,13 @@ def unblockuser(request, user_id):
     user.save()
     # return JsonResponse({'message': 'User unblocked successfully'})
     return redirect('user_management')
+
+def user_details(request):
+    user_id = request.GET.get('user_id')
+    user = Account.objects.get(id=user_id)
+    address = Address.objects.filter(account=user.id,is_default=True).first()
+    context={
+        "user":user,
+        'address':address,
+    }
+    return render(request,'admin_templates/user_details.html',context)

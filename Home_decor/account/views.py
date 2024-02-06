@@ -62,7 +62,10 @@ def add_address(request):
         is_default = make_default == 'on'
         address.is_default = is_default
         address.save()
-        return redirect('myaddress')
+        # return redirect(request.META.get('HTTP_REFERER', 'myaddress')) # To redirect back to the page it came from 
+        next_url = request.GET.get('next', 'myaddress')
+        return redirect(next_url)
+        # return redirect('myaddress')
     return render(request,'account_templates/add-address.html')
 
 def delete_address(request):
@@ -83,7 +86,15 @@ def my_order(request):
     return render(request,'account_templates/orders.html')
 
 def my_profile(request):
-    return render(request,'account_templates/my-profile.html')
+    print(request.user)
+    account = Account.objects.filter(email=request.user)
+    acc=account.first()
+    print(acc)
+    context = {
+        "account":acc,
+    }
+    
+    return render(request,'account_templates/my-profile.html',context)
 
  
 def forget_password(request):

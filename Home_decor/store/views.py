@@ -109,7 +109,7 @@ class ShopView(View):
     template_name = 'store_templates/shop.html'
 
     def get(self, request):
-        products = Product_Variant.objects.all()
+        products = Product_Variant.objects.filter(is_active=True,product__is_available=True)
         return render(request, self.template_name, {'products': products})
 
 class ProductDetailView(View):

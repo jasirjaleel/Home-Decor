@@ -39,6 +39,7 @@ def cart(request):
         tax = round(total / 100 * 5, 2)
         grandtotal = round(tax + total + shipping, 2)
         print(tax,grandtotal,quantity)
+        request.session['grandtotal'] = {'value': str(grandtotal),}
       
         context = {
             'total' : total,
@@ -81,6 +82,7 @@ def add_to_cart(request, slug):
                 # else:
                 if request.GET.get('quantity'):
                     quantity1 = int(request.GET.get('quantity'))
+                    print(quantity1)
                 else:
                     quantity1=1
                 cart_item.quantity += quantity1
@@ -150,7 +152,6 @@ def order_summary(request):
 
     tax = round(total / 100 * 5, 2)
     grandtotal = round(tax + total + shipping, 2)
-
     # Return JSON response
     return JsonResponse({
         'total': total,
@@ -159,6 +160,28 @@ def order_summary(request):
         'tax': tax,
         'grandtotal': grandtotal,
     })
+
+
+@login_required(login_url='userlogin')
+def update_cart(request, cart_item_id, new_quantity):
+    try:
+        cart_item = CartItem.objects.get(id=cart_item_id, user=request.user)
+        cart_item.quantity = int(new_quantity)
+        cart_item.save()
+
+        response_data = {
+            'success': True,
+            'message': 'Cart updated successfully',
+            'subtotal': cart_item.sub_total(),
+        }
+
+    except CartItem.DoesNotExist:
+        response_data = {
+            'success': False,
+            'message': 'Cart item not found',
+        }
+
+    return JsonResponse(response_data)
 
 @login_required
 def delete_cart_item(request, cart_item_id):
@@ -188,5 +211,3 @@ def delete_cart_item(request, cart_item_id):
 #         return JsonResponse({'total': 0})
     
 
-# def payment(request):
-#     return render(request,'cart_templates/payment.html')

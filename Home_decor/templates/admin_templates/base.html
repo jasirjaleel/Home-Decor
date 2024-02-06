@@ -71,8 +71,8 @@
                         <a href="page-categories.html">Categories</a> -->
                     </div>
                 </li>
-                {% comment %}
-                <!-- <li class="menu-item has-submenu">
+              
+                <li class="menu-item has-submenu">
                     <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Orders</span>
                     </a>
@@ -82,6 +82,7 @@
                         <a href="page-orders-detail.html">Order detail</a>
                     </div>
                 </li>
+                {% comment %}
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="page-sellers-cards.html"> <i class="icon material-icons md-store"></i>
                         <span class="text">Sellers</span>
@@ -91,8 +92,9 @@
                         <a href="page-sellers-list.html">Sellers list</a>
                         <a href="page-seller-detail.html">Seller profile</a>
                     </div>
-                </li> -->
-                <!-- <li class="menu-item has-submenu {% if request.path == '/admin/add-product/' %}active{% endif %}">
+                </li>
+              
+                <li class="menu-item has-submenu {% if request.path == '/admin/add-product/' %}active{% endif %}">
                     <a class="menu-link" href="{% url 'addproduct' %}"> <i class="icon material-icons md-add_box"></i>
                         <span class="text">Add product</span>
                     </a>
@@ -100,7 +102,7 @@
                         <a href="{% url 'addproduct' %}">Add product 1</a>
                         
                     </div>
-                </li> -->
+                </li>
                 {% endcomment %}
                 <li class="menu-item has-submenu  {% if request.path == '/admin/user-management/' %}active{% endif %}">
                     <a class="menu-link " href="{% url 'user_management' %}"> <i class="icon material-icons md-people"></i>
@@ -111,7 +113,7 @@
                             <!-- <i class="icon material-icons md-people"></i> -->
                             <span class="text">Users List</span>
                         </a>
-                        <a class="" href="{% url 'adminhome' %}"> 
+                        <a class="{% if request.path == '/admin/user-details/' %}active{% endif %}"> 
                             <!-- <i class="icon material-icons md-add_box"></i> -->
                             <span class="text">User Details</span>
                         </a>

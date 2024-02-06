@@ -23,11 +23,14 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('djadmin/', admin.site.urls),
     path('admin/',include('admin_app.urls')),
+    path('admin/',include('extra_management.urls')),
+
+    path('myaccount/',include('account.urls')),
+
     path('',include('user_app.urls')),
     path('',include('cart_app.urls')),
-    path('myaccount/',include('account.urls')),
     path('',include('store.urls')),
-    path('admin/',include('extra_management.urls')),
+    path('',include('order.urls')),
     
 ]
 
