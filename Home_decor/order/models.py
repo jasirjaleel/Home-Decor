@@ -58,8 +58,9 @@ class Order(models.Model):
     # wallet_discount = models.IntegerField(default=0,null=True)
     # order_note = models.CharField(max_length=100,blank=True,null=True)
     # ip = models.CharField(max_length=50,blank=True)
-    @classmethod
-    def generate_order_number(cls):
+
+    @staticmethod
+    def generate_order_number():
         current_date = datetime.datetime.now().strftime("%Y%m%d")
         last_order = Order.objects.last()
         
@@ -69,6 +70,11 @@ class Order(models.Model):
             sequence_number = 1
 
         return f"ORD{current_date}{sequence_number:06d}"
+
+    def save(self, *args, **kwargs):
+        if not self.order_number:
+            self.order_number = self.generate_order_number()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.order_number
@@ -85,6 +91,9 @@ class OrderProduct(models.Model):
     created_at      = models.DateTimeField(auto_now_add=True)
     updated_at      = models.DateTimeField(auto_now=True)
     
+    def total_price(self):
+        return self.product.total_price() * self.quantity
+
     def __str__(self):
         return str(self.order)
 

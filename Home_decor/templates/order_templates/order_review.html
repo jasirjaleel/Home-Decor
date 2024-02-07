@@ -60,21 +60,18 @@
                                 </thead> <!-- End Cart Table Head -->
                              <tbody>
                                     <!-- Start Cart Single Item-->
-                                    {% for cart_item in cart_items %}
+                                    {% for order_item in orders_items %}
                                     <tr>
                                         
                                         <td class="product_thumb">
-                                            <a href=""><img src="{{ cart_item.product.thumbnail_image.url }}" alt=""></a>
+                                            <a href=""><img src="{{ order_item.product.thumbnail_image.url }}" alt=""></a>
                                         </td>
                                         <td class="product_name">
-                                            <a href="{% url 'product_detail' slug=cart_item.product.product_variant_slug %}">{{ cart_item.product.get_product_name  }}</a>
+                                            <a href="">{{ order_item.product.get_product_name  }}</a>
                                         </td>
-                                        <td class="product-price">${{ cart_item.product.total_price }}</td>
-                                        <td class="product_quantity">
-                                                
-                                            
-                                        </td>
-                                        <td class="product_total" id="subtotal-{{ cart_item.id }}">${{ cart_item.sub_total }}</td>
+                                        <td class="product-price">{{ order_item.product.total_price }}</td>
+                                        <td class="product_quantity">{{ order_item.quantity }}</td>
+                                        <td class="product_total" id="subtotal-{{ cart_item.id }}">${{ order_item.total_price }}</td>
                                     </tr>
                                     {% endfor %}<!-- End Cart Single Item-->
 
@@ -129,10 +126,11 @@
                         <div>Order total:</div>
                         <div class="payment-summary-money" id="grandtotal">${{grandtotal}}</div>
                       </div>
-                
-                      <button class="btn btn-block btn-golden" >
-                        <a href="{% url 'payment' %}" style="color:white;">Place Order</a>
-                      </button>
+
+                      <form action="{% url 'place_order' %}" method="post">
+                        {% csrf_token %}
+                        <button class="btn btn-block btn-golden" type="submit">Place Order</button>
+                    </form>
                     </div>
                   </div>
 

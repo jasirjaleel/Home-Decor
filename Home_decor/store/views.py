@@ -8,6 +8,8 @@ from django.views import View
 from django.shortcuts import render, get_object_or_404
 # Create your views here.
 def home(request):
+    user=request.user
+    print(user.email)
     return render(request,'store_templates/index.html')
 
 # def shop(request):

@@ -1,6 +1,32 @@
 {% extends 'store_templates/base.html' %}
 {% load static %}
 {% block content %}
+
+<style>
+    #myform {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    align-items: center;
+    padding: 5px;
+    border: solid 1px #e8e8e8; 
+    box-sizing: border-box;
+    border-radius: 5px;
+    margin: 2%;
+    color: #777777;
+}
+.qty {
+    width: 40px;
+    height: 25px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+input.qtyplus { width:30px; height:30px;}
+input.qtyminus { width:30px; height:30px;}
+</style>
+
 <div class="breadcrumb-section breadcrumb-bg-color--golden">
     <div class="breadcrumb-wrapper">
         <div class="container">
@@ -123,12 +149,20 @@
                             
                         
                             <!-- Product Variable Single Item -->
-                            <div class="d-flex align-items-center ">
+                            <div class="d-flex align-items-center " style='gap:20px;'>
                                 <div class="variable-single-item ">
                                     <span>Quantity</span>
-                                    <div class="product-variable-quantity">
+                                    <!-- <div class="product-variable-quantity">
                                         <input id="quantityInput" min="1" max="100" value="1" type="number" >
+                                    </div> -->
+
+                                    <div id='myform' method='POST' class='quantity d-flex' action='#'>
+                                        <input type='button' value='-' class='qtyminus minus' field='quantity' />
+                                        <input type='text' name='quantity' value='1' class='qty' id="quantityInput" />
+                                        <input type='button' value='+' class='qtyplus plus' field='quantity' />
                                     </div>
+                                      
+
                                 </div>
                                 
                                 <div class="product-add-to-cart-btn">
@@ -869,20 +903,46 @@
 
 
 
-    document.getElementById('addToCartBtn').addEventListener('click', function () {
-        var quantityInput = document.getElementById('quantityInput');
-        var selectedQuantity = quantityInput.value;
-        console.log(selectedQuantity);
+document.getElementById('addToCartBtn').addEventListener('click', function () {
+    var quantityInput = document.getElementById('quantityInput');
+    var selectedQuantity = quantityInput.value;
 
-        // Modify the href attribute to include the selected quantity
-        var addToCartBtn = document.getElementById('addToCartBtn');
-        addToCartBtn.href += selectedQuantity;
-        console.log(quantityInput);
-    });
+    // Modify the href attribute to include the selected quantity
+    var addToCartBtn = document.getElementById('addToCartBtn');
+    addToCartBtn.href = addToCartBtn.href.split('?')[0] + '?quantity=' + selectedQuantity;
 
+    console.log(selectedQuantity);
+    console.log(quantityInput.value);
+});
   
     </script>
 
+   <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.quantity').forEach(function(quantity) {
+        quantity.addEventListener('click', function(event) {
+            if(event.target.classList.contains('plus')) {
+                let input = this.querySelector('input.qty');
+                let val = parseInt(input.value);
+                input.value = val + 1;
+            } else if(event.target.classList.contains('minus')) {
+                let input = this.querySelector('input.qty');
+                let val = parseInt(input.value);
+                if(val > 0) {
+                    input.value = val - 1;
+                }
+            }
+        });
+
+        // Add input event listener for numeric validation
+        quantity.querySelector('input.qty').addEventListener('input', function(event) {
+            // Remove non-numeric characters from the input value
+            this.value = this.value.replace(/\D/g, '');
+        });
+    });
+});
+
+</script>
 
     
     {% endblock content %}

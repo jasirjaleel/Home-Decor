@@ -9,11 +9,20 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 # Create your views here.
 def _cart_id(request):
-    cart = request.session.session_key
-    print('++++++++++++++++++++++')
-    if not cart:
-        cart = request.session.create()
-        print('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||')
+    # cart = request.session['storedemail']
+    # print('++++++++++++++++++++++')
+    # if not cart:
+    #     user = request.user
+    #     cart = request.session['storedemail'] = user.email
+    #     # cart = request.session.create()
+    #     # print('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||')
+    # return cart
+    try:
+        cart = request.session['storedemail']  # Try to retrieve the email from the session
+    except KeyError:
+        # If email is not found in session, fetch it from request.user and store it in session
+        user = request.user
+        cart = request.session['storedemail'] = user.email
     return cart
 
 @login_required(login_url='userlogin')
@@ -34,11 +43,9 @@ def cart(request):
         for cart_item in cart_items:
             total += round(cart_item.sub_total(), 2)
             quantity += cart_item.quantity
-        print(total)
         shipping = 100
         tax = round(total / 100 * 5, 2)
         grandtotal = round(tax + total + shipping, 2)
-        print(tax,grandtotal,quantity)
         request.session['grandtotal'] = {'value': str(grandtotal),}
       
         context = {
@@ -49,7 +56,6 @@ def cart(request):
             'grandtotal': grandtotal,
             'shipping'  : shipping
         }
-        print('hi2')
         return render(request, 'cart_templates/cart.html', context)
     else:
         # Handle unauthenticated user case (redirect or display message)
@@ -85,8 +91,14 @@ def add_to_cart(request, slug):
                     print(quantity1)
                 else:
                     quantity1=1
-                cart_item.quantity += quantity1
-                cart_item.save()
+                
+                if quantity1 > product.stock :
+                    messages.error(request,'Product Out Of Stock')
+                    print('nostock')
+                else:
+                    print('stock')
+                    cart_item.quantity += quantity1
+                    cart_item.save()
 
             except CartItem.DoesNotExist:
                 cart_item = CartItem.objects.create(
@@ -111,8 +123,6 @@ def add_to_cart(request, slug):
             shipping=100
             tax         = round(total / 100 * 5, 2)
             grandtotal  = round(tax + total + shipping, 2)
-            print(quantity)
-            print(tax)
 
             context = {
                 'total'     : total,
@@ -122,7 +132,6 @@ def add_to_cart(request, slug):
                 'grandtotal': grandtotal,
                 
             }
-            print('hi')
             messages.success(request, "Item added to cart")
             # return render(request, 'cart_templates/cart.html', context)
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -183,7 +192,7 @@ def update_cart(request, cart_item_id, new_quantity):
 
     return JsonResponse(response_data)
 
-@login_required
+@login_required(login_url='userlogin')
 def delete_cart_item(request, cart_item_id):
     try:
         cart_item = CartItem.objects.get(id=cart_item_id, user=request.user)

@@ -3,9 +3,10 @@ from account.models import Address
 from order.models import PaymentMethod
 from .models import Order,OrderProduct
 from cart_app.models import CartItem
-from decimal import Decimal
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required(login_url='userlogin')
 def payment(request):
     print('++++++++++++++++')
     user = request.user
@@ -25,12 +26,12 @@ def payment(request):
         draft_order = Order.objects.create(
             user=user,
             # payment=selected_payment_method,
-            order_number=Order.generate_order_number(),
             shipping_address=default_address_ins,
             order_total=grandtotal1,
             order_status='New',
             is_ordered = False,
         )
+
 
         cart_items = CartItem.objects.filter(user=user)
         for cart_item in cart_items:
@@ -50,8 +51,35 @@ def payment(request):
     }
     return render(request,'order_templates/payment.html',context)
 
-
+@login_required(login_url='userlogin')
 def order_review(request):
     orders_items = OrderProduct.objects.filter(user=request.user)
     print(orders_items)
-    return render(request,'order_templates/order_review.html')
+    context= {
+        'orders_items':orders_items,
+    }
+    return render(request,'order_templates/order_review.html',context)
+
+
+@login_required(login_url='userlogin')
+def place_order(request):
+    # if request.method == 'POST':
+    #     user = request.user
+    #     cart_items = CartItem.objects.filter(user=user)
+    #     for cart_item in cart_items:
+    #         # Reduce the stock of products
+    #         product = cart_item.product
+    #         product.stock -= cart_item.quantity
+    #         product.save()
+
+    #     # Mark the order as processed
+    #     draft_order = Order.objects.get(user=user, is_ordered=False)
+    #     draft_order.is_ordered = True
+    #     draft_order.save()
+
+    #     # Clear the cart
+    #     cart_items.delete()
+
+    return render(request,'order_templates/order_success.html')  # Redirect to a page confirming the order placement
+
+    # return redirect('order_review')

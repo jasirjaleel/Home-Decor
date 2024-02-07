@@ -46,13 +46,13 @@ def usersignup(request):
         
         randomotp = str(random.randint(100000, 999999))
 
-        # request.session['storedotp'] = randomotp
-        # request.session['storedemail']=email
+        request.session['storedotp'] = randomotp
+        request.session['storedemail']=email
         # request.session.modified = True 
         # request.session.set_expiry(300)
 
-        request.session['storedotp'] = {'value': randomotp,}
-        request.session['storedemail'] = {'value': email, }
+        # request.session['storedotp'] = {'value': randomotp,}
+        # request.session['storedemail'] = {'value': email, }
         request.session.set_expiry(None)
         request.session.modified = True
 
@@ -237,5 +237,3 @@ class EnterNewPasswordView(View):
             return redirect('forget_password_login')
 
         return render(request, self.template_name)
-
-    
