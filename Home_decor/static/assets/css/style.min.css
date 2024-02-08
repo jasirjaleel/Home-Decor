@@ -17852,7 +17852,7 @@ table {
 }
 
 .table_page table tbody tr td.product_quantity {
-    min-width: 180px
+    max-width: 180px
 }
 
 .table_page table tbody tr td.product_quantity label {
@@ -17861,11 +17861,11 @@ table {
 }
 
 .table_page table tbody tr td.product_quantity input {
-    width: 60px;
+    width: 40px;
     height: 40px;
     padding: 0 5px 0 10px;
     background: 0 0;
-    border: 1px solid #ededed
+    border: 1px solid #ededed;
 }
 
 .table_page table tbody tr td.product_addcart {

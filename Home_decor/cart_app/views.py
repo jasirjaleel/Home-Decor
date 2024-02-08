@@ -9,12 +9,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 # Create your views here.
 def _cart_id(request):
-    # cart = request.session['storedemail']
+    # cart = request.session.session_key()
     # print('++++++++++++++++++++++')
     # if not cart:
-    #     user = request.user
-    #     cart = request.session['storedemail'] = user.email
-    #     # cart = request.session.create()
+    #     cart = request.session.create()
     #     # print('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||')
     # return cart
     try:
@@ -24,6 +22,7 @@ def _cart_id(request):
         user = request.user
         cart = request.session['storedemail'] = user.email
     return cart
+
 
 @login_required(login_url='userlogin')
 @never_cache
@@ -46,7 +45,7 @@ def cart(request):
         shipping = 100
         tax = round(total / 100 * 5, 2)
         grandtotal = round(tax + total + shipping, 2)
-        request.session['grandtotal'] = {'value': str(grandtotal),}
+        request.session['grandtotal'] = str(grandtotal)
       
         context = {
             'total' : total,
@@ -70,10 +69,10 @@ def add_to_cart(request, slug):
 
     if request.user.is_authenticated:
         try:
-            print("add try")
+            print("Getting cart id")
             cart = Cart.objects.get(cart_id=_cart_id(request))
         except Cart.DoesNotExist:
-            print("add except")
+            print("Creating cart id")
             cart = Cart.objects.create(
                 cart_id = _cart_id(request)
             )
@@ -209,14 +208,4 @@ def delete_cart_item(request, cart_item_id):
         }
 
     return JsonResponse(response_data)
-
-
-# def get_cart_total(request):
-#     if request.user.is_authenticated:
-#         cart_items = CartItem.objects.filter(currentuser=request.user)
-#         total = sum(cart_item.sub_total() for cart_item in cart_items)
-#         return JsonResponse({'total': total})
-#     else:
-#         return JsonResponse({'total': 0})
-    
 

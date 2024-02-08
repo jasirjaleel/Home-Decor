@@ -1,4 +1,4 @@
-{% extends 'user_templates/base.html' %}
+{% extends 'store_templates/base.html' %}
 {% load static %}
 {% block content %}
 
@@ -40,24 +40,17 @@
                 </tr>
             </thead>
             <tbody>
+                {% for order in orders %}
                 <tr>
                     <td ><img src="" alt="hi">
-                        <a href="" class="view">Asgaard sofa</a></td>
+                        <a href="" class="view"></a>{{order.order_number}}</td>
                     <td>Rs. 25,000</td>
                     <td>May 10, 2018</td>
                     <td>Delivered on Jan 10</td>
                     <td><a href="cart.html" class="view">view</a></td>
                     <td><a href="cart.html" class="view">view</a></td>
                 </tr>
-                <tr>
-                    <td ><a href="" class="view">Asgaard sofa</a></td>
-                    <td>Rs. 25,000</td>
-                    <td>May 10, 2018</td>
-                    <td>Processing</td>
-                    <td>$17.00 for 1 item </td>
-                    
-                    <td><a href="cart.html" class="view">view</a></td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>

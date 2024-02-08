@@ -111,7 +111,7 @@ input.qtyminus { width:30px; height:30px;}
                         <!-- End  Product Details Text Area-->
                         <!-- Start Product Variable Area -->
                         <div class="product-details-variable">
-                            <h4 class="title">Available Options</h4>
+                            <!-- <h4 class="title">Available Options</h4> -->
                             <!-- Product Variable Single Item -->
                             <!-- <div class="variable-single-item">
                                 <div class="product-stock"> <span class="product-stock-in"><i
@@ -158,7 +158,7 @@ input.qtyminus { width:30px; height:30px;}
 
                                     <div id='myform' method='POST' class='quantity d-flex' action='#'>
                                         <input type='button' value='-' class='qtyminus minus' field='quantity' />
-                                        <input type='text' name='quantity' value='1' class='qty' id="quantityInput" />
+                                        <input type='text' name='quantity' value='1' class='qty' id="quantityInput" max='{{stock}}'/>
                                         <input type='button' value='+' class='qtyplus plus' field='quantity' />
                                     </div>
                                       
@@ -918,17 +918,23 @@ document.getElementById('addToCartBtn').addEventListener('click', function () {
     </script>
 
    <script>
-  document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.quantity').forEach(function(quantity) {
         quantity.addEventListener('click', function(event) {
+            let input = this.querySelector('input.qty');
+            let val = parseInt(input.value);
+            let maxStock = parseInt(input.getAttribute('max')); // Get the maximum stock value from an attribute
+
             if(event.target.classList.contains('plus')) {
-                let input = this.querySelector('input.qty');
-                let val = parseInt(input.value);
-                input.value = val + 1;
+                // Check if the current value is less than the maximum stock
+                if (val < maxStock) {
+                    input.value = val + 1;
+                } else {
+                    // Optionally, you can provide feedback to the user that the maximum stock level has been reached
+                    console.log('Maximum stock reached');
+                }
             } else if(event.target.classList.contains('minus')) {
-                let input = this.querySelector('input.qty');
-                let val = parseInt(input.value);
-                if(val > 0) {
+                if(val > 1) {
                     input.value = val - 1;
                 }
             }
@@ -941,7 +947,6 @@ document.getElementById('addToCartBtn').addEventListener('click', function () {
         });
     });
 });
-
 </script>
 
     

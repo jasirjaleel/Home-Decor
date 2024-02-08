@@ -53,7 +53,7 @@ def usersignup(request):
 
         # request.session['storedotp'] = {'value': randomotp,}
         # request.session['storedemail'] = {'value': email, }
-        request.session.set_expiry(None)
+        # request.session.set_expiry(None)
         request.session.modified = True
 
         subject = "Verify Your One-Time Password (OTP) - Home Decor Ecommerce Store"
@@ -133,10 +133,10 @@ def userlogin(request):
         if user is not None and  user.is_blocked == False and user.is_superadmin == False:
             login(request,user)
             try:
-                print("new try")
+                print("Getting cart id")
                 cart = Cart.objects.get(cart_id=_cart_id(request))
             except Cart.DoesNotExist:
-                print("except")
+                print("Creating cart id")
                 cart = Cart.objects.create(
                     cart_id = _cart_id(request)
                 )
@@ -172,9 +172,9 @@ class ForgetPasswordView(View):
     def post(self, request, *args, **kwargs):
         email = self.request.POST.get('email')
         random_otp = str(random.randint(100000, 999999))
-        self.request.session['storedotp'] = {'value': random_otp,}
-        self.request.session['storedemail'] = {'value': email,}
-        self.request.session.set_expiry(None)
+        self.request.session['storedotp'] = random_otp
+        self.request.session['storedemail'] = email
+        # self.request.session.set_expiry(None)
         self.request.session.modified = True 
 
         subject = "Verify Your One-Time Password (OTP) - Home Decor Ecommerce Store"

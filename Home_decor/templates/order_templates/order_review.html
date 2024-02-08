@@ -22,7 +22,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <h3 class="breadcrumb-title">Cart</h3>
+                    <h3 class="breadcrumb-title">Order Review</h3>
                     <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
                         <nav aria-label="breadcrumb">
                             <ul>
@@ -64,12 +64,12 @@
                                     <tr>
                                         
                                         <td class="product_thumb">
-                                            <a href=""><img src="{{ order_item.product.thumbnail_image.url }}" alt=""></a>
+                                            <a href=""><img src="{{ order_item.images.url }}" alt=""></a>
                                         </td>
                                         <td class="product_name">
-                                            <a href="">{{ order_item.product.get_product_name  }}</a>
+                                            <a href="">{{ order_item.product_variant  }}</a>
                                         </td>
-                                        <td class="product-price">{{ order_item.product.total_price }}</td>
+                                        <td class="product-price">{{ order_item.product_price }}</td>
                                         <td class="product_quantity">{{ order_item.quantity }}</td>
                                         <td class="product_total" id="subtotal-{{ cart_item.id }}">${{ order_item.total_price }}</td>
                                     </tr>

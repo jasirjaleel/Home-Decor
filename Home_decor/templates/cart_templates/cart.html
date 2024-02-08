@@ -4,6 +4,29 @@
 <link rel="stylesheet" href="{% static 'assets/css/payment.css' %}">
 <style>
  
+    #myform {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    align-items: center;
+    /* padding: 5px; */
+    /* border: solid 1px #e8e8e8;  */
+    box-sizing: border-box;
+    border-radius: 5px;
+    /* margin: 2%; */
+    color: #777777;
+}
+.qty {
+    width: 20px;
+    height: 25px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+input.qtyplus { width:15px; height:15px;}
+input.qtyminus { width:15px; height:15px;}
+
 .btn-golden a {
         color: white;
         text-decoration: none; /* Optional: Remove underline */
@@ -74,9 +97,15 @@
                                         </td>
                                         <td class="product-price">${{ cart_item.product.total_price }}</td>
                                         <td class="product_quantity">
-                                     
+                                            <div id='myform' method='POST' class='quantity d-flex' action='#'>
+                                                <input type='button' value='-' class='qtyminus minus' field='quantity' onclick="updateQuantity('{{ cart_item.id }}', -1)"  />
+                                                <input type='text' name='quantity' value="{{ cart_item.quantity }}" class='qty' id="quantityInput{{ cart_item.id }}" max='{{cart_item.product.stock}}'/>
+                                                <input type='button' value='+' class='qtyplus plus' field='quantity' onclick="updateQuantity('{{ cart_item.id }}', 1)"  />
+                                            </div>
+                                            {% comment %}
                                             <input min="0" max="100" value="{{ cart_item.quantity }}" type="number"
-                                                onchange="updateCart('{{ cart_item.id }}', this.value)">
+                                            onchange="updateCart('{{ cart_item.id }}', this.value)">
+                                            {% endcomment %}
                                         </td>
                                         <td class="product_total" id="subtotal-{{ cart_item.id }}">${{ cart_item.sub_total }}</td>
                                     </tr>
@@ -167,31 +196,7 @@
 <!-- End Coupon Start -->
  <!-- ...:::: End Cart Section:::... -->
 
-<!-- <script>
-    function updateCart(cartItemId, newQuantity) {
-        fetch(`/update_cart/${cartItemId}/${newQuantity}/`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Update the subtotal in your HTML
-                    document.getElementById(`subtotal-${cartItemId}`).innerText = `$${data.subtotal}`;
-                } else {
-                    console.error(data.message);
-                    // Handle the error, e.g., display an alert to the user
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                // Handle the error, e.g., display an alert to the user
-            });
-    }
-</script> -->
-
 <script>
-
-
-
-
 
 
 function deleteCartItem(cartItemId) {
@@ -247,11 +252,31 @@ function deleteCartItem(cartItemId) {
 
 
 
+  function updateQuantity(cartItemId, change) {
+    const quantityInput = document.getElementById(`quantityInput${cartItemId}`);
+    let newQuantity = parseInt(quantityInput.value) + change;
+
+    // Ensure the new quantity stays within the stock limit
+    const maxStock = parseInt(quantityInput.getAttribute('max'));
+    if (newQuantity < 0) {
+        newQuantity = 1; // Prevent decreasing quantity below 1
+    } else if (newQuantity > maxStock) {
+        newQuantity = maxStock; // Prevent increasing quantity above maximum stock
+    }
+
+    // Update the quantity input field value
+    quantityInput.value = newQuantity;
+
+    // Call the updateCart function with the new quantity
+    updateCart(cartItemId, newQuantity);
+}
+
+
 
     function updateCart(cartItemId, newQuantity) {
       if (newQuantity == 0) {
         deleteCartItem(cartItemId);
-        return;
+        return; 
     }
 
 
@@ -279,6 +304,28 @@ function deleteCartItem(cartItemId) {
             alert('Error updating cart. Please try again.');
         });
 }
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.quantity').forEach(function(quantity) {
+        quantity.querySelector('.qtyplus').addEventListener('click', function(event) {
+            const cartItemId = quantity.dataset.cartItemId;
+            updateQuantity(cartItemId, 1); // Increment by 1
+        });
+
+        quantity.querySelector('.qtyminus').addEventListener('click', function(event) {
+            const cartItemId = quantity.dataset.cartItemId;
+            updateQuantity(cartItemId, -1); // Decrement by 1
+        });
+
+        // Add input event listener for numeric validation
+        quantity.querySelector('input.qty').addEventListener('input', function(event) {
+            // Remove non-numeric characters from the input value
+            this.value = this.value.replace(/\D/g, '');
+        });
+    });
+});
 
 </script>
 

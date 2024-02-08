@@ -8,9 +8,13 @@ from django.views import View
 from django.shortcuts import render, get_object_or_404
 # Create your views here.
 def home(request):
-    user=request.user
-    print(user.email)
-    return render(request,'store_templates/index.html')
+    products = Product_Variant.objects.filter(is_active=True,product__is_available=True)
+    images_dict = {}
+    for i in products:
+        first_image = Additional_Product_Image.objects.filter(product_variant=i.id).first()
+        images_dict[i] = first_image
+    context = {'product': images_dict }
+    return render(request,'store_templates/index.html',context)
 
 # def shop(request):
 #     products = Product.objects.all().filter(is_available=True)
@@ -111,7 +115,7 @@ class ShopView(View):
     template_name = 'store_templates/shop.html'
 
     def get(self, request):
-        products = Product_Variant.objects.filter(is_active=True,product__is_available=True)
+        products = Product_Variant.objects.filter(is_active=True,stock__gt=0)
         return render(request, self.template_name, {'products': products})
 
 class ProductDetailView(View):
@@ -123,6 +127,7 @@ class ProductDetailView(View):
         att_list = []
         for variant in variants:
             # Access the id attribute for each variant
+            stock = variant.stock
             variant_id = variant.id
             variant_att = variant.attributes.all()
             variant_pro= variant.product
@@ -133,7 +138,6 @@ class ProductDetailView(View):
         m = Product_Variant.objects.prefetch_related('attributes').filter(product=variant_pro)
         unique_colors = set()
         unique_materials = set()
-        print(variant_pro_id)
 
         for variant in m:
             # Iterate over related attributes for each variant
@@ -162,6 +166,7 @@ class ProductDetailView(View):
             'att_list'          : att_list,
             'unique_colors'     : unique_colors,
             'unique_materials'  : unique_materials,
+            'stock': stock
 
         }
         return render(request, self.template_name, context)

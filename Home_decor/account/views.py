@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.contrib.auth import login
 from django.shortcuts import get_object_or_404
+from order.models import Order, OrderProduct
 # Create your views here.
 
 def my_account(request):
@@ -83,7 +84,10 @@ def delete_address(request):
     return redirect('myaddress')
 
 def my_order(request):
-    return render(request,'account_templates/orders.html')
+    user = request.user
+    orders = Order.objects.filter(user=user)
+    context = {'orders': orders}
+    return render(request,'account_templates/my-orders.html',context)
 
 def my_profile(request):
     print(request.user)
