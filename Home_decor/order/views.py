@@ -4,12 +4,15 @@ from .models import Order,OrderProduct,PaymentMethod,ShippingAddress,Payment
 from cart_app.models import CartItem
 from django.contrib.auth.decorators import login_required
 import datetime
+from django.views.decorators.cache import never_cache
+from cart_app.views import _delete_unordered_orders
 
 # Create your views here.
 @login_required(login_url='userlogin')
 def payment(request):
     print('1')
     user = request.user
+    _delete_unordered_orders(user)
     address = Address.objects.filter(account=user.id)
     payment_methods = PaymentMethod.objects.filter(is_active=True)
     grandtotal1 = request.session.get('grandtotal')
@@ -59,7 +62,6 @@ def payment(request):
 
         cart_items = CartItem.objects.filter(user=user)
         for cart_item in cart_items:
-            # price = cart_item.product.total_price()
             OrderProduct.objects.create(
                 order           = draft_order,
                 user            = user,
@@ -81,7 +83,7 @@ def payment(request):
 
 @login_required(login_url='userlogin')
 def order_review(request):
-    orders_items = OrderProduct.objects.filter(user=request.user)
+    orders_items = OrderProduct.objects.filter(user=request.user,ordered= False,)
     print(orders_items)
     context= {
         'orders_items':orders_items,
@@ -89,7 +91,8 @@ def order_review(request):
     return render(request,'order_templates/order_review.html',context)
 
 
-# @login_required(login_url='userlogin')
+@login_required(login_url='userlogin')
+@never_cache
 def place_order(request):
     if request.method == 'POST':
         user = request.user
@@ -111,20 +114,6 @@ def place_order(request):
             for order_product in order_products:
                 order_product.ordered = True
                 order_product.save()
-            # order.ordered = True
-            # order.save()
-        # draft_order.is_ordered = True
-        # draft_order.save()
-
-        # order = OrderProduct.objects.filter(order=draft_order)
-        # for j in order:
-        #     j.ordered = True
-        #     j.save()
-        # order.ordered = True
-        # order.save()
-        # Clear the cart
         cart_items.delete()
 
     return render(request,'order_templates/order_success.html')  # Redirect to a page confirming the order placement
-
-    # return redirect('order_review')

@@ -80,11 +80,15 @@ class Order(models.Model):
    
     def generate_order_number(self):
         current_date = datetime.datetime.now().strftime("%Y%m%d")
-        last_order = Order.objects.last()
-        
-        if last_order and last_order.order_number.startswith(current_date):
+        print(current_date)
+        last_order = Order.objects.filter(order_number__startswith=f'ORD{current_date}')
+        print(last_order)
+        if last_order :
             sequence_number = int(last_order.order_number[-6:]) + 1
+            
+            print('workiing')
         else:
+            print('No work')
             sequence_number = 1
 
         return f"ORD{current_date}{sequence_number:06d}"

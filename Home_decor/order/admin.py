@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import PaymentMethod,Order,OrderProduct
+from .models import PaymentMethod,Order,OrderProduct,ShippingAddress,Payment
 # Register your models here.
 
 @admin.register(PaymentMethod)
@@ -10,3 +10,5 @@ class PaymentMethodAdmin(admin.ModelAdmin):
 
 admin.site.register(OrderProduct)
 admin.site.register(Order)
+admin.site.register(ShippingAddress)
+admin.site.register(Payment)

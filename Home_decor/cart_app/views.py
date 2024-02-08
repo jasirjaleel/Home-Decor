@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from product_management.models import Product_Variant
 from .models import Cart,CartItem
+from order.models import OrderProduct,Order
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse, HttpResponseRedirect
@@ -24,9 +25,25 @@ def _cart_id(request):
     return cart
 
 
+# Define the private function for deleting unordered orders
+def _delete_unordered_orders(user):
+    draft_orders = Order.objects.filter(user=user,is_ordered=False)
+    if draft_orders.exists():
+        for order in draft_orders:
+            if order.payment:
+                order.payment.delete()
+                print("Order Payment deleted")
+            if order.shipping_address:
+                order.shipping_address.delete()
+                print("Order Shipping Address deleted")
+        draft_orders.delete()
+        print('deleted orders')
+
+
 @login_required(login_url='userlogin')
 @never_cache
 def cart(request):
+    _delete_unordered_orders(request.user)
     total = 0
     quantity = 0
     cart_items = None

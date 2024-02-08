@@ -85,7 +85,7 @@ def delete_address(request):
 
 def my_order(request):
     user = request.user
-    orders = Order.objects.filter(user=user)
+    orders = OrderProduct.objects.filter(user=user)
     context = {'orders': orders}
     return render(request,'account_templates/my-orders.html',context)
 

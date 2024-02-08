@@ -42,12 +42,16 @@
             <tbody>
                 {% for order in orders %}
                 <tr>
-                    <td ><img src="" alt="hi">
-                        <a href="" class="view"></a>{{order.order_number}}</td>
-                    <td>Rs. 25,000</td>
-                    <td>May 10, 2018</td>
-                    <td>Delivered on Jan 10</td>
-                    <td><a href="cart.html" class="view">view</a></td>
+                    <td class="d-flex justify-content-center align-content-center"><img src="{{order.images.url}}" style="width: 60px;"  alt="hi">
+                        <a href="" class="view"></a>{{order.product_variant}}</td>
+                    <td>Rs. {{ order.product_price }}</td>
+                    <td>{{ order.created_at|date:"j M Y" }}</td>
+                    {% if order.order.order_status != "Delivered" %}
+                    <td>Pending</td>
+                    {% else %}
+                    <td>{{order.order.order_status}}</td>
+                    {% endif %}
+                    <td><a href="cart.html" class="view">{{order.order.order_number}}</a></td>
                     <td><a href="cart.html" class="view">view</a></td>
                 </tr>
                 {% endfor %}
