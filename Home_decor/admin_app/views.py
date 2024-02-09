@@ -125,7 +125,7 @@ def adminlogout(request):
 
 @never_cache
 @login_required(login_url='userlogin')
-def user_management(request):
+def all_users(request):
     if request.user.is_superadmin:
         # if request.method == 'POST':
     #         search_word = request.POST.get('search-box', '')
@@ -133,9 +133,8 @@ def user_management(request):
     #     else:
         data = Account.objects.all().order_by('id').exclude(is_superadmin=True)
         context={'users': data}
-        return render(request,"admin_templates/usermanagement.html", context=context)
+        return render(request,"admin_templates/all_users.html", context=context)
     return redirect('usersignup')
-    
     
     # return render(request,"admin_templates/usermanagement.html")
 
@@ -184,12 +183,12 @@ def blockuser(request):
 #     # return JsonResponse({'message': 'User blocked successfully'})
 #     return redirect('user_management')
 
-def unblockuser(request, user_id):
-    user = Account.objects.get(id=user_id)
-    user.is_blocked = not user.is_blocked 
-    user.save()
-    # return JsonResponse({'message': 'User unblocked successfully'})
-    return redirect('user_management')
+# def unblockuser(request, user_id):
+#     user = Account.objects.get(id=user_id)
+#     user.is_blocked = not user.is_blocked 
+#     user.save()
+#     # return JsonResponse({'message': 'User unblocked successfully'})
+#     return redirect('user_management')
 
 def user_details(request):
     user_id = request.GET.get('user_id')

@@ -1,0 +1,99 @@
+{% extends 'admin_templates/base.html' %}
+{% load static %}
+{% block content %}
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Order List </h2>
+            <p>Lorem ipsum dolor sit amet.</p>
+        </div>
+        <div>
+            <input type="text" placeholder="Search order ID" class="form-control bg-white">
+        </div>
+    </div>
+    <div class="card mb-4">
+        <header class="card-header">
+            <div class="row gx-3">
+                <div class="col-lg-4 col-md-6 me-auto">
+                    <input type="text" placeholder="Search..." class="form-control">
+                </div>
+                <div class="col-lg-2 col-6 col-md-3">
+                    <select class="form-select">
+                        <option>Status</option>
+                        <option>Active</option>
+                        <option>Disabled</option>
+                        <option>Show all</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-6 col-md-3">
+                    <select class="form-select">
+                        <option>Show 20</option>
+                        <option>Show 30</option>
+                        <option>Show 40</option>
+                    </select>
+                </div>
+            </div>
+        </header> 
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="align-middle" scope="col">Order ID</th>
+                                    <th class="align-middle" scope="col">Billing Name</th>
+                                    <th class="align-middle" scope="col">Date</th>
+                                    <th class="align-middle" scope="col">Total</th>
+                                    <th class="align-middle" scope="col">Payment Status</th>
+                                    <th class="align-middle" scope="col">Payment Method</th>
+                                    <th class="align-middle" scope="col">Status</th>
+                                    <th class="align-middle" scope="col" class="text-end"> Action </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in orders %}
+                                <tr>
+                                    <td  class="fw-bold"><span>{{i.order_number|slice:"14:"}}</span></td>
+                                    <td><b>{{i.user.get_usernme}}</b></td>
+                                    
+                                    <td>{{i.created_at|date:"j M Y"}}</td>
+                                    <td>${{i.order_total}}</td>
+                                    <td>
+                                        <span class="badge badge-pill badge-soft-danger">Chargeback</span>
+                                    </td>
+                                    <td>
+                                        <i class="material-icons md-payment font-xxl text-muted mr-5"></i> Visa
+                                    </td>
+                                    <td>{% if i.order_status == 'New' %}
+                                        <span class="badge rounded-pill alert-primary">New</span>
+                                        {% elif i.order_status == 'Accepted' %}
+                                        <span class="badge rounded-pill alert-secondary">Accepted</span>
+                                        {% elif i.order_status == 'Delivered' %}
+                                        <span class="badge rounded-pill alert-success">Delivered</span>
+                                        {% else %}
+                                        <span class="badge rounded-pill alert-warning">Pending</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'order_details' order_id=i.id %}" class="btn btn-xs rounded font-sm">Detail</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div> <!-- table-responsive //end -->
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+            <div class="pagination-area mt-15 mb-50">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-start">
+                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                        <li class="page-item"><a class="page-link" href="#">02</a></li>
+                        <li class="page-item"><a class="page-link" href="#">03</a></li>
+                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                        <li class="page-item"><a class="page-link" href="#">16</a></li>
+                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </section> <!-- content-main end// -->
+    {% endblock content %}

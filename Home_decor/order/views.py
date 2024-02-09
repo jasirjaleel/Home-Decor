@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from django.views.decorators.cache import never_cache
 from cart_app.views import _delete_unordered_orders
+from order.models import Order,OrderProduct,PaymentMethod,ShippingAddress,Payment
 
 # Create your views here.
 @login_required(login_url='userlogin')
@@ -117,3 +118,29 @@ def place_order(request):
         cart_items.delete()
 
     return render(request,'order_templates/order_success.html')  # Redirect to a page confirming the order placement
+
+
+
+###################### ORDER MANAGEMENT #######################
+def all_order(request):
+    orders = Order.objects.all()
+    context = {
+        'orders': orders,
+    }
+    return render(request, 'admin_templates/all_orders.html', context)
+
+
+def order_details(request, order_id):
+    order = Order.objects.get(id=order_id)
+    order_products = OrderProduct.objects.filter(order=order)
+    payment = Payment.objects.all()
+    for i in payment:
+        print(i.payment_order_id)
+        print(i.payment_id,i.payment_method)
+        
+    context = {
+        'order': order,
+        'order_products': order_products,
+    }
+    return render(request, 'admin_templates/order_details.html', context)
+

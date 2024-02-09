@@ -72,14 +72,19 @@
                     </div>
                 </li>
               
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i>
+                <li class="menu-item has-submenu {% if request.path == '/admin/order-details/' or request.path == '/admin/all-orders/' %}active{% endif %}">
+                    <a class="menu-link"> <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Orders</span>
                     </a>
                     <div class="submenu">
-                        <a href="page-orders-1.html">Order list 1</a>
-                        <a href="page-orders-2.html">Order list 2</a>
-                        <a href="page-orders-detail.html">Order detail</a>
+                        <a class="{% if request.path == '/admin/all-orders/' %}active{% endif %}" href="{% url 'all_orders' %}">
+                            <!-- <i class="icon material-icons md-people"></i> -->
+                            <span class="text">Order List</span>
+                        </a>
+                        <a class="{% if request.path == '/admin/order-details/' %}active{% endif %}"> 
+                            <!-- <i class="icon material-icons md-add_box"></i> -->
+                            <span class="text">Order Details</span>
+                        </a>
                     </div>
                 </li>
                 {% comment %}
@@ -104,12 +109,12 @@
                     </div>
                 </li>
                 {% endcomment %}
-                <li class="menu-item has-submenu  {% if request.path == '/admin/user-management/' %}active{% endif %}">
-                    <a class="menu-link " href="{% url 'user_management' %}"> <i class="icon material-icons md-people"></i>
+                <li class="menu-item has-submenu  {% if request.path == '/admin/all-users/' %}active{% endif %}">
+                    <a class="menu-link "> <i class="icon material-icons md-people"></i>
                         <span class="text">Users</span>
                     </a>
                     <div class="submenu">
-                        <a class="{% if request.path == '/admin/user-management/' %}active{% endif %}" href="{% url 'user_management' %}">
+                        <a class="{% if request.path == '/admin/all-users/' %}active{% endif %}" href="{% url 'all-users' %}">
                             <!-- <i class="icon material-icons md-people"></i> -->
                             <span class="text">Users List</span>
                         </a>

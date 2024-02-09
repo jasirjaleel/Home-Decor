@@ -16,6 +16,10 @@ from cart_app.models import Cart
 from cart_app.views import _cart_id
 
 # Create your views here.
+
+def custom_404_view(request,exception):
+    return render(request, 'admin_templates/404.html',status=404)
+
 @never_cache
 def usersignup(request):
     if request.method == "POST":

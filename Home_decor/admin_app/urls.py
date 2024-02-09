@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 from product_management import views as productView
 from category_management import views as categoryView
+from order import views as orderView
 
 urlpatterns = [
     
@@ -23,10 +24,13 @@ urlpatterns = [
     path('add-category/',categoryView.add_category,name='addcategory'),
     path('manage-category/',categoryView.manage_category,name='manage_category'),
 
-    path('user-management/', views.user_management, name='user_management'),
+    path('all-users/', views.all_users, name='all-users'),
     path('user-details/', views.user_details, name='user_details'),
     path('blockuser/', views.blockuser, name='blockuser'),
-    path('unblockuser/<int:user_id>/', views.unblockuser, name='unblockuser'),
+    # path('unblockuser/<int:user_id>/', views.unblockuser, name='unblockuser'),
+
+    path('all-orders/', orderView.all_order, name='all_orders'),
+    path('order-details/<int:order_id>/', orderView.order_details, name='order_details'),
 
     
     

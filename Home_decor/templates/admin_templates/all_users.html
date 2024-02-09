@@ -1,0 +1,251 @@
+{% extends 'admin_templates/base.html' %}
+{% load static %}
+{% block content %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Users List</h2>
+
+        </div>
+        <div>
+            <!-- <a href="#" class="btn btn-light rounded font-md">Export</a>
+                    <a href="#" class="btn btn-light rounded  font-md">Import</a>
+                    <a href="#" class="btn btn-primary btn-sm rounded">Create new</a> -->
+        </div>
+    </div>
+    <div class="card mb-4">
+        <header class="card-header">
+            <div class="row align-items-center">
+
+                <div class="col-md-3 col-12 me-auto mb-md-0 mb-3 ">
+                    <form class="searchform">
+                        <div class="input-group" style="width: 350px;">
+                            <input type="text" class="form-control" placeholder="Search">
+                            <button class="btn btn-light bg" type="button"> <i
+                                    class="material-icons md-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+                <!-- <div>
+                    {% if messages %}
+                    {% for message in messages %}
+                    <span class="error" style="top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">{{message}}</span>
+                    {% endfor %}
+                    {% endif %}
+                </div> -->
+                <div class="col-md-2 col-6">
+                    <input type="date" value="02.05.2021" class="form-control">
+                </div>
+                <div class="col-md-2 col-6">
+                    <select class="form-select">
+                        <option selected>Status</option>
+                        <option>Active</option>
+                        <option>Disabled</option>
+                        <option>Show all</option>
+                    </select>
+                </div>
+            </div>
+        </header> <!-- card-header end// -->
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#ID</th>
+                                    <th class="align-middle" scope="col">Name</th>
+                                    <th class="align-middle" scope="col">Phone Number</th>
+                                    <th class="align-middle" scope="col">Registration</th>
+                                    <th class="align-middle" scope="col">Status</th>
+                                    <th class="align-middle" scope="col" > Action </th>
+                                    <th class="align-middle" scope="col">View Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                <tr>
+                                    <td>
+                                        <b>{{user.id}}</b>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'user_details' %}?user_id={{ user.id }}">
+                                            <h6 class="mb-0">{{ user.username }}</h6>
+                                            <span>{{ user.email }}</span>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {% if user.phone_number %}
+                                       {{user.phone_number}}
+                                       {% else %}
+                                       <div>Not given</div>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ user.date_join|date:"d-m-Y" }}</td>
+                                    <td>
+                                        {% if user.is_blocked %}
+                                        <div class="align-items-center col-status">
+                                            <span  class="badge rounded-pill alert-danger">Blocked</span>
+                                        </div>
+                                        {% elif user.is_active %}
+                                        <div class="align-items-center col-status">
+                                            <span class="badge rounded-pill alert-success" >Active</span>
+                                        </div>
+                                        {% else %}
+                                        <div class="align-items-center col-status">
+                                            <span class="badge rounded-pill alert-warning">Not active</span>
+                                        </div>
+                                        {% endif %}
+                                    </td>
+                                 
+                                    <td >
+                                        <!-- <a href="" class="btn btn-md rounded font-sm">Detail</a> -->
+                                      <div class="d-flex" style="gap: 5px;align-items: center;">
+                                        <div>
+                                            {% if user.is_blocked %}
+                                            <button class="btn  alert-success unblock-user-btn"  onclick="sweet_alert('{{user.id}}')"
+                                          >Unblock User</button>
+                                            {% else %}
+                                            <button class="btn alert-danger block-user-btn" onclick="sweet_alert('{{user.id}}')"
+                                          >Block User</button>
+                                            {% endif %}
+                                        </div>
+                                       
+                                      </div>
+                                         <!-- dropdown //end -->
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'user_details' %}?user_id={{ user.id }}" class="btn btn-xs"> View details</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div> <!-- table-responsive //end -->
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+            <div class="pagination-area mt-15 mb-50">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-start">
+                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                        <li class="page-item"><a class="page-link" href="#">02</a></li>
+                        <li class="page-item"><a class="page-link" href="#">03</a></li>
+                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                        <li class="page-item"><a class="page-link" href="#">16</a></li>
+                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </section> <!-- content-main end// -->
+
+
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            // Add this script to your HTML template or a separate JS file
+        
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
+
+    function sweet_alert(userId) {
+Swal.fire({
+    title: "Are you sure?",
+    // text: "Block the user?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#b19361",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes"
+}).then((result) => {
+    // If the user confirms
+    console.log(userId);
+    if (result.isConfirmed) {
+        // Make a fetch request to update is_default in the backend
+        fetch('/admin/blockuser/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+            // body: JSON.stringify({ 'addressId':addressId }),
+            body: JSON.stringify({ 'userId':userId }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response from the server
+                console.log(data);
+                if (data.success) {
+                    // Success message
+                    Swal.fire('Success', data.message, 'success');
+                    // location.reload()
+                    // updateUI(data.is_blocked, userId);
+                } else {
+                    // Error message
+                    Swal.fire('Error', data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle other errors
+                Swal.fire('Error', 'An unexpected error occurred', 'error');
+            });
+    }
+});
+}
+        
+    
+    // $('.block-user-btn').click(function () {
+    //     var userId = $(this).data('user-id');
+
+    //     $.ajax({
+    //         url: base_url + 'blockuser/' + userId + '/',
+    //         type: 'GET',  // You can use POST if needed
+    //         success: function (response) {
+    //             // alert(response.message);
+    //             location.reload();
+    //         },
+    //         error: function (error) {
+    //             console.log(error);
+    //         }
+    //     });
+    // });
+
+    // $('.unblock-user-btn').click(function () {
+    //     var userId = $(this).data('user-id');
+    //     $.ajax({
+    //         url: base_url + 'unblockuser/' + userId + '/',
+    //         type: 'GET',  // You can use POST if needed
+    //         success: function (response) {
+    //             // alert(response.message);
+    //             location.reload();
+    //         },
+    //         error: function (error) {
+    //             console.log(error);
+    //         }
+    //     });
+    // });
+
+
+
+
+
+        </script>
+    {% endblock content %}
