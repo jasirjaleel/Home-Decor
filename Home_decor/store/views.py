@@ -2,18 +2,18 @@ from django.shortcuts import render,redirect
 from product_management.models import Product,Product_Variant,Additional_Product_Image
 from category_management.models import Category
 from django.db.models import Q
-import json
 from django.http import JsonResponse
 from django.views import View
-from django.shortcuts import render, get_object_or_404
+from extra_management.models import Banner
 # Create your views here.
 def home(request):
+    hero_banner = Banner.objects.filter(is_active=True)
     products = Product_Variant.objects.filter(is_active=True,product__is_available=True)
     images_dict = {}
     for i in products:
         first_image = Additional_Product_Image.objects.filter(product_variant=i.id).first()
         images_dict[i] = first_image
-    context = {'product': images_dict }
+    context = {'product': images_dict, 'hero_banner': hero_banner} 
     return render(request,'store_templates/index.html',context)
 
 # def shop(request):
@@ -123,6 +123,7 @@ class ProductDetailView(View):
 
     def get(self, request, slug):
         variants = Product_Variant.objects.select_related('product').prefetch_related('attributes').filter(product_variant_slug=slug)
+        print(variants.first())
         images_list = []
         att_list = []
         for variant in variants:

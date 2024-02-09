@@ -1,0 +1,98 @@
+{% extends 'admin_templates/base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Banner List</h2>
+            
+        </div>
+        <div>
+            <a href="{% url 'add-banner' %}" class="btn btn-primary btn-sm rounded">Create new</a>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <header class="card-header">
+            <div class="row align-items-center">
+                
+                <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
+                    <select class="form-select">
+                        <option selected>All category</option>
+                        <option>Electronics</option>
+                        <option>Clothes</option>
+                        <option>Automobile</option>
+                    </select>
+                </div>
+                <div class="col-md-2 col-6">
+                    <input type="date" value="02.05.2021" class="form-control">
+                </div>
+                <div class="col-md-2 col-6">
+                    <select class="form-select">
+                        <option selected>Status</option>
+                        <option>Active</option>
+                        <option>Disabled</option>
+                        <option>Show all</option>
+                    </select>
+                </div>
+            </div>
+        </header> <!-- card-header end// -->
+        <div class="card-body">
+            {% for i in banner %}
+            <article class="itemlist">
+                <div class="row align-items-center">
+                    
+                    <div class="col-lg-4 col-sm-4 col-8 flex-grow col-name">
+                        <a class="itemside" href="#">
+                            <div class="left">
+                                <img src="{{ i.banner_image.url }}" class="img-sm img-thumbnail" alt="Item">
+                            </div>
+                            <div class="info">
+                                <h6 class="mb-0">{{i.banner_name}}</h6>
+                            </div>  
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-sm-2 col-4 col-price">
+                        <div class="info">
+                            <span class="mb-0">{{i.banner_name_sub}}</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-sm-2 col-4 col-price">
+                        <div class="info">
+                            <span class="mb-0">{{i.button_text}}</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-sm-2 col-4 col-status">
+                        <span class="badge rounded-pill alert-primary">{{i.banner_url}}</span>
+                    </div>
+                    
+                    <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
+                        <a href="{% url 'edit-banner' %}?id={{i.id}}" class="btn btn-sm font-sm rounded btn-brand">
+                            <i class="material-icons md-edit"></i> Edit
+                        </a>
+                        <a href="{% url 'delete-banner' %}?id={{i.id}}" class="btn btn-sm font-sm alert-danger rounded">
+                            <i class="material-icons md-delete_forever"></i>
+                        </a>
+                    </div>
+                </div> <!-- row .// -->
+            </article> <!-- itemlist  .// -->
+            {% endfor %}
+            
+        </div> <!-- card-body end// -->
+    </div> <!-- card end// -->
+    <div class="pagination-area mt-30 mb-50">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-start">
+                <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                <li class="page-item"><a class="page-link" href="#">02</a></li>
+                <li class="page-item"><a class="page-link" href="#">03</a></li>
+                <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                <li class="page-item"><a class="page-link" href="#">16</a></li>
+                <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+            </ul>
+        </nav>
+    </div>
+</section>
+
+
+{% endblock content %}

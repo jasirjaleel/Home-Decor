@@ -1,0 +1,67 @@
+{% extends 'admin_templates/base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="content-main">
+    <div class="row">
+        <div class="col-9">
+            <div class="content-header">
+                <h2 class="content-title">Edit Banner</h2>
+                
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>General Information</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'edit-banner' %}?id={{old_banner.id}}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label class="form-label">Banner Title</label>
+                            <input type="text" placeholder="Type here" class="form-control"  name="banner_name" value="{{old_banner.banner_name}}" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Banner Sub Title</label>
+                            <input type="text" placeholder="Type here" class="form-control"  name="banner_name_sub" value="{{old_banner.banner_name_sub}}" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Banner URL</label>
+                            <input type="text" placeholder="Type here" class="form-control"  name="banner_url" value="{{old_banner.banner_url}}" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Button Text</label>
+                            <input type="text" placeholder="Type here" class="form-control"  name="button_text" value="{{old_banner.button_text}}" required>
+                        </div>
+                        
+                        <div>
+                            
+                            <button class="btn btn-md rounded font-sm hover-up" type="submit">Add</button>
+                        </div>
+                   
+                </div>
+            </div> <!-- card end// -->
+            
+        </div>
+        
+        <div class="col-lg-3">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>Image</h4>
+                </div>
+                <div class="card-body">
+                    <div class="input-upload">
+                        <img src="{{old_banner.banner_image.url}}" alt="">
+                        <input class="form-control" type="file" name="banner_image" accept="image/*"onchange="previewImages(event)">
+                        <div id="imagePreviewContainer"></div>
+                    </div>
+                </div>
+            </div> <!-- card end// -->
+        </div>
+    </form>
+    </div>
+</section> <!-- content-main end// -->
+
+
+{% endblock content %}

@@ -43,8 +43,8 @@
                 {% for order in orders %}
                 <tr>
                     <td class="d-flex justify-content-center align-content-center"><img src="{{order.images.url}}" style="width: 60px;"  alt="hi">
-                        <a href="" class="view"></a>{{order.product_variant}}</td>
-                    <td>Rs. {{ order.product_price }}</td>
+                        <a href="" class="view"></a>{{order.product_variant}} x {{order.quantity}}</td>
+                    <td>Rs. {{ order.total_price }}</td>
                     <td>{{ order.created_at|date:"j M Y" }}</td>
                     {% if order.order.order_status != "Delivered" %}
                     <td>Pending</td>

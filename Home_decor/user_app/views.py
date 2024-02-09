@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate,login,logout
-from django.contrib.auth.models import User
 from django.views.decorators.cache import never_cache,cache_control
 from django.contrib import messages
 from django.http import JsonResponse

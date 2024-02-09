@@ -143,7 +143,7 @@
                     </div>
                 </li>
                
-                <li class="menu-item has-submenu  {% if request.path == '/admin/attribute/' or request.path == '/admin/attribute-value/' or request.path == '/admin/brand/' or request.path == '/admin/add-brand/' or request.path == '/admin/add-attribute-value/'   or  request.path == '/admin/add-attribute/' %}active{% endif %}" >
+                <li class="menu-item has-submenu  {% if request.path == '/admin/attribute/' or request.path == '/admin/attribute-value/' or request.path == '/admin/brand/' or request.path == '/admin/add-brand/' or request.path == '/admin/add-attribute-value/'   or  request.path == '/admin/add-attribute/' or request.path == '/admin/banner/' or request.path == '/admin/add-banner/' %}active{% endif %}" >
                     <a class="menu-link " ><i class="fa-sharp fa-regular fa-bars-progress" ></i>
                         <span class="text">Management</span>
                     </a>
@@ -160,6 +160,10 @@
                             <!-- <i class="icon material-icons md-people"></i> -->
                             <span class="text">Brand</span>
                         </a>
+                        <a class="{% if request.path == '/admin/banner/' %}active{% endif %} p-2" href="{% url 'banner' %}"> 
+                            <!-- <i class="icon material-icons md-add_box"></i> -->
+                            <span class="text">Banner</span>
+                        </a>
                         <a class="{% if request.path == '/admin/add-attribute/' %}active{% endif %} p-2" href="{% url 'add-attribute' %}"> 
                             <!-- <i class="icon material-icons md-add_box"></i> -->
                             <span class="text">Add Attribute</span>
@@ -171,6 +175,10 @@
                         <a class="{% if request.path == '/admin/add-brand/' %}active{% endif %} p-2" href="{% url 'add-brand' %}"> 
                             <!-- <i class="icon material-icons md-add_box"></i> -->
                             <span class="text">Add Brand</span>
+                        </a>
+                        <a class="{% if request.path == '/admin/add-banner/' %}active{% endif %} p-2" href="{% url 'add-banner' %}"> 
+                            <!-- <i class="icon material-icons md-add_box"></i> -->
+                            <span class="text">Add Banner</span>
                         </a>
                     </div>
                 </li>

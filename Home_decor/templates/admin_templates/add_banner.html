@@ -1,0 +1,66 @@
+{% extends 'admin_templates/base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="content-main">
+    <div class="row">
+        <div class="col-9">
+            <div class="content-header">
+                <h2 class="content-title">Add New Banner</h2>
+                
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>General Information</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'add-banner' %}"  enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label class="form-label">Banner Title</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="product_name" name="banner_name" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Banner Sub Title</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="product_name" name="banner_name_sub" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Banner URL</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="product_name" name="banner_url" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Button Text</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="product_name" name="button_text" required>
+                        </div>
+                        
+                        <div>
+                            
+                            <button class="btn btn-md rounded font-sm hover-up" type="submit">Add</button>
+                        </div>
+                   
+                </div>
+            </div> <!-- card end// -->
+            
+        </div>
+        
+        <div class="col-lg-3">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>Image</h4>
+                </div>
+                <div class="card-body">
+                    <div class="input-upload">
+                        <img src="{% static 'assets/imgs/theme/upload.svg' %}" alt="">
+                        <input class="form-control" type="file" name="banner_image">
+                    </div>
+                </div>
+            </div> <!-- card end// -->
+        </div>
+    </form>
+    </div>
+</section> <!-- content-main end// -->
+
+
+{% endblock content %}

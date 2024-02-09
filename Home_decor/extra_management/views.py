@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views import View
 from product_management.models import Attribute,Attribute_Value,Brand
+from .models import Banner
 # Create your views here.
 
 
@@ -90,3 +91,54 @@ def create_brand(request):
 #         return model_classes.get(model, None)
 
 
+
+#===========BANNER MANAGEMENT==================
+def all_banner(request):
+    banner = Banner.objects.all()
+    context = { 'banner':banner }
+    return render(request, 'admin_templates/all_banner.html', context)
+
+
+def create_banner(request):
+    if request.method == 'POST':
+        banner_name         = request.POST.get('banner_name')
+        banner_name_sub     = request.POST.get('banner_name_sub')
+        banner_url          = request.POST.get('banner_url')
+        button_text         = request.POST.get('button_text')
+        image               = request.FILES.get('banner_image')
+        banner = Banner.objects.create(banner_name=banner_name, banner_name_sub=banner_name_sub, banner_url=banner_url, button_text=button_text, banner_image=image)
+        banner.save()
+        return redirect('banner')
+    return render(request, 'admin_templates/add_banner.html')
+
+def edit_banner(request):
+    print("=====================")
+    banner_id = request.GET.get('id')
+    print(banner_id)
+    old_banner = Banner.objects.get(id=banner_id)
+    print(old_banner)
+    if request.method == 'POST':
+        print("++++++++++++++")
+        banner_name             = request.POST.get('banner_name')
+        banner_name_sub         = request.POST.get('banner_name_sub')
+        banner_url              = request.POST.get('banner_url')
+        button_text             = request.POST.get('button_text')
+        image                   = request.FILES.get('banner_image')
+        print(banner_name,banner_name_sub,banner_url,button_text,image)
+        print(image)
+        old_banner.banner_name      = banner_name
+        old_banner.banner_name_sub  = banner_name_sub
+        old_banner.banner_url       = banner_url
+        old_banner.button_text      = button_text
+        old_banner.banner_image     = image
+        old_banner.save()
+        return redirect('banner')
+    context = { 'old_banner':old_banner }
+    return render(request, 'admin_templates/edit_banner.html', context)
+
+class DeleteBannerView(View):
+    def get(self, request):
+        id = request.GET.get('id')
+        banner = Banner.objects.get(id=id)
+        banner.delete()
+        return redirect('banner')
