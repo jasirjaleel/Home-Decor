@@ -122,7 +122,7 @@ def place_order(request):
 
 ###################### ORDER MANAGEMENT #######################
 def all_order(request):
-    orders = Order.objects.all()
+    orders = Order.objects.all().order_by('-created_at')
     context = {
         'orders': orders,
     }
@@ -136,10 +136,15 @@ def order_details(request, order_id):
     for i in payment:
         print(i.payment_order_id)
         print(i.payment_id,i.payment_method)
-        
+   
+    order_status = Order.ORDER_STATUS_CHOICES
+    
+
+
     context = {
         'order': order,
         'order_products': order_products,
+        'order_status': order_status,
     }
     return render(request, 'admin_templates/order_details.html', context)
     

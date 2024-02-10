@@ -27,7 +27,7 @@ urlpatterns = [
     path('all-users/', views.all_users, name='all-users'),
     path('user-details/', views.user_details, name='user_details'),
     path('blockuser/', views.blockuser, name='blockuser'),
-
+    path('update-order-status/', views.update_order_status, name='update_order_status'),
 
     path('all-orders/', orderView.all_order, name='all_orders'),
     path('order-details/<int:order_id>/', orderView.order_details, name='order_details'),

@@ -63,16 +63,17 @@
                                     <td>
                                         <i class="material-icons md-payment font-xxl text-muted mr-5"></i> Visa
                                     </td>
-                                    <td>{% if i.order_status == 'New' %}
-                                        <span class="badge rounded-pill alert-primary">New</span>
-                                        {% elif i.order_status == 'Accepted' %}
-                                        <span class="badge rounded-pill alert-secondary">Accepted</span>
-                                        {% elif i.order_status == 'Delivered' %}
-                                        <span class="badge rounded-pill alert-success">Delivered</span>
-                                        {% else %}
-                                        <span class="badge rounded-pill alert-warning">Pending</span>
-                                        {% endif %}
+                                    <td>
+                                        {% for choice in i.ORDER_STATUS_CHOICES %}
+                                            {% if i.order_status == choice.0 %}
+                                            <span class="badge rounded-pill {% if choice.0 == 'New' %}alert-primary{% elif choice.0 == 'Pending' %}alert-warning{% elif choice.0 == 'Delivered' %}alert-success{% elif choice.0 == 'Shipped' %}alert-secondary{% elif choice.0 == 'Cancelled' %}alert-danger{% elif choice.0 == 'Returned' %}alert-info{% endif %}">
+                                                {{ choice.1 }}
+                                            </span>
+                                            
+                                            {% endif %}
+                                        {% endfor %}
                                     </td>
+                                    
                                     <td>
                                         <a href="{% url 'order_details' order_id=i.id %}" class="btn btn-xs rounded font-sm">Detail</a>
                                     </td>

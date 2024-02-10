@@ -8,8 +8,8 @@ from account.models import Address
 from .models import *
 from django.http import JsonResponse
 import json
-from order.models import OrderProduct
-
+from order.models import OrderProduct,Order
+from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
 
 
@@ -42,88 +42,6 @@ def adminlogout(request):
     messages.success(request,'Successfuly Logged Out')
     return redirect('home')
 
-
-
-# def addproduct(request):
-#     if request.method == "POST":
-#         productname   = request.POST['product_name']
-#         category_id   = request.POST['category_id']
-#         description   = request.POST['description']
-#         price         = request.POST['price']
-#         stock         = request.POST['stock']
-#         # productslug = request.POST['slug']
-#         image         = request.FILES['image']              
-
-
-        # category = Category.objects.get(id=category_id)
-#         product = Product(
-#             product_name = productname,
-#             category     = category,
-#             # slug         = productslug,
-#             description  = description,
-#             price        = price,
-#             stock        = stock,
-#             images       = image   
-#         )
-
-#         product.save()
-
-
-#         messages.success(request, 'Product Added.')
-#         return redirect('productdetail')
-
-#     categories = Category.objects.all()
-#     context = {
-#         'categories':categories
-#     }
-#     return render(request,"admin_templates/addproduct.html",context)
-
-
-# @never_cache
-# @login_required(login_url='adminhome')
-# def editproduct(request,product_id):
-#     if request.method ==  "POST":
-
-#         productname        = request.POST['product_name']
-#         productslug        = slugify(productname)
-#         productdescription = request.POST['description']
-#         productprice       = request.POST['price']
-#         productstock       = request.POST['stock']
-#         productimages      = request.FILES.get('image')
-#         productcategory    = request.POST['category_id']
-
-#         category = Category.objects.get(id=productcategory)
-
-#         product              = Product.objects.get(id=product_id) 
-
-#         product.product_name = productname
-#         product.slug         = productslug
-#         product.description  = productdescription
-#         product.stock        = productstock
-#         product.category     = category
-#         product.price        = productprice
-#         product.offerprice   = productprice
-
-#         if productimages is not None:
-#             product.images = productimages
-#         product.save()
-#         messages.success(request,'Successfully Saved')
-#         return redirect('productdetail')
-
-        
-#     category = Category.objects.all()
-
-
-#     pros = Product.objects.get(id=product_id)
-#     context = {
-#         'product':pros,
-#         'category':category,
-#     }
-
-#     return render(request,'admin_templates/editproduct.html',context)
-
-
-
 @never_cache
 @login_required(login_url='userlogin')
 def all_users(request):
@@ -137,7 +55,6 @@ def all_users(request):
         return render(request,"admin_templates/all_users.html", context=context)
     return redirect('usersignup')
     
-    # return render(request,"admin_templates/usermanagement.html")
 
 def blockuser(request):
     if request.method == 'POST':
@@ -174,22 +91,6 @@ def blockuser(request):
     # # return JsonResponse({'message': 'User blocked successfully'})
     # return redirect('user_management')
 
-# def blockuser(request, user_id):
-#     user1 = Account.objects.get(id=user_id)
-#     if request.user.is_authenticated and request.user == user1:
-#         logout(request)
-#         request.session.flush()
-#     user1.is_blocked = True
-#     user1.save()
-#     # return JsonResponse({'message': 'User blocked successfully'})
-#     return redirect('user_management')
-
-# def unblockuser(request, user_id):
-#     user = Account.objects.get(id=user_id)
-#     user.is_blocked = not user.is_blocked 
-#     user.save()
-#     # return JsonResponse({'message': 'User unblocked successfully'})
-#     return redirect('user_management')
 
 def user_details(request):
     user_id = request.GET.get('user_id')
@@ -204,3 +105,26 @@ def user_details(request):
         'ordered_products_count':ordered_products.count()
     }
     return render(request,'admin_templates/user_details.html',context)
+
+##################### CHANGE ORDER STATUS OF PRODUCT ########################
+
+def update_order_status(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            order_id = data.get('order_id')
+            new_status = data.get('new_status')
+            print(order_id, new_status)
+
+            # Update the order status
+            order = Order.objects.get(id=order_id)
+            order.order_status = new_status
+            order.save()
+
+            return JsonResponse({'message': 'Order status updated successfully'}, status=200)
+        except ObjectDoesNotExist:
+            return JsonResponse({'error': 'Order not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)

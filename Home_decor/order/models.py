@@ -55,11 +55,11 @@ class Payment(models.Model):
 class Order(models.Model):
     ORDER_STATUS_CHOICES =(
         ("New", "New"),
-        ("Accepted", "Accepted"),
+        ("Pending", "Pending"),
         ("Delivered", "Delivered"),
-        ("Cancelled_Admin", "Cancelled Admin"),
-        ("Cancelled_User", "Cancelled User"),
-        ("Returned_User", "Returned User"),
+        ("Shipped", "Shipped"),
+        ("Cancelled", "Cancelled"),
+        ("Returned", "Returned"),
         )
     user                = models.ForeignKey(Account,on_delete=models.SET_NULL,null=True)
     payment             = models.ForeignKey(Payment,on_delete=models.SET_NULL,null=True,blank=True)

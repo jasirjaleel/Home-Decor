@@ -17,16 +17,13 @@
                             </span> <br>
                             <small class="text-muted">Order ID: {{order.order_number|slice:"14:"}}</small>
                         </div>
-                        <div class="col-lg-6 col-md-6 ms-auto text-md-end">
-                            <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200">
-                                <option>Change status</option>
-                                <option>Awaiting payment</option>
-                                <option>Confirmed</option>
-                                <option>Shipped</option>
-                                <option>Delivered</option>
+                        <div class="col-lg-6 col-md-6 ms-auto text-md-end ">
+                            <select id="status-select" data-order_id="{{order.id}}" class="form-select d-inline-block mb-lg-0 mb-15 mw-200">
+                                {% for status in order_status %}
+                                    <option {% if status.0 == order.order_status %}selected{% endif %}>{{ status.1 }}</option>
+                                {% endfor %}
                             </select>
-                            <a class="btn btn-primary" href="#">Save</a>
-                            <a class="btn btn-secondary print ms-2" href="#"><i class="icon material-icons md-print"></i></a>
+                            <a id="save-btn" class="btn btn-primary">Save</a>
                         </div>
                     </div>
                 </header> <!-- card-header end// -->
@@ -156,4 +153,65 @@
                 </div> <!-- card-body end// -->
             </div> <!-- card end// -->
         </section> <!-- content-main end// -->
+        <script>
+             function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+    const csrftoken = getCookie('csrftoken');
+
+
+
+
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('save-btn').addEventListener('click', function() {
+                    var statusSelect = document.getElementById('status-select');
+                    var newStatus = statusSelect.value;
+                    const orderId = statusSelect.dataset.order_id;
+                    console.log(orderId,newStatus);
+                    // Prepare the request body
+                    var data = {
+                        order_id: orderId,
+                        new_status: newStatus
+                    };
+        
+                    // Send the AJAX request
+                    fetch('{% url "update_order_status" %}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrftoken,
+                        },
+                        body: JSON.stringify(data),
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to update order status');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Handle success response
+                        console.log('Order status updated successfully');
+                    })
+                    .catch(error => {
+                        // Handle error
+                        console.error('Error:', error);
+                    });
+                });
+            });
+        </script>
+        
         {% endblock content %}
