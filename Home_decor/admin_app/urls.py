@@ -27,7 +27,7 @@ urlpatterns = [
     path('all-users/', views.all_users, name='all-users'),
     path('user-details/', views.user_details, name='user_details'),
     path('blockuser/', views.blockuser, name='blockuser'),
-    # path('unblockuser/<int:user_id>/', views.unblockuser, name='unblockuser'),
+
 
     path('all-orders/', orderView.all_order, name='all_orders'),
     path('order-details/<int:order_id>/', orderView.order_details, name='order_details'),

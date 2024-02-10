@@ -1,358 +1,164 @@
 {% extends 'admin_templates/base.html' %}
 {% load static %}
 {% block content %}
-<div class="" style="width: 1176px; height: 926px; padding-left: 24px; padding-right: 24px; padding-top: 32px; padding-bottom: 32px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 24px; display: inline-flex">
-    <div class="Content" style="align-self: stretch; border-radius: 8px; justify-content: flex-start; align-items: flex-start; gap: 24px; display: inline-flex">
-      <div class="LeftCol" style="flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 24px; display: inline-flex">
-        <div class="UserDetail" style="height: 700px; padding-top: 64px; padding-bottom: 24px; padding-left: 24px; padding-right: 24px; background: white; box-shadow: 0px 1.5px 2px rgba(15.99, 24.03, 40.11, 0.10); border-radius: 8px; overflow: hidden; border: 1px #E0E2E7 solid; flex-direction: column; justify-content: flex-start; align-items: center; gap: 18px; display: flex">
+<div class="container p-2 mb-3"  >
+    <div class="row" >
+       <div class="col">
+      <div class="UserDetail" style="height: 680px; padding-top: 64px; padding-bottom: 24px; padding-left: 24px; padding-right: 24px; background: white; box-shadow: 0px 1.5px 2px rgba(15.99, 24.03, 40.11, 0.10); border-radius: 8px; overflow: hidden; border: 1px #E0E2E7 solid; flex-direction: column; justify-content: flex-start; align-items: center; gap: 18px; display: flex">
           
-          <div class="PhotoName" style="flex-direction: column; justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-            <div class="Avatar" style="justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-              <div class="Photo" style="width: 164px; height: 164px; background: #E0E2E7; border-radius: 100px"></div>
-            </div>
-            <div class="Name" style="align-self: stretch; height: 24px; flex-direction: column; justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-              <div class="NameStatus" style="justify-content: center; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Text" style="text-align: center; color: #333843; font-size: 16px;  font-weight: 500; line-height: 24px; letter-spacing: 0.08px; word-wrap: break-word">{{user.first_name}} {{user.last_name}}</div>
-              </div>
+        <div class="PhotoName" style="flex-direction: column; justify-content: flex-start; align-items: center; gap: 8px; display: flex">
+          <div class="Avatar" style="justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
+            <div class="Photo" style="width: 164px; height: 164px; background: #E0E2E7; border-radius: 100px"></div>
+          </div>
+          <div class="Name" style="align-self: stretch; height: 24px; flex-direction: column; justify-content: flex-start; align-items: center; gap: 8px; display: flex">
+            <div class="NameStatus" style="justify-content: center; align-items: center; gap: 8px; display: inline-flex">
+              <div class="Text" style="text-align: center; color: #333843; font-size: 16px;  font-weight: 500; line-height: 24px; letter-spacing: 0.08px; word-wrap: break-word">{{user.first_name}} {{user.last_name}}</div>
             </div>
           </div>
-          <div class="Divider" style="align-self: stretch; height: 0px; border: 1px #E0E2E7 solid"></div>
-          <!-- <div class="ListItem1Col" style="width: 312px; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-            <div class="CircleIconBagde" style="padding: 8px; background: #E0E2E7; border-radius: 100px; overflow: hidden; border: 4px #F0F1F3 solid; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
-              <div class="Lock" style="width: 24px; height: 24px; padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; justify-content: center; align-items: center; display: flex">
-                <div class="Icon" style="width: 18px; height: 20px; background: #667085"></div>
-              </div>
-            </div>
-            <div class="Text" style="flex: 1 1 0; flex-direction: column; justify-content: center; align-items: flex-start; gap: 4px; display: inline-flex">
-              <div class="Text" style="align-self: stretch; color: #4D5464; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">User ID</div>
-              <div class="Text" style="align-self: stretch; color: #1A1C21; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">ID-011221</div>
-            </div>
-          </div> -->
-          <div class="ListItem1Col" style="width: 312px; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-            <div class="CircleIconBagde" style="padding: 8px; background: #E0E2E7; border-radius: 100px; overflow: hidden; border: 4px #F0F1F3 solid; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
-              <div class="Envelope" style="width: 24px; height: 24px; padding-left: 2px; padding-right: 2px; padding-top: 4px; padding-bottom: 4px; justify-content: center; align-items: center; display: flex">
-              <i class="fa-light fa-envelope" style="font-size: 15px;"></i>
-              </div>
-            </div>
-            <div class="Text" style="flex: 1 1 0; flex-direction: column; justify-content: center; align-items: flex-start; gap: 4px; display: inline-flex">
-              <div class="Text" style="align-self: stretch; color: #4D5464; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Billing Email</div>
-              <div class="Text" style="align-self: stretch; color: #1A1C21; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">{{user.email}}</div>
+        </div>
+        <div class="Divider" style="align-self: stretch; height: 0px; border: 1px #E0E2E7 solid"></div>
+        <!-- <div class="ListItem1Col" style="width: 312px; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
+          <div class="CircleIconBagde" style="padding: 8px; background: #E0E2E7; border-radius: 100px; overflow: hidden; border: 4px #F0F1F3 solid; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
+            <div class="Lock" style="width: 24px; height: 24px; padding-left: 3px; padding-right: 3px; padding-top: 2px; padding-bottom: 2px; justify-content: center; align-items: center; display: flex">
+              <div class="Icon" style="width: 18px; height: 20px; background: #667085"></div>
             </div>
           </div>
-          <div class="ListItem1Col" style="width: 312px; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-            <div class="CircleIconBagde" style="padding: 8px; background: #E0E2E7; border-radius: 100px; overflow: hidden; border: 4px #F0F1F3 solid; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
-              <div class="Phone" style="width: 24px; height: 24px; justify-content: center; align-items: center; display: flex">
-                <i class="fa-light fa-phone" style="font-size: 15px;"></i>
-              </div>
-            </div>
-            <div class="Text" style="flex: 1 1 0; flex-direction: column; justify-content: center; align-items: flex-start; gap: 4px; display: inline-flex">
-              <div class="Text" style="align-self: stretch; color: #4D5464; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Phone Number</div>
-              <div class="Text" style="align-self: stretch; color: #1A1C21; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">{{address.phone_number}}</div>
+          <div class="Text" style="flex: 1 1 0; flex-direction: column; justify-content: center; align-items: flex-start; gap: 4px; display: inline-flex">
+            <div class="Text" style="align-self: stretch; color: #4D5464; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">User ID</div>
+            <div class="Text" style="align-self: stretch; color: #1A1C21; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">ID-011221</div>
+          </div>
+        </div> -->
+        <div class="ListItem1Col" style="width: 312px; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
+          <div class="CircleIconBagde" style="padding: 8px; background: #E0E2E7; border-radius: 100px; overflow: hidden; border: 4px #F0F1F3 solid; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
+            <div class="Envelope" style="width: 24px; height: 24px; padding-left: 2px; padding-right: 2px; padding-top: 4px; padding-bottom: 4px; justify-content: center; align-items: center; display: flex">
+            <i class="fa-light fa-envelope" style="font-size: 15px;"></i>
             </div>
           </div>
-          <div class="ListItem1Col" style="width: 312px; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-            <div class="CircleIconBagde" style="padding: 8px; background: #E0E2E7; border-radius: 100px; overflow: hidden; border: 4px #F0F1F3 solid; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
-              <div class="Pin" style="width: 24px; height: 24px; padding-top: 2px; padding-bottom: 2.12px; padding-left: 4px; padding-right: 4px; justify-content: center; align-items: center; display: flex">
-                <i class="fa-light fa-light fa-address-card "style="font-size: 15px;"></i>
-              </div>
-            </div>
-            <div class="Text" style="flex: 1 1 0; flex-direction: column; justify-content: center; align-items: flex-start; gap: 4px; display: inline-flex">
-              <div class="Text" style="align-self: stretch; color: #4D5464; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Delivery Address</div>
-              <div class="Text" style="align-self: stretch; color: #17183B; font-size: 16px; font-family: Poppins; font-weight: 400; line-height: 24px; word-wrap: break-word">{{address.town_city}}, {{address.street_address}}, {{address.state}} , {{address.country_region}} {{address.zip_code}} </div>
+          <div class="Text" style="flex: 1 1 0; flex-direction: column; justify-content: center; align-items: flex-start; gap: 4px; display: inline-flex">
+            <div class="Text" style="align-self: stretch; color: #4D5464; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Billing Email</div>
+            <div class="Text" style="align-self: stretch; color: #1A1C21; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">{{user.email}}</div>
+          </div>
+        </div>
+        <div class="ListItem1Col" style="width: 312px; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
+          <div class="CircleIconBagde" style="padding: 8px; background: #E0E2E7; border-radius: 100px; overflow: hidden; border: 4px #F0F1F3 solid; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
+            <div class="Phone" style="width: 24px; height: 24px; justify-content: center; align-items: center; display: flex">
+              <i class="fa-light fa-phone" style="font-size: 15px;"></i>
             </div>
           </div>
-          <div class="ListItem1Col" style="width: 312px; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-            <div class="CircleIconBagde" style="padding: 8px; background: #E0E2E7; border-radius: 100px; overflow: hidden; border: 4px #F0F1F3 solid; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
-              <div class="Cart" style="width: 24px; height: 24px; padding-top: 2.50px; padding-bottom: 2.50px; padding-left: 2px; padding-right: 2.09px; justify-content: center; align-items: center; display: flex">
-                <i class="fa-light fa-truck-fast" style="font-size: 15px;"></i>
-              </div>
+          <div class="Text" style="flex: 1 1 0; flex-direction: column; justify-content: center; align-items: flex-start; gap: 4px; display: inline-flex">
+            <div class="Text" style="align-self: stretch; color: #4D5464; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Phone Number</div>
+            <div class="Text" style="align-self: stretch; color: #1A1C21; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">{{address.phone_number}}</div>
+          </div>
+        </div>
+        <div class="ListItem1Col" style="width: 312px; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
+          <div class="CircleIconBagde" style="padding: 8px; background: #E0E2E7; border-radius: 100px; overflow: hidden; border: 4px #F0F1F3 solid; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
+            <div class="Pin" style="width: 24px; height: 24px; padding-top: 2px; padding-bottom: 2.12px; padding-left: 4px; padding-right: 4px; justify-content: center; align-items: center; display: flex">
+              <i class="fa-light fa-light fa-address-card "style="font-size: 15px;"></i>
             </div>
-            <div class="Text" style="flex: 1 1 0; flex-direction: column; justify-content: center; align-items: flex-start; gap: 4px; display: inline-flex">
-              <div class="Text" style="align-self: stretch; color: #4D5464; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Latest Transaction</div>
-              <div class="Text" style="align-self: stretch; color: #1A1C21; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">12 December 2023</div>
+          </div>
+          <div class="Text" style="flex: 1 1 0; flex-direction: column; justify-content: center; align-items: flex-start; gap: 4px; display: inline-flex">
+            <div class="Text" style="align-self: stretch; color: #4D5464; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Delivery Address</div>
+            <div class="Text" style="align-self: stretch; color: #17183B; font-size: 16px; font-family: Poppins; font-weight: 400; line-height: 24px; word-wrap: break-word">{{address.town_city}}, {{address.street_address}}, {{address.state}} , {{address.country_region}} {{address.zip_code}} </div>
+          </div>
+        </div>
+        <div class="ListItem1Col" style="width: 312px; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
+          <div class="CircleIconBagde" style="padding: 8px; background: #E0E2E7; border-radius: 100px; overflow: hidden; border: 4px #F0F1F3 solid; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
+            <div class="Cart" style="width: 24px; height: 24px; padding-top: 2.50px; padding-bottom: 2.50px; padding-left: 2px; padding-right: 2.09px; justify-content: center; align-items: center; display: flex">
+              <i class="fa-light fa-truck-fast" style="font-size: 15px;"></i>
             </div>
+          </div>
+          <div class="Text" style="flex: 1 1 0; flex-direction: column; justify-content: center; align-items: flex-start; gap: 4px; display: inline-flex">
+            <div class="Text" style="align-self: stretch; color: #4D5464; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Latest Transaction</div>
+            <div class="Text" style="align-self: stretch; color: #1A1C21; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">12 December 2023</div>
           </div>
         </div>
       </div>
-      <!-- <div class="RightCol" style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 24px; display: inline-flex">
-        <div class="Metrics" style="align-self: stretch; justify-content: flex-start; align-items: flex-start; gap: 24px; display: inline-flex">
-          <div class="IconVertical" style="flex: 1 1 0; padding: 20px; background: white; box-shadow: 0px 1.5px 2px rgba(15.99, 24.03, 40.11, 0.10); border-radius: 8px; border: 1px #E0E2E7 solid; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
-            <div class="CircleIconBagde" style="padding: 8px; background: #CFE7DC; border-radius: 100px; overflow: hidden; border: 4px #E7F4EE solid; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-              <div class="Wallet" style="width: 24px; height: 24px; padding-left: 2px; padding-right: 2px; padding-top: 3px; padding-bottom: 3px; justify-content: center; align-items: center; display: flex">
-                <div class="Icon" style="width: 20px; height: 18px; background: #0D894F"></div>
-              </div>
-            </div>
-            <div class="Body" style="align-self: stretch; height: 64px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
-              <div class="Text" style="align-self: stretch; color: #667085; font-size: 16px;  font-weight: 500; line-height: 24px; letter-spacing: 0.08px; word-wrap: break-word">Total Balance</div>
-              <div class="Value" style="justify-content: center; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Text" style="color: #333843; font-size: 24px;  font-weight: 500; line-height: 32px; letter-spacing: 0.12px; word-wrap: break-word">Rs 723.00</div>
-              </div>
-            </div>
-          </div>
-          <div class="IconVertical" style="flex: 1 1 0; padding: 20px; background: white; box-shadow: 0px 1.5px 2px rgba(15.99, 24.03, 40.11, 0.10); border-radius: 8px; border: 1px #E0E2E7 solid; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
-            <div class="CircleIconBagde" style="padding: 8px; background: #FAE1CF; border-radius: 100px; overflow: hidden; border: 4px #FDF1E8 solid; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-              <div class="Cart" style="width: 24px; height: 24px; padding-top: 2.50px; padding-bottom: 2.50px; padding-left: 2px; padding-right: 2.09px; justify-content: center; align-items: center; display: flex">
-                <div class="Icon" style="width: 19.91px; height: 19px; background: #E46A11"></div>
-              </div>
-            </div>
-            <div class="Body" style="align-self: stretch; height: 64px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
-              <div class="Text" style="align-self: stretch; color: #667085; font-size: 16px;  font-weight: 500; line-height: 24px; letter-spacing: 0.08px; word-wrap: break-word">Total Orders</div>
-              <div class="Value" style="justify-content: center; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Text" style="color: #333843; font-size: 24px;  font-weight: 500; line-height: 32px; letter-spacing: 0.12px; word-wrap: break-word">17</div>
-                <div class="Label" style="padding-left: 6px; padding-right: 6px; padding-top: 2px; padding-bottom: 2px; background: #E7F4EE; border-radius: 100px; flex-direction: column; justify-content: center; align-items: center; gap: 8px; display: inline-flex">
-                  <div class="Text" style="text-align: center; color: #0D894F; font-size: 12px;  font-weight: 600; line-height: 18px; letter-spacing: 0.06px; word-wrap: break-word">+10%</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="ColTableExample" style="align-self: stretch; height: 594px; box-shadow: 0px 1.5px 2px rgba(15.99, 24.03, 40.11, 0.10); border-radius: 8px; overflow: hidden; border: 1px #E0E2E7 solid; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex">
-          <div class="Header" style="align-self: stretch; padding-left: 24px; padding-right: 24px; padding-top: 18px; padding-bottom: 18px; background: white; justify-content: flex-start; align-items: center; gap: 12px; display: inline-flex">
-            <div class="Title" style="flex: 1 1 0; height: 28px; justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-              <div class="Text" style="color: #333843; font-size: 18px;  font-weight: 500; line-height: 28px; letter-spacing: 0.09px; word-wrap: break-word">Transaction History</div>
-            </div>
-            <div class="Datepicker" style="padding-left: 14px; padding-right: 14px; padding-top: 10px; padding-bottom: 10px; background: white; border-radius: 8px; overflow: hidden; border: 1px #E0E2E7 solid; justify-content: center; align-items: center; gap: 8px; display: flex">
-              <div class="CalendarAlt" style="width: 20px; height: 20px; padding-left: 2.50px; padding-right: 2.50px; padding-top: 1.67px; padding-bottom: 1.67px; justify-content: center; align-items: center; display: flex">
-                <div class="Icon" style="width: 15px; height: 16.67px; background: #667085"></div>
-              </div>
-              <div class="SelectDates" style="color: #667085; font-size: 14px;  font-weight: 500; line-height: 19.60px; letter-spacing: 0.07px; word-wrap: break-word">Select Date</div>
-            </div>
-            <div class="Filter" style="padding-left: 14px; padding-right: 14px; padding-top: 10px; padding-bottom: 10px; background: white; border-radius: 8px; overflow: hidden; border: 1px #E0E2E7 solid; justify-content: center; align-items: center; gap: 8px; display: flex">
-              <div class="Slider" style="width: 20px; height: 20px; padding: 2.50px; justify-content: center; align-items: center; display: flex">
-                <div class="Icon" style="width: 15px; height: 15px; background: #667085"></div>
-              </div>
-              <div class="Filters" style="color: #667085; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Filters</div>
-            </div>
-          </div>
-          <div class="Table" style="align-self: stretch; border: 1px #F0F1F3 solid; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-            <div class="Col" style="flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-              <div class="HeaderCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: #F9F9FC; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-                <div class="Product" style="flex: 1 1 0; color: #333843; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Order ID</div>
-              </div>
-              <div class="CodeCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Container" style="width: 62px; justify-content: center; align-items: center; gap: 8px; display: flex">
-                  <div class="302012" style="color: #5C59E8; font-size: 14px;  font-weight: 600; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">#302012</div>
-                </div>
-              </div>
-              <div class="CodeCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Container" style="width: 60px; justify-content: center; align-items: center; gap: 8px; display: flex">
-                  <div class="302012" style="color: #5C59E8; font-size: 14px;  font-weight: 600; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">#302011</div>
-                </div>
-              </div>
-              <div class="CodeCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Container" style="width: 65px; justify-content: center; align-items: center; gap: 8px; display: flex">
-                  <div class="302012" style="color: #5C59E8; font-size: 14px;  font-weight: 600; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">#302006</div>
-                </div>
-              </div>
-              <div class="CodeCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Container" style="width: 62px; justify-content: center; align-items: center; gap: 8px; display: flex">
-                  <div class="302012" style="color: #5C59E8; font-size: 14px;  font-weight: 600; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">#302001</div>
-                </div>
-              </div>
-              <div class="CodeCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Container" style="width: 62px; justify-content: center; align-items: center; gap: 8px; display: flex">
-                  <div class="302012" style="color: #5C59E8; font-size: 14px;  font-weight: 600; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">#301998</div>
-                </div>
-              </div>
-            </div>
-            <div class="Col" style="flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-              <div class="HeaderCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: #F9F9FC; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-                <div class="Product" style="flex: 1 1 0; color: #333843; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Product</div>
-              </div>
-              <div class="SquareImageCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Container" style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                  <div class="Img" style="width: 44px; height: 44px; background: #E0E2E7; border-radius: 8px"></div>
-                  <div class="Desc" style="flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 4px; display: inline-flex">
-                    <div class="TitleHere" style="color: #333843; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Elegant Dining Chairs</div>
-                    <div class="SubtextHere" style="color: #667085; font-size: 12px;  font-weight: 400; line-height: 18px; letter-spacing: 0.06px; word-wrap: break-word">+3 other products</div>
-                  </div>
-                </div>
-              </div>
-              <div class="SquareImageCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Container" style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                  <div class="Img" style="width: 44px; height: 44px; background: #E0E2E7; border-radius: 8px"></div>
-                  <div class="Desc" style="flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 4px; display: inline-flex">
-                    <div class="TitleHere" style="color: #333843; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Stylish Coffee Table</div>
-                    <div class="SubtextHere" style="color: #667085; font-size: 12px;  font-weight: 400; line-height: 18px; letter-spacing: 0.06px; word-wrap: break-word">+1 other products</div>
-                  </div>
-                </div>
-              </div>
-              <div class="SquareImageCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Container" style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                  <div class="Img" style="width: 44px; height: 44px; background: #E0E2E7; border-radius: 8px"></div>
-                  <div class="Desc" style="flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 4px; display: inline-flex">
-                    <div class="TitleHere" style="color: #333843; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Home Office Desk</div>
-                  </div>
-                </div>
-              </div>
-              <div class="SquareImageCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Container" style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                  <div class="Img" style="width: 44px; height: 44px; background: #E0E2E7; border-radius: 8px"></div>
-                  <div class="Desc" style="flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 4px; display: inline-flex">
-                    <div class="TitleHere" style="color: #333843; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Comfortable Sofa</div>
-                    <div class="SubtextHere" style="color: #667085; font-size: 12px;  font-weight: 400; line-height: 18px; letter-spacing: 0.06px; word-wrap: break-word">+1 other products</div>
-                  </div>
-                </div>
-              </div>
-              <div class="SquareImageCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Container" style="justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                  <div class="Img" style="width: 44px; height: 44px; background: #E0E2E7; border-radius: 8px"></div>
-                  <div class="Desc" style="flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 4px; display: inline-flex">
-                    <div class="TitleHere" style="color: #333843; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Wardrobe</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="Col" style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-              <div class="HeaderCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: #F9F9FC; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-                <div class="Product" style="flex: 1 1 0; color: #333843; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Total</div>
-                <div class="ChevronDown" style="width: 20px; height: 20px; padding-top: 6.67px; padding-bottom: 6.49px; padding-left: 4.17px; padding-right: 4.17px; justify-content: center; align-items: center; display: flex">
-                  <div class="Icon" style="width: 11.67px; height: 6.84px; background: #858D9D"></div>
-                </div>
-              </div>
-              <div class="NumberCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Container" style="width: 78px; justify-content: center; align-items: center; gap: 4px; display: flex">
-                  <div class="400" style="color: #667085; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Rs 4299.00</div>
-                </div>
-              </div>
-              <div class="NumberCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Container" style="width: 79px; justify-content: center; align-items: center; gap: 4px; display: flex">
-                  <div class="400" style="color: #667085; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Rs 3990.00</div>
-                </div>
-              </div>
-              <div class="NumberCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Container" style="width: 74px; justify-content: center; align-items: center; gap: 4px; display: flex">
-                  <div class="400" style="color: #667085; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Rs8250.00</div>
-                </div>
-              </div>
-              <div class="NumberCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Container" style="width: 84px; justify-content: center; align-items: center; gap: 4px; display: flex">
-                  <div class="400" style="color: #667085; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Rs 17599.00</div>
-                </div>
-              </div>
-              <div class="NumberCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Container" style="width: 78px; justify-content: center; align-items: center; gap: 4px; display: flex">
-                  <div class="400" style="color: #667085; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Rs 3999.00</div>
-                </div>
-              </div>
-            </div>
-            <div class="Col" style="flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-              <div class="HeaderCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: #F9F9FC; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-                <div class="Product" style="flex: 1 1 0; color: #333843; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Status</div>
-                <div class="ChevronDown" style="width: 20px; height: 20px; padding-top: 6.67px; padding-bottom: 6.49px; padding-left: 4.17px; padding-right: 4.17px; justify-content: center; align-items: center; display: flex">
-                  <div class="Icon" style="width: 11.67px; height: 6.84px; background: #858D9D"></div>
-                </div>
-              </div>
-              <div class="LabelBadgeCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-                <div class="Container" style="width: 80px; justify-content: center; align-items: center; gap: 8px; display: flex">
-                  <div class="Label" style="padding-left: 12px; padding-right: 12px; padding-top: 4px; padding-bottom: 4px; background: #FDF1E8; border-radius: 100px; flex-direction: column; justify-content: center; align-items: center; gap: 8px; display: inline-flex">
-                    <div class="Text" style="color: #E46A11; font-size: 14px;  font-weight: 600; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Pending</div>
-                  </div>
-                </div>
-              </div>
-              <div class="LabelBadgeCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-                <div class="Container" style="width: 80px; justify-content: center; align-items: center; gap: 8px; display: flex">
-                  <div class="Label" style="padding-left: 12px; padding-right: 12px; padding-top: 4px; padding-bottom: 4px; background: #FDF1E8; border-radius: 100px; flex-direction: column; justify-content: center; align-items: center; gap: 8px; display: inline-flex">
-                    <div class="Text" style="color: #E46A11; font-size: 14px;  font-weight: 600; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Pending</div>
-                  </div>
-                </div>
-              </div>
-              <div class="LabelBadgeCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-                <div class="Container" style="width: 81px; justify-content: center; align-items: center; gap: 8px; display: flex">
-                  <div class="Label" style="padding-left: 12px; padding-right: 12px; padding-top: 4px; padding-bottom: 4px; background: #E8F8FD; border-radius: 100px; flex-direction: column; justify-content: center; align-items: center; gap: 8px; display: inline-flex">
-                    <div class="Text" style="text-align: center; color: #13B2E4; font-size: 14px;  font-weight: 600; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Shipped</div>
-                  </div>
-                </div>
-              </div>
-              <div class="LabelBadgeCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-                <div class="Container" style="width: 81px; justify-content: center; align-items: center; gap: 8px; display: flex">
-                  <div class="Label" style="padding-left: 12px; padding-right: 12px; padding-top: 4px; padding-bottom: 4px; background: #E8F8FD; border-radius: 100px; flex-direction: column; justify-content: center; align-items: center; gap: 8px; display: inline-flex">
-                    <div class="Text" style="text-align: center; color: #13B2E4; font-size: 14px;  font-weight: 600; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Shipped</div>
-                  </div>
-                </div>
-              </div>
-              <div class="LabelBadgeCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-                <div class="Container" style="width: 89px; justify-content: center; align-items: center; gap: 8px; display: flex">
-                  <div class="Label" style="padding-left: 12px; padding-right: 12px; padding-top: 4px; padding-bottom: 4px; background: #E7F4EE; border-radius: 100px; flex-direction: column; justify-content: center; align-items: center; gap: 8px; display: inline-flex">
-                    <div class="Text" style="text-align: center; color: #0D894F; font-size: 14px;  font-weight: 600; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Delivered</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="Col" style="flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-              <div class="HeaderCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: #F9F9FC; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-                <div class="Product" style="flex: 1 1 0; color: #333843; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Date</div>
-                <div class="ChevronDown" style="width: 20px; height: 20px; padding-top: 6.67px; padding-bottom: 6.49px; padding-left: 4.17px; padding-right: 4.17px; justify-content: center; align-items: center; display: flex">
-                  <div class="Icon" style="width: 11.67px; height: 6.84px; background: #858D9D"></div>
-                </div>
-              </div>
-              <div class="RegularTextCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Container" style="width: 85px; justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                  <div class="Desc" style="flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 4px; display: inline-flex">
-                    <div class="TitleHere" style="color: #667085; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">12 Dec 2023</div>
-                  </div>
-                </div>
-              </div>
-              <div class="RegularTextCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Container" style="width: 77px; justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                  <div class="Desc" style="flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 4px; display: inline-flex">
-                    <div class="TitleHere" style="color: #667085; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">1 Dec 2023</div>
-                  </div>
-                </div>
-              </div>
-              <div class="RegularTextCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Container" style="width: 86px; justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                  <div class="Desc" style="flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 4px; display: inline-flex">
-                    <div class="TitleHere" style="color: #667085; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">10 Nov 2023</div>
-                  </div>
-                </div>
-              </div>
-              <div class="RegularTextCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Container" style="width: 79px; justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                  <div class="Desc" style="flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 4px; display: inline-flex">
-                    <div class="TitleHere" style="color: #667085; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">2 Nov 2023</div>
-                  </div>
-                </div>
-              </div>
-              <div class="RegularTextCell" style="align-self: stretch; padding-left: 22px; padding-right: 22px; padding-top: 18px; padding-bottom: 18px; background: white; border-bottom: 1px #F0F1F3 solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-                <div class="Container" style="width: 78px; justify-content: flex-start; align-items: center; gap: 8px; display: flex">
-                  <div class="Desc" style="flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 4px; display: inline-flex">
-                    <div class="TitleHere" style="color: #667085; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">7 Sep 2023</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="Footer" style="align-self: stretch; padding-top: 14px; padding-bottom: 16px; padding-left: 24px; padding-right: 24px; background: white; justify-content: flex-start; align-items: center; gap: 12px; display: inline-flex">
-            <div class="Showing15From100" style="flex: 1 1 0; color: #667085; font-size: 14px;  font-weight: 500; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">Showing 1-5 from 1,296</div>
-            <div class="Pagination" style="justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
-              <div class="PrimaryIconButton" style="width: 32px; height: 32px; padding: 6px; background: #DEDEFA; border-radius: 8px; overflow: hidden; justify-content: center; align-items: center; gap: 4px; display: flex">
-                <div class="ChevronLeft" style="width: 20px; height: 20px; padding-top: 4.17px; padding-bottom: 4.17px; padding-left: 6.08px; padding-right: 7.08px; justify-content: center; align-items: center; display: flex">
-                  <div class="Icon" style="width: 6.84px; height: 11.67px; background: #5C59E8"></div>
-                </div>
-              </div>
-              <div class="Indicator" style="width: 32px; height: 32px; padding: 6px; background: #5C59E8; border-radius: 8px; overflow: hidden; justify-content: center; align-items: center; gap: 4px; display: flex">
-                <div style="flex: 1 1 0; text-align: center; color: white; font-size: 14px;  font-weight: 600; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">1</div>
-              </div>
-              <div class="Indicator" style="width: 32px; height: 32px; padding: 6px; background: #DEDEFA; border-radius: 8px; overflow: hidden; justify-content: center; align-items: center; gap: 4px; display: flex">
-                <div style="flex: 1 1 0; text-align: center; color: #5C59E8; font-size: 14px;  font-weight: 600; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">2</div>
-              </div>
-              <div class="Indicator" style="width: 32px; height: 32px; padding: 6px; background: #DEDEFA; border-radius: 8px; overflow: hidden; justify-content: center; align-items: center; gap: 4px; display: flex">
-                <div style="flex: 1 1 0; text-align: center; color: #5C59E8; font-size: 14px;  font-weight: 600; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">3</div>
-              </div>
-              <div class="Indicator" style="width: 32px; height: 32px; padding: 6px; background: #DEDEFA; border-radius: 8px; overflow: hidden; justify-content: center; align-items: center; gap: 4px; display: flex">
-                <div style="flex: 1 1 0; text-align: center; color: #5C59E8; font-size: 14px;  font-weight: 600; line-height: 20px; letter-spacing: 0.07px; word-wrap: break-word">...</div>
-              </div>
-              <div class="PrimaryIconButton" style="width: 32px; height: 32px; padding: 6px; background: #DEDEFA; border-radius: 8px; overflow: hidden; justify-content: center; align-items: center; gap: 4px; display: flex">
-                <div class="ChevronRight" style="width: 20px; height: 20px; padding-top: 4.17px; padding-bottom: 4.17px; padding-left: 7.08px; padding-right: 6.08px; justify-content: center; align-items: center; display: flex">
-                  <div class="Icon" style="width: 6.84px; height: 11.67px; background: #5C59E8"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
-      
     </div>
+    <div class="col-lg-7 col-md-12 ">
+       <div class="row">
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="card card-body mb-4">
+            <article class="icontext">
+                <span class="icon icon-sm rounded-circle bg-success-light"><i class="fa-sharp fa-light fa-wallet"></i></span>
+                <div class="text">
+                    <h6 class="mb-1 card-title">Wallet</h6> <span>53.668</span>
+                    <span class="text-sm">
+                        Excluding orders in transit
+                    </span>
+                </div>
+            </article>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="card card-body mb-4">
+            <article class="icontext">
+                <span class="icon icon-sm rounded-circle bg-success-light"><i class="fa-light fa-box-circle-check"></i></span>
+                <div class="text">
+                    <h6 class="mb-1 card-title">Orders</h6> <span>{{ordered_products_count}}</span>
+                    <span class="text-sm">
+                        Excluding orders in transit
+                    </span>
+                </div>
+            </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="row">
+        <div class="col">
+        <div class="card">
+          <header class="card-header">
+            
+                  <h2 class="content-title card-title">Order List </h2>
+                  
+         
+          </header> <!-- card-header end// -->
+          <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="align-middle" scope="col">Order ID</th>
+                            <th class="align-middle" scope="col">Product</th>
+                            <th class="align-middle" scope="col">Total</th>
+                            <th class="align-middle" scope="col">Status</th>
+                            <th class="align-middle" scope="col">Date</th>
+                            <th class="align-middle" scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in ordered_products %}
+                        <tr>
+                            <td  class="fw-bold"><span>{{i.order.order_number|slice:"14:"}}</span></td>
+                            <td><b>{{i.user.get_usernme}}</b></td>
+                            
+                            <td>${{i.total_price}}</td>
+                            <td>{% if i.order.order_status == 'New' %}
+                              <span class="badge rounded-pill alert-primary">New</span>
+                                {% elif i.order_status == 'Accepted' %}
+                                <span class="badge rounded-pill alert-secondary">Accepted</span>
+                                {% elif i.order_status == 'Delivered' %}
+                                <span class="badge rounded-pill alert-success">Delivered</span>
+                                {% else %}
+                                <span class="badge rounded-pill alert-warning">Pending</span>
+                                {% endif %}
+                            </td>
+                            <td>{{i.created_at|date:"j M Y"}}</td>
+                            <td>
+                                <a href="{% url 'order_details' order_id=i.order.id %}" class="btn btn-xs rounded font-sm">Detail</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div> <!-- table-responsive //end -->
+        </div>
+      </div> 
+      </div>
+      </div>
+    </div>
+    </div>
+   
+   
   </div>
   {% endblock content %}

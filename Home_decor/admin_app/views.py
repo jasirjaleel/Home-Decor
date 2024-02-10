@@ -8,6 +8,7 @@ from account.models import Address
 from .models import *
 from django.http import JsonResponse
 import json
+from order.models import OrderProduct
 
 # Create your views here.
 
@@ -194,8 +195,12 @@ def user_details(request):
     user_id = request.GET.get('user_id')
     user = Account.objects.get(id=user_id)
     address = Address.objects.filter(account=user.id,is_default=True).first()
+    ordered_products = OrderProduct.objects.filter(user=user,ordered=True).order_by('-id')
+
     context={
         "user":user,
         'address':address,
+        'ordered_products':ordered_products,
+        'ordered_products_count':ordered_products.count()
     }
     return render(request,'admin_templates/user_details.html',context)

@@ -39,9 +39,9 @@
                                 </span>
                                 <div class="text">
                                     <h6 class="mb-1">Customer</h6>
-                                    <p class="mb-1">
+                                    <h5 class="mb-1">
                                         {{order.user.get_usernme}} <br> <template class="__cf_email__" data-cfemail="e2838e879aa2879a838f928e87cc818d8f">[email&#160;protected]</template> <br> +91 {{order.shipping_address.phone_number}}
-                                    </p>
+                                    </h5>
                                     <a href="#">View profile</a>
                                 </div>
                             </article>
@@ -54,7 +54,7 @@
                                 <div class="text">
                                     <h6 class="mb-1">Order info</h6>
                                     <p class="mb-1">
-                                        Shipping: Fargo express <br> Pay method: {{order.payment.payment}} <br> Status: {{order.order_status}}
+                                     Pay method:  {{order.payment.payment_method}} <br> Status: {{order.order_status}}
                                     </p>
                                     <a href="#">Download info</a>
                                 </div>
@@ -68,12 +68,12 @@
                                 <div class="text">
                                     <h6 class="mb-1">Deliver to</h6>
                                     <p class="mb-1">
-                                        <strong>Name:</strong> {{order.shipping_address.first_name}} {{order.shipping_address.last_name}} <br>
-                                        <strong>City:</strong> {{order.shipping_address.town_city}}, {{order.shipping_address.state}} <br>
-                                        <strong>Street Address:</strong> {{order.street_address.town_city}}<br>
+                                        {{order.shipping_address.first_name}} {{order.shipping_address.last_name}} <br>
+                                        {{order.shipping_address.town_city}}, {{order.shipping_address.state}} <br>
+                                        {{order.shipping_address.street_address}}<br>
                                         {{ order.shipping_address.country_region }} {{order.shipping_address.zip_code}}
                                     </p>
-                                    <a href="#">View profile</a>
+                                    <a href="{% url 'user_details' %}?user_id={{ order.user.id }}">View profile</a>
                                 </div>
                             </article>
                         </div> <!-- col// -->

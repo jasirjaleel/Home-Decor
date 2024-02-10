@@ -21,7 +21,6 @@ class ShippingAddress(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.street_address} "
-
     
 class PaymentMethod(models.Model):
     method_name = models.CharField(max_length=100)
@@ -39,17 +38,18 @@ class Payment(models.Model):
         ("FAILED", "Failed"),
         ("SUCCESS", "Success"),
         )
-    user                = models.ForeignKey(Account,on_delete=models.CASCADE)
-    payment_id          = models.CharField(max_length=100,null=True,blank=True)
+    payment_method      = models.ForeignKey(PaymentMethod, on_delete=models.SET_NULL, null=True, blank=True)
+    is_paid             = models.BooleanField(default=False)
     payment_order_id    = models.CharField(max_length=100,null=True,blank=True)
-    payment_method      = models.CharField(max_length=100,null=True,blank=True)
-    amount_paid         = models.CharField(max_length=30)
+    payment_id          = models.CharField(max_length=100,null=True,blank=True)
+    amount_paid         = models.IntegerField(null=True, blank=True)
     payment_status      = models.CharField(choices = PAYMENT_STATUS_CHOICES,max_length=20)
     created_at          = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return self.payment_order_id
     
+
 
 
 class Order(models.Model):
@@ -123,3 +123,35 @@ class OrderProduct(models.Model):
     
     def __str__(self):
         return self.order.order_number
+    
+
+
+
+
+
+
+
+
+
+
+
+# class Wallet(models.Model):
+#     user    = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='wallet' )
+#     balance = models.IntegerField(default=0, null=True)
+
+# class Transaction(models.Model):
+#     TRANSACTION_CHOICES =(
+#         ("CREDIT", "Credit"),
+#         ("DEBIT", "Debit"),
+#         )
+#     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE, related_name='transactions')
+#     amount = models.IntegerField(default=0)
+#     transaction_type = models.CharField(choices=TRANSACTION_CHOICES,max_length=10)
+#     created_at = models.DateTimeField(auto_now_add=True)
+
+
+   
+
+    
+    
+    

@@ -23,7 +23,7 @@ def payment(request):
         print('3')
 
         selected_payment_method = request.POST.get('payment_method')
-        print(selected_payment_method)
+        payment_methods_instance = PaymentMethod.objects.get(id=selected_payment_method)
         address = Address.objects.get(is_default=True,account=user)
         shipping_address = ShippingAddress.objects.create(
         first_name       = address.first_name,
@@ -40,9 +40,8 @@ def payment(request):
         grandtotal1 = request.session.get('grandtotal')
    
         payment = Payment.objects.create(
-            user                = user,
-            payment_method      = selected_payment_method,
-            amount_paid         = 0,    
+            payment_method      = payment_methods_instance,
+            amount_paid         = 0,        
             payment_status     ='PENDING',
             )
 
@@ -143,4 +142,5 @@ def order_details(request, order_id):
         'order_products': order_products,
     }
     return render(request, 'admin_templates/order_details.html', context)
+    
 
