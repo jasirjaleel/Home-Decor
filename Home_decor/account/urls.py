@@ -7,6 +7,7 @@ urlpatterns = [
     path('my-address/',views.my_address,name='myaddress'),
     path('add-address/',views.add_address,name='addaddress'),
     path('delete-address/',views.delete_address,name='deleteaddress'),
+    path('edit-address/', views.edit_address, name='editaddress'),
 
     path('forget-password/',views.forget_password,name='forget_password'),
     path('verify-forget-password/',views.verif_forget_password,name='verif_forget_password'),
@@ -14,7 +15,7 @@ urlpatterns = [
 
     path('order/',views.my_order,name='myorder'),
     path('profile/',views.my_profile,name='myprofile'),
-
+    path('edit-profile/', views.edit_user_profile, name='editprofile'),
 
 
 ]

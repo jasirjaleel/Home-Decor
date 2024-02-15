@@ -14,7 +14,7 @@
                                 <ul>
                                     <li><a href="{% url 'home' %}">Home</a></li>
                                     <li><a href="{% url 'myaccount' %}">My Account</a></li>
-                                    <li class="active" aria-current="page">Add Address</li>
+                                    <li class="active" aria-current="page">Edit Address</li>
                                 </ul>
                             </nav>
                         </div>
@@ -37,53 +37,53 @@
                         <form method="post" id="addressForm">
                             {% csrf_token %}
                             <h3>
-                                <span class=" d-flex align-items-center justify-content-center mt-2">Add a new address</span>
+                                <span class=" d-flex align-items-center justify-content-center mt-2">Edit address</span>
                             </h3>
                             <div class="d-flex " style="gap: 178px; width: 260;">
                                 <div class="default-form-box"style="width: 90px; max-width: 600px; position: relative;">
-                                    <input type="text" id="firstname" class="mt-3"  placeholder="First Name" name="first_name" autocomplete="off" onkeyup="validateFname()"autocomplete="off" style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <input type="text" id="firstname" class="mt-3"  placeholder="First Name" name="first_name" value="{{address.first_name}}" autocomplete="off" onkeyup="validateFname()"autocomplete="off" style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
                                     <span class="error"  id="fnameError" style="position: absolute;top: 100%;left: 2px;font-size:12px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
                                 </div>
                                 <div class="default-form-box"style="width: 90px; max-width: 600px; position: relative;">
-                                    <input type="text" id="lastname" class="mt-3"  placeholder="Last Name" name="last_name" autocomplete="off" onkeyup="validateLname()"autocomplete="off" style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <input type="text" id="lastname" class="mt-3"  placeholder="Last Name" name="last_name" value="{{address.last_name}}" autocomplete="off" onkeyup="validateLname()"autocomplete="off" style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
                                     <span class="error" id="lnameError" style="position: absolute;top: 100%;left: 2px;font-size:12px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
                                 </div>
                             </div>
                             <div class="d-flex " style="gap: 178px; width: 260;">
                                 <div class="default-form-box"style="width: 90px; max-width: 600px; position: relative;">
-                                    <input type="text" id="phone_number" class="mt-3"   placeholder="Phone Number" name="phone_number"  onkeyup="validatePhoneNumber()"autocomplete="off" style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <input type="text" id="phone_number" class="mt-3"   placeholder="Phone Number" name="phone_number" value="{{address.phone_number}}"  onkeyup="validatePhoneNumber()"autocomplete="off" style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
                                     <span class="error" id="phoneError"  style="position: absolute;top: 100%;left: 2px;font-size:12px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
                                 </div>
                                 <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;margin-top: 15px;">
-                                    <input type="text"  id="town_city" placeholder="Town / City" autocomplete="off" name="town_city" onkeyup="validateTown()"autocomplete="off" style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;" >
+                                    <input type="text"  id="town_city" placeholder="Town / City" autocomplete="off" name="town_city"value="{{address.town_city}}" onkeyup="validateTown()"autocomplete="off" style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;" >
                                     <span class="error" id="townError"  style="position: absolute;top: 100%;left: 2px;font-size:12px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
                                 </div>
                             </div>
                             <div class="d-flex " style="gap: 178px; width: 260;">
                                 <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;margin-top: 5px;">
                                    
-                                    <input type="text" id="street_address" class="mt-1"  placeholder="Street address" name="street_address" autocomplete="off" onkeyup="validateStreet()" style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <input type="text" id="street_address" class="mt-1"  placeholder="Street address" name="street_address"value="{{address.street_address}}" autocomplete="off" onkeyup="validateStreet()" style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
                                     <span class="error" id="streetError" style="position: absolute;top: 100%;left: 2px;font-size:12px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;"></span>
                                 </div>
                                 <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;margin-top: 5px;">
                                    
-                                    <input type="text" id="state" class="mt-1"  placeholder="State" name="state" onkeyup="validateState()" autocomplete="off" style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <input type="text" id="state" class="mt-1"  placeholder="State" name="state" onkeyup="validateState()"value="{{address.state}}" autocomplete="off" style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
                                     <span class="error" id="stateError" style="position: absolute; top: 100%; left: 2px; font-size: 12px; font-weight: 400; color: red; width: 190px; transition: opacity 0.5s;"></span>
                                 </div>
                             </div>
                             <div class="d-flex " style="gap: 178px; width: 260;">
                                 <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;margin-top: 5px;">
                                    
-                                    <input type="text" id="country_region"  class="mt-1"  placeholder="Country / Region" onkeyup="validateCountry()" autocomplete="off" name="country_region"  style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <input type="text" id="country_region"  class="mt-1"  placeholder="Country / Region" onkeyup="validateCountry()"value="{{address.country_region}}" autocomplete="off" name="country_region"  style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
                                     <span class="error" id="countryError" style="position: absolute;top: 100%;left: 2px;font-size:12px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;"></span>
                                 </div>
                                 <div class="default-form-box" style="width: 90px; max-width: 600px; position: relative;margin-top: 5px;">
                                    
-                                    <input type="text" id="zip_code" class="mt-1"  placeholder="ZIP code" name="zip_code"  onkeyup="validateZip()" autocomplete="off" style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <input type="text" id="zip_code" class="mt-1"  placeholder="ZIP code" name="zip_code"  onkeyup="validateZip()"value="{{address.zip_code}}" autocomplete="off" style="display: block; width: 260px; background: transparent;outline: none; margin-top: 15px; padding: 5px 20px;position: relative; z-index: 10;">
                                     <span class="error" id="zipError" style="position: absolute; top: 100%; left: 2px; font-size: 12px; font-weight: 400; color: red; width: 190px; transition: opacity 0.5s;"></span>
                                 </div>
                             </div>
-                              <div class="d-flex form-check justify-content-around align-items-center w-25" >
+                            <div class="d-flex form-check justify-content-around align-items-center w-25" >
                                 <input class=" d-flex form-check-input " type="checkbox" name="make_default">
                                 <label class="d-flex form-check-label " style="padding-bottom: 6px;" >
                                   Make as default 

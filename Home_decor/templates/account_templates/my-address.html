@@ -59,7 +59,10 @@
                         
                     </div>
                 </label>
-                <div class="btn d-flex px-3 align-items-center" onclick="delete_add('{{ i.id }}')"><i class="fa-duotone fa-trash" style="--fa-primary-color: #b19561; --fa-secondary-color: #b19561;font-size: 25px;"></i></div>
+                <div class="d-flex">
+                    <div class="btn d-flex px-3 align-items-center" onclick="delete_add('{{ i.id }}')"><i class="fa-duotone fa-trash" style="--fa-primary-color: #b19561; --fa-secondary-color: #b19561;font-size: 18px;"></i></div>
+                    <div class="btn d-flex px-3 align-items-center" ><a href="{% url 'editaddress' %}?address_id={{i.id}}"><i class="fa-sharp fa-light fa-pen" style="font-size: 18px;color:#b19561;"></i></a></div>
+                </div>
             </li>
             {% endfor %}
             <!-- Single Address End  -->

@@ -125,7 +125,7 @@ def verify_otp(request):
 #                     return redirect('userlogin')
 #     else:
 #         return render(request,'user_templates/login.html')
-
+@never_cache
 def userlogin(request):
     if request.user.is_authenticated:
         return redirect('home')
@@ -159,7 +159,7 @@ def userlogin(request):
     else:
         return render(request,'user_templates/login.html')
     
-
+@never_cache
 def userlogout(request):
     if request.user.is_authenticated:
         logout(request)

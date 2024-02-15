@@ -10,7 +10,7 @@
             </div>
         </div>
         <!-- Add new product form  -->
-        <form method="POST" action="{% url 'edit_product' %}">
+        <form method="POST" action="{% url 'edit_product' %}?product_id={{products.id}}">
             {% csrf_token %}
             <div class="col-lg-6">
                 <div class="card mb-4">

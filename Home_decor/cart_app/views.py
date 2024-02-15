@@ -1,13 +1,15 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from .models import CartItem
 from django.contrib import messages
 from django.http import JsonResponse
 from product_management.models import Product_Variant
-from .models import Cart,CartItem
+from .models import Cart,CartItem,Wishlist,WishlistItem
 from order.models import OrderProduct,Order
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.core.paginator import EmptyPage,PageNotAnInteger,Paginator
+import json
 # Create your views here.
 def _cart_id(request):
     # cart = request.session.session_key()
@@ -40,6 +42,8 @@ def _delete_unordered_orders(user):
         print('deleted orders')
 
 
+grandtotal = 0.00
+
 @login_required(login_url='userlogin')
 @never_cache
 def cart(request):
@@ -62,7 +66,6 @@ def cart(request):
         shipping = 100
         tax = round(total / 100 * 5, 2)
         grandtotal = round(tax + total + shipping, 2)
-        request.session['grandtotal'] = str(grandtotal)
       
         context = {
             'total' : total,
@@ -226,3 +229,59 @@ def delete_cart_item(request, cart_item_id):
 
     return JsonResponse(response_data)
 
+################ WISH LIST ####################
+def user_wishlist(request):
+    
+    wishlist,created = Wishlist.objects.get_or_create(user=request.user)
+    wishlistItems = WishlistItem.objects.filter(wishlist=wishlist,is_active=True).order_by('-created_at')
+    wishlistItems_count = wishlistItems.count()
+    for i in wishlistItems:
+        print(i.product.get_product_name())
+    # paginator = Paginator(wishlistItems,10)
+    # page = request.GET.get('page')
+    # paged_wishlist = paginator.get_page(page)
+    
+    context = {
+        'wishlistItems':wishlistItems,
+        'wishlistItems_count':wishlistItems_count
+    }
+    return render(request, 'cart_templates/wishlist.html',context)
+    
+
+@login_required(login_url='userlogin')
+def add_wishlist(request):
+    print('jhi')
+    
+    if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        data = json.loads(request.body)
+        slug = data.get('variant')
+        wishlist, created = Wishlist.objects.get_or_create(user=request.user)
+        try:
+            product_variant = Product_Variant.objects.get(product_variant_slug=slug)
+            print(product_variant,'++++++++++++++=')
+        except Product_Variant.DoesNotExist:
+            return JsonResponse({"status": "error", "message": "Product not found"})
+
+        wishlist_item, created = WishlistItem.objects.get_or_create(wishlist=wishlist, product=product_variant)
+        # if not created:
+        #     wishlist_item.delete()
+
+        return JsonResponse({"status": "success"})
+    else:
+        return JsonResponse({"status": "error", "message": "Invalid request"})
+
+    # current_user    = request.user
+    # slug = request.GET.get('slug')
+    # product = get_object_or_404(Product_Variant, product_variant_slug=slug)
+    # wishlist, created = Wishlist.objects.get_or_create(user=current_user)
+    
+    # # Check if the product is already in the wishlist
+    # if WishlistItem.objects.filter(wishlist=wishlist,product=product).exists():
+    #     return JsonResponse({'message': 'Product is already in the wishlist'}, status=400)
+    
+    # # Add the product to the wishlist
+    # WishlistItem.objects.create(wishlist=wishlist, product=product)
+    
+    # return JsonResponse({'message': 'Product added to wishlist'}, status=200)
+
+    return render(request, 'cart_templates/wishlist.html')

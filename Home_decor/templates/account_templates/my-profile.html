@@ -45,28 +45,28 @@
                         <div
                             style="width: 84.45px; height: 21px; color: #222222; font-size: 16px; font-weight: 400; line-height: 20px; word-wrap: break-word">
                             Name</div>
+                            <div
+                            style="color: #717171;  font-weight: 400; line-height: 18px; word-wrap: break-word">
+                           {{account.get_usernme|title}}</div>
+                        </div>
                         <div
-                            style="width: 26.12px; height: 18px; text-align: right; color: #222222; font-size: 14px; font-weight: 600; text-decoration: underline; line-height: 20.02px; word-wrap: break-word">
-                            Edit</div>
-                        <div
-                            style="color: #717171; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
-                        {{account.first_name}} {{account.last_name}}</div>
-                    </div>
+                            style="width: 26.12px; height: 18px; text-align: right; color: #222222;  font-weight: 600;  line-height: 20.02px; word-wrap: break-word;text-decoration: none;">
+                            <a href="{% url 'editprofile' %}">Edit</a></div>
                 </div>
                 <div
                     style="align-self: stretch; height: 91px; padding-top: 24px; padding-bottom: 25px; border-bottom: 1px #EBEBEB solid; justify-content: center; align-items: center; display: inline-flex">
                     <div
                         style="width: 595.33px; height: 42px; position: relative; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex">
                         <div
-                            style="width: 101.01px; height: 21px; color: #222222; font-size: 16px; font-weight: 400; line-height: 20px; word-wrap: break-word">
+                            style="width: 150.01px; height: 21px; color: #222222; font-size: 16px; font-weight: 400; line-height: 20px; word-wrap: break-word">
                             Email address</div>
-                        <div
-                            style="width: 26.12px; height: 18px; text-align: right; color: #222222; font-size: 14px; font-weight: 600; text-decoration: underline; line-height: 20.02px; word-wrap: break-word">
-                            Edit</div>
-                        <div
-                            style="color: #717171; font-size: 13px; font-weight: 400; line-height: 18px; word-wrap: break-word">
+                            <div
+                            style="color: #717171;  font-weight: 400; line-height: 18px; word-wrap: break-word">
                             {{account.email}}</div>
-                    </div>
+                        </div>
+                        <div
+                            style="width: 50.12px; height: 18px; text-align: right; color: #222222;  font-weight: 600; text-decoration: none; line-height: 20.02px; word-wrap: break-word">
+                            Edit</div>
                 </div>
                 <div
                     style="align-self: stretch; height: 91px; padding-top: 24px; padding-bottom: 25px; border-bottom: 1px #EBEBEB solid; justify-content: center; align-items: center; display: inline-flex">
@@ -75,13 +75,13 @@
                         <div
                             style="width: 60.90px; height: 21px; color: #222222; font-size: 16px; font-weight: 400; line-height: 20px; word-wrap: break-word">
                             Address</div>
+                            <div
+                            style="width: 84.95px; height: 18px; color: #717171;  font-weight: 400; line-height: 18px; word-wrap: break-word">
+                            {{address}} address</div>
+                        </div>
                         <div
-                            style="width: 26.12px; height: 18px; text-align: right; color: #222222; font-size: 14px; font-weight: 600; text-decoration: underline; line-height: 20.02px; word-wrap: break-word">
-                            Edit</div>
-                        <div
-                            style="width: 84.95px; height: 18px; color: #717171; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
-                            2 address</div>
-                    </div>
+                            style="width:50.12px; height: 18px; text-align: right; color: #222222;  font-weight: 600;  line-height: 20.02px; word-wrap: break-word ;text-decoration: none;">
+                            <a href="{% url 'myaddress' %}" style="text-decoration: none;">View</a></div>
                 </div>
                 <div
                     style="align-self: stretch; height: 109px; padding-top: 24px; padding-bottom: 25px; border-bottom: 1px #EBEBEB solid; justify-content: center; align-items: center; display: inline-flex">
@@ -90,16 +90,27 @@
                         <div
                             style="width: 115.14px; height: 21px; color: #222222; font-size: 16px; font-weight: 400; line-height: 20px; word-wrap: break-word">
                             Phone number</div>
-                        <div
-                            style="width: 27.97px; height: 18px; text-align: right; color: #222222; font-size: 14px; font-weight: 600; text-decoration: underline; line-height: 20.02px; word-wrap: break-word">
-                            Add</div>
-                        <div
-                            style="width: 528.97px; height: 36px; color: #717171; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
+                            <div
+                            style="width: 528.97px; height: 36px; color: #717171;  font-weight: 400; line-height: 18px; word-wrap: break-word">
+                            {% if account.phone_number == None %}
                             Add a contact number for seamless delivery coordination. Feel free to
-                            include extra numbers with specific purposes.</div>
-                    </div>
+                            include extra numbers with specific purposes.
+                            {% else %}
+                            {{account.phone_number}}
+                            {% endif %}   
+                        </div>
+                        </div>
+                        
+                        <div
+                            style="width:50.97px; height: 18px; text-align: right; color: #222222;  font-weight: 600;  line-height: 20.02px; word-wrap: break-word;text-decoration: none;">
+                            {% if account.phone_number == None %}
+                            Add
+                            {% else %}
+                            <a href="{% url 'editprofile' %}">Edit</a>
+                            {% endif %}
+                        </div>
                 </div>
-                <div
+                <!-- <div
                     style="height: 97px; padding-top: 24px; padding-bottom: 13px; border-bottom: 1px #EBEBEB solid; justify-content: center; align-items: center; display: inline-flex">
                     <div
                         style="width: 595.33px; height: 60px; position: relative; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex">
@@ -107,13 +118,13 @@
                             style="width: 115.14px; height: 21px; color: #222222; font-size: 16px; font-weight: 400; line-height: 20px; word-wrap: break-word">
                             Date of Birth</div>
                         <div
-                            style="width: 27.97px; height: 18px; text-align: right; color: #222222; font-size: 14px; font-weight: 600; text-decoration: underline; line-height: 20.02px; word-wrap: break-word">
+                            style="width: 27.97px; height: 18px; text-align: right; color: #222222;  font-weight: 600;  line-height: 20.02px; word-wrap: break-word">
                             Edit</div>
                         <div
-                            style="width: 528.97px; height: 36px; color: #717171; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
+                            style="width: 528.97px; height: 36px; color: #717171;  font-weight: 400; line-height: 18px; word-wrap: break-word">
                             05/03/2000</div>
                     </div>
-                </div>
+                </div> -->
             </div>
             <div
                 style="width: 333.33px; align-self: stretch; padding-top: 25px; padding-bottom: 26.88px; padding-left: 25px; padding-right: 25px; border-radius: 12px; border: 1px #DDDDDD solid; flex-direction: column; justify-content: center; align-items: flex-start; gap: 33.88px; display: inline-flex">
@@ -126,57 +137,22 @@
                         Why isn’t my info shown here?</div>
                     <div
                         style="width: 48px; height: 48px; left: 0px; top: 0px; position: absolute; justify-content: center; align-items: center; display: inline-flex">
-                        <div
-                            style="flex: 1 1 0; align-self: stretch; padding-top: 1px; padding-bottom: 1px; padding-left: 3px; padding-right: 2px; justify-content: center; align-items: center; display: inline-flex">
-                            <div style="width: 43px; height: 46px; position: relative">
-                                <div
-                                    style="width: 38px; height: 46px; left: 5px; top: 0px; position: absolute">
-                                    <div
-                                        style="width: 30px; height: 37.72px; left: 4px; top: 4px; position: absolute; background: rgba(184, 142, 47, 0.50)">
-                                    </div>
-                                    <div
-                                        style="width: 38px; height: 46px; left: 0px; top: 0px; position: absolute; background: #AF831D">
-                                    </div>
-                                </div>
-                                <div
-                                    style="width: 24px; height: 32px; left: 0px; top: 13px; position: absolute">
-                                    <div
-                                        style="width: 24px; height: 22px; left: 0px; top: 10px; position: absolute; border: 2px #222222 solid">
-                                    </div>
-                                    <div
-                                        style="width: 12px; height: 11px; left: 6px; top: 0px; position: absolute; border: 2px #222222 solid">
-                                    </div>
-                                    <div
-                                        style="width: 4px; height: 4px; left: 10px; top: 19px; position: absolute; border: 2px #222222 solid">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <i class="fa-sharp fa-light fa-shield-keyhole" style="font-size: 45px;color: #b19361;" ></i>
                     </div>
                 </div>
                 <div style="width: 283.33px; height: 1px; border-bottom: 1px #DDDDDD solid"></div>
                 <div style="width: 280.64px; flex: 1 1 0; position: relative">
                     <div
-                        style="width: 280.64px; height: 135.38px; left: 0px; top: 108.59px; position: absolute; color: #717171; font-size: 16px; font-weight: 400; line-height: 22.88px; word-wrap: break-word">
+                        style="width: 280.64px; height: 150.38px; left: 0px; top: 108.59px; position: absolute; color: #717171; font-size: 16px; font-weight: 400; line-height: 22.88px; word-wrap: break-word">
                         Home Decor uses to verify your identity can’t be changed. Contact info and
                         some personal details can be edited, but we may ask you verify your identity
                         the next time you book or create a listing.</div>
                     <div
-                        style="width: 275.04px; height: 26px; left: 0px; top: 65px; position: absolute; color: #222222; font-size: 20px; font-weight: 800; line-height: 28.60px; word-wrap: break-word">
+                        style="width: 275.04px; height: 50px; left: 0px; top: 69px; position: absolute; color: #222222; font-size: 20px; font-weight: 800; line-height: 28.60px; word-wrap: break-word">
                         Which details can be edited?</div>
                     <div
                         style="width: 48px; height: 48px; left: 0px; top: 0px; position: absolute; justify-content: center; align-items: center; display: inline-flex">
-                        <div
-                            style="flex: 1 1 0; align-self: stretch; padding-left: 5px; padding-right: 5px; justify-content: center; align-items: center; display: inline-flex">
-                            <div style="width: 38px; height: 48px; position: relative">
-                                <div
-                                    style="width: 30px; height: 28px; left: 4px; top: 16px; position: absolute; background: rgba(184, 142, 47, 0.50)">
-                                </div>
-                                <div
-                                    style="width: 38px; height: 48px; left: 0px; top: 0px; position: absolute; background: #B88E2F">
-                                </div>
-                            </div>
-                        </div>
+                        <i class="fa-sharp fa-light fa-user-pen"style='font-size:40px;color: #b19361;'></i>
                     </div>
                 </div>
                 <div style="width: 283.33px; height: 1px; border-bottom: 1px #DDDDDD solid"></div>
@@ -190,17 +166,7 @@
                         What info is shared with others?</div>
                     <div
                         style="width: 48px; height: 48px; left: 0px; top: 0px; position: absolute; justify-content: center; align-items: center; display: inline-flex">
-                        <div
-                            style="flex: 1 1 0; align-self: stretch; padding-left: 0.52px; padding-right: 0.52px; padding-top: 5px; padding-bottom: 5px; justify-content: center; align-items: center; display: inline-flex">
-                            <div style="width: 46.96px; height: 38px; position: relative">
-                                <div
-                                    style="width: 38.74px; height: 30px; left: 4.11px; top: 4px; position: absolute; background: rgba(184, 142, 47, 0.50)">
-                                </div>
-                                <div
-                                    style="width: 46.96px; height: 38px; left: 0px; top: 0px; position: absolute; background: #AF831D">
-                                </div>
-                            </div>
-                        </div>
+                        <i class="fa-sharp fa-light fa-file-lock"style='font-size:40px;color: #b19361;'></i>
                     </div>
                 </div>
             </div>

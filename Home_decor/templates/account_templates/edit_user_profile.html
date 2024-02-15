@@ -1,0 +1,164 @@
+{% extends 'store_templates/base.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- ...:::: Start Breadcrumb Section:::... -->
+    <div class="breadcrumb-section breadcrumb-bg-color--golden">
+        <div class="breadcrumb-wrapper">
+            <div class="container">
+                <div class="row ">
+                    <div class="col-12">
+                        <h3 class="breadcrumb-title">Edit</h3>
+                        <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden" >
+                            <nav aria-label="breadcrumb">
+                                <ul>
+                                    <li><a href="index.html">Home</a></li>
+                                    <li><a href="shop-grid-sidebar-left.html">My Account</a></li>
+                                    <li class="active" aria-current="page">Edit Profile</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- ...:::: End Breadcrumb Section:::... -->
+
+    <!-- ...:::: Start Customer Login Section :::... -->
+    <div class="customer-login">
+        <div class="container">
+            <div class="row justify-content-between mb-4 flex-column align-items-center" >
+               
+                <!--register area start-->
+                <div class="col-lg-6 col-md-6">
+                    <div class="account_form register">
+
+                      
+                        <form method="post" id="form" action="{% url 'editprofile' %}">
+                            {% csrf_token %}
+                            <h3>
+                                <span>Edit your account.</span>
+                            </h3>
+                            <div class="d-flex " style="gap: 178px; width: 260;">
+                                <div class="default-form-box"style="width: 90px; max-width: 600px; position: relative;">
+                                    <input type="text" class="mt-3" id="firstname" placeholder="First Name" name="first_name" autocomplete="off" value="{{account.first_name}}" oninput="validateFname()" style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error"  id="fnameError" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
+                                </div>
+                                <div class="default-form-box"style="width: 90px; max-width: 600px; position: relative;">
+                                    <input type="text" class="mt-3" id="lastname" placeholder="Last Name" name="last_name" autocomplete="off"  value="{{account.last_name}}" oninput="validateLname()" style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error" id="lnameError" style="position: absolute;top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
+                                </div>
+                            </div>
+                            <div class="d-flex" style="gap: 178px; width: 260;">
+                                <div class="default-form-box"style="width: 90px; max-width: 600px; position: relative;">
+                                    <input type="text" id="phone_number" class="mt-3"   placeholder="Phone Number" name="phone_number" value="{{account.phone_number}}"  onkeyup="validatePhoneNumber()"autocomplete="off" style="display: block; width: 260px; background: transparent;outline: none; padding: 5px 20px;position: relative; z-index: 10;">
+                                    <span class="error" id="phoneError"  style="position: absolute;top: 100%;left: 2px;font-size:12px;font-weight: 400;color: red;width: 190px;transition: opacity 0.5s;">  </span>
+                                </div>
+                               
+                            </div>
+                            
+                            <div class="login_submit pt-4">
+                                <button class="btn  btn-black-default-hover  w-25"  type="submit">Update</button>
+                            </div>
+                            
+                        </form>
+                      </div>
+                </div>
+                <!--register area end-->
+            </div>
+        </div>
+    </div> <!-- ...:::: End Customer Login Section :::... -->
+
+<script>
+    function validateFname() {
+        const fname = document.getElementById('firstname').value;
+        const fnameError = document.getElementById('fnameError');
+        
+        if (fname === "") {
+            fnameError.innerHTML = 'Enter your First Name';
+            return false;
+        }
+        if (!fname.match(/^[a-zA-Z\s-, ]+$/)) {
+            fnameError.innerHTML = 'Numbers and symbols are not allowed';
+            return false;
+        }
+        if (fname.length < 3) {
+            fnameError.innerHTML = "Must be three characters";
+            return false;
+        }
+        fnameError.innerHTML = null;
+        return true;
+    }
+
+    function validateLname() {
+        
+        const lname = document.getElementById('lastname').value;
+        const lnameError = document.getElementById('lnameError');
+        
+        if (lname === "") {
+            lnameError.innerHTML = 'Enter your Last Name';
+            return false;
+        }
+        if (!lname.match(/^[a-zA-Z\s-, ]+$/)) {
+            lnameError.innerHTML = 'Numbers and symbols are not allowed';
+            return false;
+        }
+        if (lname.length < 3) {
+            lnameError.innerHTML = "Must be three characters";
+            return false;
+        }
+        lnameError.innerHTML = null;
+        return true;
+    }
+
+    function validatePhoneNumber() {
+            const phoneNumber = document.getElementById('phone_number').value;
+            const phoneNumberError = document.getElementById('phoneError');
+            
+            if (phoneNumber === "" || !phoneNumber.trim()) {
+                phoneNumberError.innerHTML = 'Enter your Phone Number';
+                return false;
+            }
+            if  (phoneNumber.length >10  && phoneNumber.match(/^[0-9]+$/) || phoneNumber.length <10 && phoneNumber.match(/^[0-9]+$/)) {
+                phoneNumberError.innerHTML = "Must be 10 numbers";
+                return false;
+            }
+            if (!phoneNumber.match(/^[0-9]+$/)) {
+                phoneNumberError.innerHTML = 'Should only contain numbers.';
+                return false;
+            }
+            // You can add more specific validation for phone numbers if needed
+    
+            phoneNumberError.innerHTML = null;
+            return true;
+        }
+    
+    function validation() {
+        const isValidFname = validateFname();
+        const isValidLName = validateLname();
+        const isValidPhoneNumber = validatePhoneNumber()
+
+        return isValidFname && isValidLName && isValidPhoneNumber ;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+    const signUpForm = document.getElementById('form');
+    
+
+    signUpForm.addEventListener('submit', function (e) {
+        e.preventDefault(); // Prevent the default form submission behavior
+
+        // Your validation and other logic here
+        if (validation()) {
+            console.log('Sign up form submitted successfully');
+            this.submit(); // Manually submit the form
+        } else {
+            console.log('Sign up form not submitted due to validation error');
+        }
+    });
+});
+</script>
+
+
+
+    {% endblock content %}

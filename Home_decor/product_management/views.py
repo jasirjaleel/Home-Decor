@@ -3,6 +3,7 @@ from django.contrib import messages
 from .models import *
 from category_management.models import Category
 from django.http import JsonResponse
+from django.http import  HttpResponseRedirect
 # Create your views here.
 ##############   DISPLAYING PRODUCT   ############# 
 def all_product(request):
@@ -53,8 +54,9 @@ def create_product(request):
 
 ##############    EDIT PRODUCT    #############
 def edit_product(request):     
-    product_id = request.GET.get('product_id')
-    print(product_id)                                                                   
+    product_id = int(request.GET.get('product_id'))
+    print(product_id)
+    print("+++++++++++++++++++++++++++=")                                                                   
     category    = Category.objects.all()
     brand       = Brand.objects.all()
     products    = Product.objects.filter(id=product_id)
@@ -75,17 +77,17 @@ def edit_product(request):
         category        = Category.objects.get(id=category_id)
         brand           = Brand.objects.get(id=brand_id)
         
-        product                 = Product.objects.filter(id=products_instance.id)
+        product                 = Product.objects.get(id=products_instance.id)
         product.product_name    = product_title
-        product.category        = category_id
-        product.brand           = brand_id 
+        product.category        = category
+        product.brand           = brand 
         product.description     = description
         product.base_price      = base_price
         product.save()
 
         messages.success(request, 'Product Edited.')
-        return redirect('all-product',product_id.id)
-    
+        return redirect('all-product')
+        # return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
     return render(request,"admin_templates/edit_product.html",context)
 

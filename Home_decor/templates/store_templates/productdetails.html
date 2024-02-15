@@ -168,14 +168,17 @@ input.qtyminus { width:30px; height:30px;}
                                 <div class="product-add-to-cart-btn">
                                    {% for i in variants %}
                                     <a href="{% url 'addtocart' slug=i.product_variant_slug %}?quantity=" id="addToCartBtn">+ Add To Cart</a>
-                                    {% endfor %}
+                                    
                                 </div>
                             </div>
                             <!-- Start  Product Details Meta Area-->
                             <div class="product-details-meta mb-20">
-                                <a href="wishlist.html" class="icon-space-right"><i class="icon-heart"></i>Add to
-                                    wishlist</a>
-                                <a href="compare.html" class="icon-space-right"><i class="icon-refresh"></i>Compare</a>
+                                <button class="add-to-wishlist-btn icon-space-right" data-variant-slug="{{ i.product_variant_slug }}">
+                                    <i class="icon-heart"></i>
+                                    Add to wishlist
+                                </button>
+                                    {% endfor %}
+                                
                             </div>
                             <!-- End  Product Details Meta Area-->
                         </div>
@@ -786,8 +789,8 @@ input.qtyminus { width:30px; height:30px;}
                                                     <a href="#" data-bs-toggle="modal"
                                                         data-bs-target="#modalQuickview"><i
                                                             class="icon-magnifier"></i></a>
-                                                    <a href="wishlist.html"><i class="icon-heart"></i></a>
-                                                    <a href="compare.html"><i class="icon-shuffle"></i></a>
+                                                    <a href="{% url 'add-wishlist' %}"><i class="icon-heart"></i></a>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -949,5 +952,39 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.add-to-wishlist-btn').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var variantSlug = this.getAttribute('data-variant-slug');
+
+            fetch('/add-wishlist/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': csrftoken,
+                },
+                body: JSON.stringify({ variant: variantSlug }) // Send variant slug in JSON format
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    console.log("Item added to wishlist successfully");
+                    // Optionally, update UI to reflect item added to wishlist
+                } else {
+                    console.error("Error:", data.message);
+                    // Optionally, display error message to user
+                }
+            })
+            .catch(error => {
+                console.error("Fetch error:", error);
+                // Optionally, handle fetch errors
+            });
+        });
+    });
+});
+
+</script>
     
     {% endblock content %}

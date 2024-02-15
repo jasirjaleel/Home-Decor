@@ -31,6 +31,7 @@ urlpatterns = [
 
     path('all-orders/', orderView.all_order, name='all_orders'),
     path('order-details/<int:order_id>/', orderView.order_details, name='order_details'),
+    
 
     
     

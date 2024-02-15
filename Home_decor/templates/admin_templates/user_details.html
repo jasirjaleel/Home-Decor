@@ -135,14 +135,19 @@
                             <td>${{i.total_price}}</td>
                             <td>{% if i.order.order_status == 'New' %}
                               <span class="badge rounded-pill alert-primary">New</span>
-                                {% elif i.order_status == 'Accepted' %}
-                                <span class="badge rounded-pill alert-secondary">Accepted</span>
-                                {% elif i.order_status == 'Delivered' %}
-                                <span class="badge rounded-pill alert-success">Delivered</span>
-                                {% else %}
-                                <span class="badge rounded-pill alert-warning">Pending</span>
-                                {% endif %}
-                            </td>
+                              {% elif i.order.order_status == 'Accepted' %}
+                              <span class="badge rounded-pill alert-secondary">Accepted</span>
+                              {% elif i.order.order_status == 'Delivered' %}
+                              <span class="badge rounded-pill alert-success">Delivered</span>
+                              {% elif i.order.order_status == 'Cancelled' %}
+                              <span class="badge rounded-pill alert-danger">Cancelled</span>
+                              {% elif i.order.order_status == 'Returned' %}
+                              <span class="badge rounded-pill alert-warning">Returned</span>
+                              {% else %}
+                              <span class="badge rounded-pill alert-info">Unknown</span>
+                              {% endif %}
+                          </td>
+                          
                             <td>{{i.created_at|date:"j M Y"}}</td>
                             <td>
                                 <a href="{% url 'order_details' order_id=i.order.id %}" class="btn btn-xs rounded font-sm">Detail</a>

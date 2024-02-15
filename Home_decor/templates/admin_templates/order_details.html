@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
         <section class="content-main">
+            
             <div class="content-header">
                 <div>
                     <h2 class="content-title card-title">Order detail</h2>
@@ -23,7 +24,7 @@
                                     <option {% if status.0 == order.order_status %}selected{% endif %}>{{ status.1 }}</option>
                                 {% endfor %}
                             </select>
-                            <a id="save-btn" class="btn btn-primary">Save</a>
+                            <a id="save-btn" class=" btn btn-primary">Save</a>
                         </div>
                     </div>
                 </header> <!-- card-header end// -->
@@ -153,6 +154,8 @@
                 </div> <!-- card-body end// -->
             </div> <!-- card end// -->
         </section> <!-- content-main end// -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
         <script>
              function getCookie(name) {
         let cookieValue = null;
@@ -205,6 +208,12 @@
                     .then(data => {
                         // Handle success response
                         console.log('Order status updated successfully');
+                        Swal.fire({
+                    icon: 'success',
+                    title: 'Saved',
+                    showConfirmButton: false,
+                    timer: 1000
+                }); 
                     })
                     .catch(error => {
                         // Handle error

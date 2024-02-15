@@ -163,3 +163,6 @@ INTERNAL_IPS = [
     "127.0.0.1",
     # ...
 ]
+
+RAZOR_PAY_KEY_ID = os.environ["RAZOR_PAY_KEY_ID"]
+KEY_SECRET = os.environ["KEY_SECRET"]

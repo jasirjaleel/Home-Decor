@@ -85,17 +85,19 @@ def delete_address(request):
 
 def my_order(request):
     user = request.user
-    orders = OrderProduct.objects.filter(user=user,ordered=True)
+    orders = OrderProduct.objects.filter(user=user,ordered=True).order_by('-created_at')
     context = {'orders': orders}
     return render(request,'account_templates/my-orders.html',context)
 
 def my_profile(request):
     print(request.user)
     account = Account.objects.filter(email=request.user)
+    address = Address.objects.filter(account=request.user)
     acc=account.first()
-    print(acc)
+    print(address.count())
     context = {
         "account":acc,
+        "address":address.count(),
     }
     
     return render(request,'account_templates/my-profile.html',context)
@@ -157,3 +159,58 @@ def enter_new_password(request):
             # Account.objects.get()
             # account = Account.objects.update(password=password)
             # account.save()
+
+####################### EDIT USER PROFILE #####################
+def edit_user_profile(request):
+    user = request.user
+    account = Account.objects.get(email=user)
+    if request.method == "POST":
+        first_name       = request.POST.get('first_name')
+        last_name        = request.POST.get('last_name')
+        phone_number     = request.POST.get('phone_number')
+        print(first_name,last_name,phone_number)
+
+
+        new_account = Account.objects.get(email=request.user)
+        new_account.first_name = first_name
+        new_account.last_name = last_name
+        new_account.phone_number = phone_number
+        new_account.save()
+        return redirect('myprofile') 
+    context = {
+        'account': account,
+    } 
+    return render(request, 'account_templates/edit_user_profile.html',context)
+
+
+#################### EDIT ADDRESS #####################
+def edit_address(request):
+    user = request.user
+    address_id = request.GET.get('address_id')
+    address = Address.objects.get(account=user,id=address_id)
+    if request.method == "POST":
+        first_name       = request.POST.get('first_name')
+        last_name        = request.POST.get('last_name')
+        phone_number     = request.POST.get('phone_number')
+        town_city        = request.POST.get('town_city')
+        street_address   = request.POST.get('street_address')
+        state            = request.POST.get('state')
+        country_region   = request.POST.get('country_region')
+        zip_code         = request.POST.get('zip_code')
+    
+
+        new_address = Address.objects.get(account=user,id=address_id)
+        new_address.first_name      = first_name
+        new_address.last_name       = last_name
+        new_address.phone_number    = phone_number
+        new_address.town_city       = town_city
+        new_address.street_address  = street_address
+        new_address.state           = state
+        new_address.country_region  = country_region
+        new_address.zip_code        = zip_code
+        new_address.save()
+        return redirect('myaddress')
+    context = {
+        "address":address,
+    }
+    return render(request, 'account_templates/edit-address.html',context)
