@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'account',
     'store',
     'order',
+    'wallet',
     'extra_management',
     'product_management',
     'category_management',

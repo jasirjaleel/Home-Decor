@@ -40,35 +40,38 @@
                 </tr>
             </thead>
             <tbody>
-                {% for order in orders %}
+                {% for order in orders  %}
                 <tr>
-                    <td class="d-flex justify-content-center align-content-center"><img src="{{order.images.url}}" style="width: 60px;"  alt="hi">
-                        <a href="" class="view"></a>{{order.product_variant}} x {{order.quantity}}</td>
-                    <td>Rs. {{ order.total_price }}</td>
+                    
+                    <td class="d-flex justify-content-center align-content-center">
+                    {{ order.item_count }} items
+                    </td>
+                    
+                    <td>Rs. {{ order.order_total }}</td>
                     <td>{{ order.created_at|date:"j M Y" }}</td>
-                    {% if order.order.order_status == "New" %}
+                    {% if order.order_status == "New" %}
                         <td>New</td>
-                    {% elif order.order.order_status == "Pending" %}
+                    {% elif order.order_status == "Pending" %}
                         <td>Pending</td>
-                    {% elif order.order.order_status == "Delivered" %}
+                    {% elif order.order_status == "Delivered" %}
                         <td>Delivered</td>
-                    {% elif order.order.order_status == "Shipped" %}
+                    {% elif order.order_status == "Shipped" %}
                         <td>Shipped</td>
-                    {% elif order.order.order_status == "Cancelled" %}
+                    {% elif order.order_status == "Cancelled" %}
                     <td>Cancelled</td>
-                    {% elif order.order.order_status == "Returned" %}
+                    {% elif order.order_status == "Returned" %}
                         <td>Returned</td>
                     {% endif %}
-                    <td><a href="cart.html" class="view">{{order.order.order_number}}</a></td>
+                    <td><a href="cart.html" class="view">{{order.order_number}}</a></td>
                     <td>
-                        {% if order.order.order_status == 'Delivered' %}
-                        <a href="#" class="return-order" data-order-id="{{ order.order.id }}" data-order-created-at='{{ order.created_at|date:"Y-m-d\TH:i:s" }}'>Return</a>
-                        {% elif order.order.order_status == 'Cancelled' %}
+                        {% if order.order_status == 'Delivered' %}
+                        <a href="#" class="return-order" data-order-id="{{ order.id }}" data-order-created-at='{{ order.created_at|date:"Y-m-d\TH:i:s" }}'>Return</a>
+                        {% elif order.order_status == 'Cancelled' %}
                         <a href="" class="view">Cancelled</a>
-                        {% elif order.order.order_status == 'Returned' %}
+                        {% elif order.order_status == 'Returned' %}
                         <a href="" class="view">Returned</a>
                         {% else %}
-                        <a href="#" class="view" onclick="cancelOrderConfirmation('{{ order.order.id }}')">Cancel</a>
+                        <a href="#" class="view" onclick="cancelOrderConfirmation('{{ order.id }}')">Cancel</a>
                         {% endif %}
                     </td>
                 </tr>

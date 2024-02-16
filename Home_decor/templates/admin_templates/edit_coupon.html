@@ -1,0 +1,77 @@
+{% extends 'admin_templates/base.html' %}
+{% load static %}
+{% block content %}
+<!-- jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- jQuery UI library -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+
+<section class="content-main">
+    <div class="row">
+        <div class="col-9">
+            <div class="content-header">
+                <h2 class="content-title">Edit Coupon</h2>
+                
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>General Information</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'edit-coupon' %}?id={{old_coupon.id}}"  enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label class="form-label">Coupon Code</label>
+                            <input type="text" placeholder="Type here" class="form-control"  name="coupon_code" value="{{ old_coupon.coupon_code }}" required>
+                        </div>
+                        <div class="row gx-3">
+                            <div class="col-md-4  mb-3">
+                                <label class="form-label">Discount Percentage</label>
+                                <input type="number" placeholder="Type here" class="form-control"  name="discount_percentage" value="{{ old_coupon.discount_percentage }}" required>
+                            </div>
+                            <div class="col-md-4  mb-3">
+                                <label class="form-label">Minimum Amount</label>
+                                <input type="number" placeholder="Type here" class="form-control"  name="minimum_amount" value="{{ old_coupon.minimum_amount }}" required>
+                            </div>
+                            <div class="col-md-4  mb-3">
+                                <label class="form-label">Total Coupons</label>
+                                <input type="number" placeholder="Type here" class="form-control"  name="total_coupons" value="{{ old_coupon.total_coupons }}" required>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Maximum Number of usage for a user</label>
+                            <input type="number" placeholder="Type here" class="form-control"  name="max_uses" value="{{ old_coupon.max_uses }}" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Expire Date</label>
+                            <input type="text" placeholder="Select date" class="form-control" id="expire_date" name="expire_date" value="{{ old_coupon.expire_date }}" required>
+                        </div>
+                        <div>
+                            <button class="btn btn-md rounded font-sm hover-up" type="submit">Edit</button>
+                        </div>
+                    </form>                    
+                </div>
+            </div> <!-- card end// -->
+            
+        </div>
+        
+       
+    
+    </div>
+</section> <!-- content-main end// -->
+
+<script>
+ $(document).ready(function() {
+    $("#expire_date").datepicker({
+        dateFormat: 'yy-mm-dd'// Set the date format as YYYY-MM-DD
+    });
+});
+   
+
+</script>
+{% endblock content %}

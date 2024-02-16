@@ -11,6 +11,7 @@ from django.http import JsonResponse
 from django.contrib.auth import login
 from django.shortcuts import get_object_or_404
 from order.models import Order, OrderProduct
+from django.db.models import Count
 # Create your views here.
 
 def my_account(request):
@@ -85,8 +86,11 @@ def delete_address(request):
 
 def my_order(request):
     user = request.user
-    orders = OrderProduct.objects.filter(user=user,ordered=True).order_by('-created_at')
-    context = {'orders': orders}
+    orders = Order.objects.filter(user=user,is_ordered=True).order_by('-created_at')
+    orders = orders.annotate(item_count=Count('orderproduct'))
+    context = {
+        'orders': orders,
+        }
     return render(request,'account_templates/my-orders.html',context)
 
 def my_profile(request):

@@ -4,11 +4,10 @@
 <section class="content-main">
     <div class="content-header">
         <div>
-            <h2 class="content-title card-title">Order List </h2>
-
+            <h2 class="content-title card-title">Coupon List </h2>
         </div>
         <div>
-            <input type="text" placeholder="Search order ID" class="form-control bg-white">
+            <a href="{% url 'add-coupon' %}" class="btn btn-primary btn-sm rounded">Add new</a>
         </div>
     </div>
     <div class="card mb-4">
@@ -39,44 +38,39 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th class="align-middle" scope="col">Order ID</th>
-                                    <th class="align-middle" scope="col">Billing Name</th>
-                                    <th class="align-middle" scope="col">Date</th>
-                                    <th class="align-middle" scope="col">Total</th>
-                                    <th class="align-middle" scope="col">Payment Status</th>
-                                    <th class="align-middle" scope="col">Payment Method</th>
+                                    <th class="align-middle" scope="col">Coupon Code</th>
+                                    <th class="align-middle" scope="col">Total Coupons</th>
+                                    <th class="align-middle" scope="col">Discount %</th>
+                                    <th class="align-middle" scope="col">Minimum Amount</th>
+                                    <th class="align-middle" scope="col">Max usage</th>
                                     <th class="align-middle" scope="col">Status</th>
+                                    <th class="align-middle" scope="col">Expiry Date</th>
                                     <th class="align-middle" scope="col" class="text-end"> Action </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for i in orders %}
+                                {% for i in coupon %}
                                 <tr>
-                                    <td  class="fw-bold"><span>{{i.order_number|slice:"14:"}}</span></td>
-                                    <td><b>{{i.user.get_usernme}}</b></td>
-                                    
-                                    <td>{{i.created_at|date:"j M Y"}}</td>
-                                    <td>${{i.order_total}}</td>
+                                    <!-- <td  class="fw-bold"><span>{{i.order_number|slice:"14:"}}</span></td> -->
+                                    <td  class="fw-bold"><span>{{i.coupon_code}}</span></td>
+                                    <td>{{i.total_coupons}}</td>
+                                    <td><b>{{i.discount_percentage}} %</b></td>
+                                    <td>$ {{i.minimum_amount}}</td>
+                                    <td>{{i.max_uses}}</td>
+                                    <td>{{i.expire_date|date:"j M Y"}}</td>
                                     <td>
-                                        <span class="badge badge-pill badge-soft-danger">Chargeback</span>
+                                        {% if i.is_expired %}
+                                            <span class="badge rounded-pill alert-warning">Expired</span>
+                                        {% else %}
+                                            <span class="badge rounded-pill alert-success">Active</span>
+                                        {% endif %}
+                                        
                                     </td>
                                     <td>
-                                        <i class="material-icons md-payment font-xxl text-muted mr-5"></i> Visa
+                                        <a href="{% url 'edit-coupon' %}?id={{i.id}}" class="btn badge alert-primary">Edit</a>
+                                        <a href="{% url 'delete-coupon' %}?id={{i.id}}" class="btn badge alert-danger"><i class="fa-sharp fa-light fa-trash"></i></a>
                                     </td>
-                                    <td>
-                                        {% for choice in i.ORDER_STATUS_CHOICES %}
-                                            {% if i.order_status == choice.0 %}
-                                            <span class="badge rounded-pill {% if choice.0 == 'New' %}alert-primary{% elif choice.0 == 'Pending' %}alert-warning{% elif choice.0 == 'Delivered' %}alert-success{% elif choice.0 == 'Shipped' %}alert-secondary{% elif choice.0 == 'Cancelled' %}alert-danger{% elif choice.0 == 'Returned' %}alert-info{% endif %}">
-                                                {{ choice.1 }}
-                                            </span>
-                                            
-                                            {% endif %}
-                                        {% endfor %}
-                                    </td>
-                                    
-                                    <td>
-                                        <a href="{% url 'order_details' order_id=i.id %}" class="btn btn-xs rounded font-sm">Detail</a>
-                                    </td>
+                                
                                 </tr>
                                 {% endfor %}
                             </tbody>

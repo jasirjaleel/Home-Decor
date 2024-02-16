@@ -20,7 +20,7 @@
     <link href="{% static 'assets2/css/main.css' %}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css">
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/sharp-light.css">
-    
+   
     <style>
         .submenu {
             list-style: none;
@@ -188,6 +188,19 @@
                     </div>
                 </li>
 
+                <li class="menu-item has-submenu  {% if request.path == '/admin/all-coupon/' %}active{% endif %}" >
+                    <a class="menu-link " > <i class="icon material-icons md-people"></i>
+                        <span class="text">Coupon</span>
+                    </a>
+                    <div class="submenu">
+                        <a class="{% if request.path == '/admin/manage-category/' %}active{% endif %}  p-2" href="{% url 'coupon' %}">
+                  
+                            <span class="text">Coupon List</span>
+                        </a>
+                        
+                    </div>
+                </li>
+
                 <!-- <li class="menu-item has-submenu">
                     <a class="menu-link" href="page-transactions-1.html"> <i class="icon material-icons md-monetization_on"></i>
                         <span class="text">Transactions</span>
@@ -284,7 +297,7 @@
                         </div> -->
                     </li>
                     <li class="dropdown nav-item">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="{% static 'assets2/imgs/people/avatar2.jpg' %}" alt="User"></a>
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="{% static 'assets2\imgs\admin.png' %}" alt="User"></a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
                             <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
                             <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
@@ -320,6 +333,9 @@
             </div>
         </footer>
     </main>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Include other scripts that depend on jQuery here -->
+
     <script src="{% static 'assets2/js/vendors/jquery-3.6.0.min.js' %}"></script>
     <script src="{% static 'assets2/js/vendors/jquery.fullscreen.min.js' %}"></script>
     <script src="{% static 'assets2/js/vendors/bootstrap.bundle.min.js' %}"></script>
@@ -327,6 +343,7 @@
     <script src="{% static 'assets2/js/vendors/perfect-scrollbar.js' %}"></script>
     <script src="{% static 'assets2/js/vendors/chart.js' %}"></script>
     <!-- Main Script -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script src="{% static 'assets2/js/main.js' %}" type="text/javascript"></script>
     <script src="{% static 'assets2/js/custom-chart.js' %}" type="text/javascript"></script>
 </body>

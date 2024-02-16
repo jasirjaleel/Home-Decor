@@ -5,7 +5,7 @@ from cart_app.models import CartItem
 from django.contrib.auth.decorators import login_required
 import datetime
 from django.views.decorators.cache import never_cache
-from cart_app.views import _delete_unordered_orders ,grandtotal
+from cart_app.views import _delete_unordered_orders 
 from order.models import Order,OrderProduct,PaymentMethod,ShippingAddress,Payment
 import razorpay
 from django.http import JsonResponse,HttpResponseBadRequest
@@ -22,7 +22,6 @@ def payment(request):
     _delete_unordered_orders(user)    
     address1 = Address.objects.filter(account=user.id)
     payment_methods = PaymentMethod.objects.filter(is_active=True)
-    grandtotal = request.GET.get('grandtotal')
     print('2')
     payment1 = None
     if request.method == "POST":
@@ -50,7 +49,8 @@ def payment(request):
         zip_code         = address.zip_code
         )
         print('4')
-        grandtotal1 = int(grandtotal)
+        
+        grandtotal1 = float(request.session.get('grandtotal'))
         print(grandtotal1)
         
 
@@ -296,6 +296,7 @@ def cancel_order(request):
         if order.order_status == 'Delivered':
             order.order_status = 'Returned'
     order.save()       
+    
     # if order.created_at < datetime.datetime.now() - datetime.timedelta(days=7):
     print(order.order_status)
     print("##############")
@@ -309,4 +310,3 @@ def cancel_order(request):
 
 
 
-##################### DELETE USER ###################

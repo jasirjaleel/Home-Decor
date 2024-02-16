@@ -42,7 +42,6 @@ def _delete_unordered_orders(user):
         print('deleted orders')
 
 
-grandtotal = 0.00
 
 @login_required(login_url='userlogin')
 @never_cache
@@ -66,6 +65,7 @@ def cart(request):
         shipping = 100
         tax = round(total / 100 * 5, 2)
         grandtotal = round(tax + total + shipping, 2)
+        request.session['grandtotal'] = str(grandtotal)
       
         context = {
             'total' : total,

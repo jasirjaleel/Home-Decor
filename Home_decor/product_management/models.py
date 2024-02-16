@@ -3,7 +3,9 @@ from category_management.models import Category
 from django.utils.text import slugify
 from django.urls import reverse
 from django.db.models import UniqueConstraint, Q,F,Avg,Count
-
+from django.core.validators import MinValueValidator, MaxValueValidator
+import datetime
+from django.utils import timezone
 # Create your models here.
 
 # Atribute Table - COLOR , SIZE
@@ -130,8 +132,7 @@ class Product_Variant(models.Model):
         return self.get_product_name()
     
 
-
-   # FOR ADDITIONAL IMAGES
+############# FOR ADDITIONAL IMAGES ############
 class Additional_Product_Image(models.Model):
     product_variant = models.ForeignKey(Product_Variant,on_delete=models.CASCADE,related_name='additional_product_images')
     image           = models.ImageField(upload_to='media/photos/additional_photos')
@@ -139,3 +140,39 @@ class Additional_Product_Image(models.Model):
 
     def __str__(self):
         return self.image.url
+    
+################## COUPON ######################
+class Coupon(models.Model):
+    coupon_code         = models.CharField(max_length=100)
+    is_expired          = models.BooleanField(default=False)
+    discount_percentage = models.IntegerField(default=10, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    minimum_amount      = models.IntegerField(default=400)
+    max_uses            = models.IntegerField(default=10, validators=[MinValueValidator(0)])
+    expire_date         = models.DateField()
+    total_coupons       = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+
+    def is_valid(self):
+        if self.is_expired:
+            return False
+        if self.expire_date < datetime.date.today():
+            return False
+        if self.total_coupons >= self.max_uses:
+            return False
+        return True
+    # if number of the coupon is 0 or the expired date is over set it as expired
+
+    def save(self, *args, **kwargs):
+        # Get the current date
+        current_date = timezone.now().date()
+        
+        # Compare expire_date with current_date
+        if self.total_coupons <= 0 or self.expire_date < current_date:
+            self.is_expired = True
+        
+        # Save the instance
+        super().save(*args, **kwargs)
+
+
+    def __str__(self):
+        return self.coupon_code
+    
