@@ -18294,8 +18294,10 @@ table {
 }
 
 .coupon_code {
-    border: 1px solid #ededed;
-    margin-top: 60px
+    border: 1px solid rgb(222 222 222);
+    border-radius: 4px;
+    margin-top: 0px;
+    width: 350px;
 }
 
 .coupon_code .h3,
@@ -18310,7 +18312,8 @@ table {
 }
 
 .coupon_inner {
-    padding: 10px 20px 25px
+    padding: 10px 10px;
+    
 }
 
 .coupon_inner p {
@@ -18319,14 +18322,15 @@ table {
 }
 
 .coupon_inner input {
-    border: 1px solid #ededed;
+    border: 1px solid rgb(222 222 222);
+    border-radius: 4px;
     height: 42px;
     background: 0 0;
     padding: 0 20px;
-    margin-right: 20px;
-    font-size: 12px;
+    margin-right: 0px;
+    font-size: 15px;
     color: #333;
-    width: 175px
+    width: 165px
 }
 
 .coupon_inner a {
@@ -18335,7 +18339,7 @@ table {
     font-size: 14px;
     font-weight: 500;
     margin-bottom: 20px;
-    border-bottom: 1px solid #ededed;
+    border-bottom: 1px solid rgb(222 222 222);
     padding-bottom: 10px;
     border-radius: 3px
 }

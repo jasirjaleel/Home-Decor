@@ -142,7 +142,10 @@
           <div>Estimated tax (5%):</div>
           <div class="payment-summary-money" id="tax">${{tax}}</div>
         </div>
-
+        <div class="payment-summary-row">
+          <div>Discount:</div>
+          <div class="payment-summary-money" id="discount"></div>
+      </div>
         <div class="payment-summary-row total-row">
           <div>Order total:</div>
           <div class="payment-summary-money" id="grandtotal">${{grandtotal}}</div>
@@ -173,6 +176,7 @@
       document.getElementById('shipping').innerText = `$${data.shipping}`;
       document.getElementById('before_tax').innerText = `$${parseInt(data.shipping) + parseInt(data.total)}`;
       document.getElementById('tax').innerText = `$${data.tax}`;
+      document.getElementById('discount').innerText   = `$${data.discount_amount}`;
       document.getElementById('grandtotal').innerText = `$${data.grandtotal}`;
     } catch (error) {
       console.error('Error fetching order summary:', error);

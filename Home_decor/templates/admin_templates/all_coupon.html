@@ -57,7 +57,7 @@
                                     <td><b>{{i.discount_percentage}} %</b></td>
                                     <td>$ {{i.minimum_amount}}</td>
                                     <td>{{i.max_uses}}</td>
-                                    <td>{{i.expire_date|date:"j M Y"}}</td>
+                                    <td>{{i.expire_date|date:"d M Y"}}</td>
                                     <td>
                                         {% if i.is_expired %}
                                             <span class="badge rounded-pill alert-warning">Expired</span>

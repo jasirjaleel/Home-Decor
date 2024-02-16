@@ -250,6 +250,10 @@ def place_order(request):
                 order_product.ordered = True
                 order_product.save()
         cart_items.delete()
+        del request.session['grandtotal']
+        # del request.session['cart_items_count']
+        del request.session['discount_amount']
+
         
     return render(request,'order_templates/order_success.html')  # Redirect to a page confirming the order placement
 

@@ -4,8 +4,8 @@ from django.utils.text import slugify
 from django.urls import reverse
 from django.db.models import UniqueConstraint, Q,F,Avg,Count
 from django.core.validators import MinValueValidator, MaxValueValidator
-import datetime
 from django.utils import timezone
+from user_app.models import Account
 # Create your models here.
 
 # Atribute Table - COLOR , SIZE
@@ -151,14 +151,7 @@ class Coupon(models.Model):
     expire_date         = models.DateField()
     total_coupons       = models.IntegerField(default=0, validators=[MinValueValidator(0)])
 
-    def is_valid(self):
-        if self.is_expired:
-            return False
-        if self.expire_date < datetime.date.today():
-            return False
-        if self.total_coupons >= self.max_uses:
-            return False
-        return True
+    
     # if number of the coupon is 0 or the expired date is over set it as expired
 
     def save(self, *args, **kwargs):
@@ -168,7 +161,8 @@ class Coupon(models.Model):
         # Compare expire_date with current_date
         if self.total_coupons <= 0 or self.expire_date < current_date:
             self.is_expired = True
-        
+        else:
+            self.is_expired = False
         # Save the instance
         super().save(*args, **kwargs)
 
@@ -176,3 +170,21 @@ class Coupon(models.Model):
     def __str__(self):
         return self.coupon_code
     
+
+class UserCoupon(models.Model):
+    user        = models.ForeignKey(Account, on_delete=models.CASCADE)
+    coupon      = models.ForeignKey(Coupon, on_delete=models.CASCADE)
+    usage_count = models.IntegerField(default=0)
+
+    def apply_coupon(self):
+        if self.coupon.is_expired:
+            print('Coupon is expired')
+            return False  # Coupon i
+        if self.usage_count >= self.coupon.max_uses:
+            print('Maximum uses reached')
+            return False
+        
+        self.usage_count += 1
+        self.save()
+        print('Coupon applied successfully In UserCoupon')
+        return True

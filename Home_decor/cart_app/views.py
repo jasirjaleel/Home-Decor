@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from .models import CartItem
 from django.contrib import messages
 from django.http import JsonResponse
-from product_management.models import Product_Variant
+from product_management.models import Product_Variant,Coupon,UserCoupon
 from .models import Cart,CartItem,Wishlist,WishlistItem
 from order.models import OrderProduct,Order
 from django.views.decorators.cache import never_cache
@@ -10,6 +10,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.core.paginator import EmptyPage,PageNotAnInteger,Paginator
 import json
+from decimal import Decimal
+from django.utils import timezone
 # Create your views here.
 def _cart_id(request):
     # cart = request.session.session_key()
@@ -65,7 +67,6 @@ def cart(request):
         shipping = 100
         tax = round(total / 100 * 5, 2)
         grandtotal = round(tax + total + shipping, 2)
-        request.session['grandtotal'] = str(grandtotal)
       
         context = {
             'total' : total,
@@ -168,7 +169,6 @@ def add_to_cart(request, slug):
 @login_required(login_url='userlogin')
 @never_cache
 def order_summary(request):
-    # Your existing code to calculate order summary
     total = 0
     quantity = 0
     shipping = 100
@@ -178,8 +178,15 @@ def order_summary(request):
         total += round(cart_item.sub_total(), 2)
         quantity += cart_item.quantity
 
-    tax = round(total / 100 * 5, 2)
-    grandtotal = round(tax + total + shipping, 2)
+    tax = round(total / 100 * 5, 0)
+    grandtotal = Decimal(round(tax + total + shipping, 2))
+    discount_amount = request.session.get('discount_amount')
+    if discount_amount:
+        discount_amount = Decimal(discount_amount)
+        grandtotal -= discount_amount
+    
+    grandtotal = round(grandtotal, 2)
+    request.session['grandtotal'] = str(grandtotal)
     # Return JSON response
     return JsonResponse({
         'total': total,
@@ -187,8 +194,73 @@ def order_summary(request):
         'shipping': shipping,
         'tax': tax,
         'grandtotal': grandtotal,
+        'discount_amount': request.session.get('discount_amount',0),
     })
 
+
+def applying_coupon(request):
+    if request.method == 'POST':
+        discount_amount = None 
+        if 'discount_amount' in request.session:
+            discount_amount = request.session['discount_amount'] 
+        if discount_amount is None :
+            data = json.loads(request.body)
+            coupon_code = data.get('coupon')
+            print(coupon_code)
+            grand_total = float(request.session.get('grandtotal'))
+            print(grand_total)
+        
+            try:
+                # Attempt to get the Coupon object based on the provided coupon code
+                coupon = Coupon.objects.get(coupon_code=coupon_code)
+                print(coupon,'1')
+            except Coupon.DoesNotExist:
+                # Handle the case where the coupon does not exist
+                data = {'error': 'Coupon does not exist'}
+                return JsonResponse(data, status=200)
+            
+            try:
+                # Attempt to get the UserCoupon object for the current user and coupon
+                coupon_usage, created = UserCoupon.objects.get_or_create(
+                coupon=coupon,
+                user=request.user,
+                defaults={'usage_count': 0}  # Set default values for newly created instance
+                )   
+                print(coupon_usage, '2')
+            except UserCoupon.DoesNotExist:
+                # Handle the case where the UserCoupon does not exist
+                data = {'error': 'UserCoupon does not exist'}
+                return JsonResponse(data, status=200)
+            discount=coupon.discount_percentage
+            if coupon_usage.apply_coupon() and grand_total >= float(coupon.minimum_amount):
+                discount_amount = grand_total * discount / 100
+                coupon.total_coupons-=1
+                coupon.save()
+                print(discount_amount, 'Success')
+                request.session['discount_amount'] = discount_amount 
+                data={'discount_amount':discount_amount,'discount':discount}
+                print(data,'3')
+                return JsonResponse({'success':'Coupon Applied'})
+                
+            else:
+                if coupon.expire_date < timezone.now().date():
+                    data={'error':'Coupon expired'}
+                    print('Failed')
+                    return JsonResponse(data)
+                elif grand_total < float(coupon.minimum_amount):
+                    data={'error':'Minimum amount required'}
+                    print('Failed')
+                    return JsonResponse(data)
+                elif coupon.total_coupons == 0:
+                    data={'error':'Coupon not available'}
+                    print('Failed')
+                    return JsonResponse(data)
+                data={'error':'Maximum uses of the coupon reached'}
+                print('Failed')
+                return JsonResponse(data)
+        else:
+            return JsonResponse({'error': 'Coupon already applied'})
+        
 
 @login_required(login_url='userlogin')
 def update_cart(request, cart_item_id, new_quantity):

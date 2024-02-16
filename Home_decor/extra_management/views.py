@@ -161,7 +161,7 @@ def create_coupon(request):
         total_coupons         = request.POST.get('total_coupons')
         print(coupon_code, discount_percentage, minimum_amount, max_uses, expire_date, total_coupons)
         print(type(total_coupons),type(discount_percentage))
-        expire_date = datetime.strptime(expire_date, '%Y-%m-%d').date()
+        expire_date = datetime.strptime(expire_date, '%d %b %Y').date()
         print(expire_date)
         coupon = Coupon.objects.create(
             coupon_code         = coupon_code,
@@ -186,7 +186,7 @@ def edit_coupon(request):
         expire_date           = request.POST.get('expire_date')
         total_coupons         = request.POST.get('total_coupons')
         
-        expire_date = datetime.strptime(expire_date, '%Y-%m-%d').date()
+        expire_date = datetime.strptime(expire_date, '%d %b %Y').date()
         old_coupon.coupon_code         = coupon_code
         old_coupon.discount_percentage = int(discount_percentage)
         old_coupon.minimum_amount      = int(minimum_amount)

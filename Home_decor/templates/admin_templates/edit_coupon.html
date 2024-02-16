@@ -49,7 +49,7 @@
                         </div>
                         <div class="mb-4">
                             <label class="form-label">Expire Date</label>
-                            <input type="text" placeholder="Select date" class="form-control" id="expire_date" name="expire_date" value="{{ old_coupon.expire_date }}" required>
+                            <input type="text" placeholder="Select date" class="form-control" id="expire_date" name="expire_date" value="{{ old_coupon.expire_date|date:'d M Y' }}" required>
                         </div>
                         <div>
                             <button class="btn btn-md rounded font-sm hover-up" type="submit">Edit</button>
@@ -68,7 +68,7 @@
 <script>
  $(document).ready(function() {
     $("#expire_date").datepicker({
-        dateFormat: 'yy-mm-dd'// Set the date format as YYYY-MM-DD
+        dateFormat: 'd M yy'// Set the date format as YYYY-MM-DD
     });
 });
    
