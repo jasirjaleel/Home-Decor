@@ -43,12 +43,23 @@ def _delete_unordered_orders(user):
         draft_orders.delete()
         print('deleted orders')
 
+def _delete_unwanted_sessions(request):
+    if 'grandtotal' in request.session:
+        del request.session['grandtotal']
+        print('Deleted grantotal from the session')
+    if 'discount_amount' in request.session:
+        del request.session['discount_amount']
+    print('Deleted unwanted sessions')
+        # del request.session['cart_items_count']
+       
 
+    
 
 @login_required(login_url='userlogin')
 @never_cache
 def cart(request):
     _delete_unordered_orders(request.user)
+    _delete_unwanted_sessions(request)
     total = 0
     quantity = 0
     cart_items = None

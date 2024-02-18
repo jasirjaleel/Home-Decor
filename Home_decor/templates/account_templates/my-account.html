@@ -43,35 +43,38 @@
 
     <div class="AccountOptions d-flex flex-column ">
 
-       
+
         <div class="col-12 col-lg-9 col-sm-2" style="display: flex;gap: 80px;margin-top: 30px;">
             <a href="{% url 'myprofile' %}">
-            <div class="col-2 p-2  "style="width: 328px; height: 156px;   background: rgba(255, 255, 255, 0); box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.12); border-radius: 12px">
-                <div class="d-flex w-25 p-2">
-                    
-                    <i class="fa-light fa-address-card " style="display: flex;font-size: 35px;color: #b19561;"></i>
+                <div class="col-2 p-2  "
+                    style="width: 328px; height: 156px;   background: rgba(255, 255, 255, 0); box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.12); border-radius: 12px">
+                    <div class="d-flex w-25 p-2">
+
+                        <i class="fa-light fa-address-card " style="display: flex;font-size: 35px;color: #b19561;"></i>
+                    </div>
+                    <div class="flex-column" style=" flex-direction: column;height: 50px; ">
+                        <div class="pb-2 pt-2"
+                            style="color: #222222; font-size: 16px; font-weight: 800; line-height: 20px; word-wrap: break-word">
+                            Personal info</div>
+                        <div class="ProvidePersonalDetailsAndHowWeCanReachYou"
+                            style="width: 258.89px; color: #717171; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
+                            Provide personal details and how we can reach you</div>
+                    </div>
                 </div>
-                <div class="flex-column" style=" flex-direction: column;height: 50px; ">
-                    <div class="pb-2 pt-2"
-                        style="color: #222222; font-size: 16px; font-weight: 800; line-height: 20px; word-wrap: break-word">
-                        Personal info</div>
-                    <div class="ProvidePersonalDetailsAndHowWeCanReachYou"
-                        style="width: 258.89px; color: #717171; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
-                        Provide personal details and how we can reach you</div>
-                </div>
-            </div>
             </a>
 
 
             <div class="col-2 p-2"
                 style="width: 328px; height: 156px;   background: rgba(255, 255, 255, 0); box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.12); border-radius: 12px">
                 <div class="d-flex w-25 p-2">
-                    <i class="fa-sharp fa-light fa-shield-halved" style="display: flex;font-size: 35px;color: #b19561;"></i>
+                    <i class="fa-sharp fa-light fa-shield-halved"
+                        style="display: flex;font-size: 35px;color: #b19561;"></i>
                 </div>
                 <div class="flex-column" style=" flex-direction: column;height: 50px; ">
                     <div class="pb-2 pt-2"
                         style="color: #222222; font-size: 16px; font-weight: 800; line-height: 20px; word-wrap: break-word">
-                         <a href="{% url 'forget_password' %}">Login & security</a></div>
+                        <a href="{% url 'forget_password' %}">Login & security</a>
+                    </div>
                     <div class="ProvidePersonalDetailsAndHowWeCanReachYou"
                         style="width: 258.89px; color: #717171; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
                         Update your password and secure your account</div>
@@ -81,89 +84,94 @@
 
             <a href="{% url 'myorder' %}">
                 <div class="col-2 p-2"
-                style="width: 328px; height: 156px;   background: rgba(255, 255, 255, 0); box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.12); border-radius: 12px">
-                <div class="d-flex w-25 p-2">
-                    <i class="fa-sharp fa-light fa-truck-fast" style="display: flex;font-size: 35px;color: #b19561;"></i>
+                    style="width: 328px; height: 156px;   background: rgba(255, 255, 255, 0); box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.12); border-radius: 12px">
+                    <div class="d-flex w-25 p-2">
+                        <i class="fa-sharp fa-light fa-truck-fast"
+                            style="display: flex;font-size: 35px;color: #b19561;"></i>
 
+                    </div>
+                    <div class="flex-column" style=" flex-direction: column;height: 50px; ">
+                        <div class="pb-2 pt-2"
+                            style="color: #222222; font-size: 16px; font-weight: 800; line-height: 20px; word-wrap: break-word">
+                            Orders</div>
+                        <div class="ProvidePersonalDetailsAndHowWeCanReachYou"
+                            style="width: 258.89px; color: #717171; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
+                            Track product details, quantities, cost, and status.</div>
+                    </div>
                 </div>
-                <div class="flex-column" style=" flex-direction: column;height: 50px; ">
-                    <div class="pb-2 pt-2"
-                        style="color: #222222; font-size: 16px; font-weight: 800; line-height: 20px; word-wrap: break-word">
-                        Orders</div>
-                    <div class="ProvidePersonalDetailsAndHowWeCanReachYou"
-                        style="width: 258.89px; color: #717171; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
-                        Track product details, quantities, cost, and status.</div>
-                </div>
-            </div>
             </a>
-            
+
 
 
         </div>
 
 
-       
-            <div style="display: flex;gap: 80px;margin-top: 30px;">
-        <a href="{% url 'myaddress' %}">
-            <div class="col-2 p-2"
-                style="width: 328px; height: 156px;   background: rgba(255, 255, 255, 0); box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.12); border-radius: 12px">
-                <div class="d-flex w-25 p-2">
-                    <i class="fa-sharp fa-light fa-address-book" style="display: flex;font-size: 35px;color: #b19561;"></i>
+
+        <div style="display: flex;gap: 80px;margin-top: 30px;">
+            <a href="{% url 'myaddress' %}">
+                <div class="col-2 p-2"
+                    style="width: 328px; height: 156px;   background: rgba(255, 255, 255, 0); box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.12); border-radius: 12px">
+                    <div class="d-flex w-25 p-2">
+                        <i class="fa-sharp fa-light fa-address-book"
+                            style="display: flex;font-size: 35px;color: #b19561;"></i>
+                    </div>
+                    <div class="flex-column" style=" flex-direction: column;height: 50px; ">
+                        <div class="pb-2 pt-2"
+                            style="color: #222222; font-size: 16px; font-weight: 800; line-height: 20px; word-wrap: break-word">
+                            Addresses</div>
+                        <div class="ProvidePersonalDetailsAndHowWeCanReachYou"
+                            style="width: 258.89px; color: #717171; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
+                            Save, edit, and delete shipping addresses.</div>
+                    </div>
                 </div>
-                <div class="flex-column" style=" flex-direction: column;height: 50px; ">
-                    <div class="pb-2 pt-2"
-                        style="color: #222222; font-size: 16px; font-weight: 800; line-height: 20px; word-wrap: break-word">
-                        Addresses</div>
-                    <div class="ProvidePersonalDetailsAndHowWeCanReachYou"
-                        style="width: 258.89px; color: #717171; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
-                        Save, edit, and delete shipping addresses.</div>
-                </div>
-            </div>
-        </a>
-            <div class="col-2 p-2"
-            style="width: 328px; height: 156px;   background: rgba(255, 255, 255, 0); box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.12); border-radius: 12px">
-            <div class="d-flex w-25 p-2">
-                <i class="fa-light fa-ticket-perforated" style="display: flex;font-size: 35px;color: #b19561;"></i>
-                
-            </div>
-            <div class="flex-column" style=" flex-direction: column;height: 50px; ">
-                <div class="pb-2 pt-2"
-                    style="color: #222222; font-size: 16px; font-weight: 800; line-height: 20px; word-wrap: break-word">
-                    Coupons</div>
-                <div class="ProvidePersonalDetailsAndHowWeCanReachYou"
-                    style="width: 258.89px; color: #717171; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
-                    Unlock exclusive deals! Enjoy extra savings. Happy shopping</div>
-            </div>
-        </div>
-        
+            </a>
 
 
             <div class="col-2 p-2"
                 style="width: 328px; height: 156px;   background: rgba(255, 255, 255, 0); box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.12); border-radius: 12px">
                 <div class="d-flex w-25 p-2">
-                    <i class="fa-light fa-wallet"style="display: flex;font-size: 35px;color: #b19561;"></i>
+                    <i class="fa-light fa-ticket-perforated" style="display: flex;font-size: 35px;color: #b19561;"></i>
                 </div>
                 <div class="flex-column" style=" flex-direction: column;height: 50px; ">
                     <div class="pb-2 pt-2"
                         style="color: #222222; font-size: 16px; font-weight: 800; line-height: 20px; word-wrap: break-word">
-                        My Wallet</div>
+                        Coupons</div>
                     <div class="ProvidePersonalDetailsAndHowWeCanReachYou"
                         style="width: 258.89px; color: #717171; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
-                        Simplify transactions, secure payments, and track spending with your
-                        wallet.</div>
+                        Unlock exclusive deals! Enjoy extra savings. Happy shopping</div>
                 </div>
             </div>
 
 
+            <a href="{% url 'wallet' %}">
+
+                <div class="col-2 p-2"
+                    style="width: 328px; height: 156px;   background: rgba(255, 255, 255, 0); box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.12); border-radius: 12px">
+                    <div class="d-flex w-25 p-2">
+                        <i class="fa-light fa-wallet" style="display: flex;font-size: 35px;color: #b19561;"></i>
+                    </div>
+                    <div class="flex-column" style=" flex-direction: column;height: 50px; ">
+                        <div class="pb-2 pt-2"
+                            style="color: #222222; font-size: 16px; font-weight: 800; line-height: 20px; word-wrap: break-word">
+                            My Wallet</div>
+                        <div class="ProvidePersonalDetailsAndHowWeCanReachYou"
+                            style="width: 258.89px; color: #717171; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
+                            Simplify transactions, secure payments, and track spending with your
+                            wallet.</div>
+                    </div>
+                </div>
+            </a>
+
+
         </div>
-    
-        
+
+
 
 
 
 
         <div style="display: flex;gap: 80px;margin-top: 30px;margin-bottom:30px;">
-            
+
 
             <!-- <div class="col-2 p-2"
             style="width: 328px; height: 156px;   background: rgba(255, 255, 255, 0); box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.12); border-radius: 12px">

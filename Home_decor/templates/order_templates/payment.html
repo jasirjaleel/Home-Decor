@@ -103,7 +103,6 @@
         <div class="btn p-4 ml-2 mb-1"><a href="{% url 'addaddress' %}?next={{ request.path }}"
             style="color: #b19561;"><i class="fa-solid fa-plus" style="color: #b19561; width: 20px;"></i> Add New
             Address</a> </div>
-
       </div>
     </div>
 
@@ -113,14 +112,7 @@
 
 
       <div class="payment-summary">
-        {% comment %}
-        <div class="">
-          <input id='coupon' type="text" class="" placeholder="Coupon Code" name="coupon">
-          <div class="">
-            <button type="submit" class="btn btn-sm btn-golden">Apply Coupon</button>
-          </div>
-        </div>
-        {% endcomment %}
+
         <div class="payment-summary-title">Order Summary</div>
 
         <div class="payment-summary-row">
@@ -280,7 +272,7 @@
           console.log('Received data:', data);
     
           const paymentOrderId = data.context.id;
-          const paymentAmount = data.context.amount
+          const paymentAmount = data.context.amount;
           console.log('Payment information:', paymentOrderId);
       // e.preventDefault();
       var razorpayKeyId = '{{ RAZOR_PAY_KEY_ID }}';
@@ -333,51 +325,7 @@
         .catch(error => {
           console.error('There was a problem with the fetch operation:', error);
         });
-
-
-      // var razorpayKeyId = '{{ RAZOR_PAY_KEY_ID }}';
-      // console.log(razorpayKeyId);
-      // console.log(paymentAmount);
-      // console.log(paymentOrderId);
-      // // var callbackURL = `http://127.0.0.1:8000/paymenthander/`;
-      // var options = {
-      //   "key": razorpayKeyId, // Enter the Key ID generated from the Dashboard
-      //   // "amount": "{{payment.amount}}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-      //   "amount": paymentAmount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-      //   // "currency": "INR",
-      //   "name": "Home Decor",
-      //   "description": "Test Transaction",
-      //   "image": "https://example.com/your_logo",
-      //   "order_id": paymentOrderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-      
-      //   "callback_url": callbackURL,
-      
-      
-      //   "prefill": {
-      //     "name": "{{request.user.get_usernme}}",
-      //     "email": "{{request.user.email}}",
-      //     "contact": "{{request.user.phone_number}}"
-      //   },
-      //   "theme": {
-      //     "color": "#3399cc"
-      //   }
-      // };
-      // var rzp1 = new Razorpay(options);
-      // rzp1.on('payment.failed', function (response) {
-      //   alert(response.error.code);
-      //   // alert(response.error.description);
-      //   // alert(response.error.source);
-      //   // alert(response.error.step);
-      //   // alert(response.error.reason);
-      //   // alert(response.error.metadata.order_id);
-      //   // alert(response.error.metadata.payment_id);
-      // });
-
-      // rzp1.open();
-      // e.preventDefault();
-
     }
-    // };
     else {
       alert('asasdd')
       e.preventDefault();

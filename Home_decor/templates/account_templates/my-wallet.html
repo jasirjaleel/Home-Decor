@@ -1,0 +1,183 @@
+{% extends 'store_templates/base.html' %}
+{% load static %}
+{% block content %}]
+<script src="{% static 'assets/js/csrftkn.js' %}" type="text/javascript"></script>
+<!-- ...:::: Start Breadcrumb Section:::... -->
+<div class="breadcrumb-section breadcrumb-bg-color--golden">
+    <div class="breadcrumb-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="breadcrumb-title">My Account</h3>
+                    <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
+                        <nav aria-label="breadcrumb">
+                            <ul>
+                                <li><a href="{% url 'home' %}">Home</a></li>
+                                <li><a href="{% url 'myaccount' %}">Shop</a></li>
+                                <li class="active" aria-current="page">My Wallet</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- ...:::: End Breadcrumb Section:::... -->
+
+<div class="container col-sm-12 col-md-9 col-lg-9 p-4">
+    <div class="col-l-9 col">
+        <div class="card p-5 mb-4">
+            <div class="card-body d-flex align-items-center">
+                <div class="col-md-8 d-flex justify-content-center ">
+                    <div class="row ">
+                        <h2 class="card-title">$ {{wallet.balance|floatformat:2}} </h2>
+                        <p class="card-text">Your Wallet Balance</p>
+                    </div>
+                </div>
+                <div class="col-md-4 d-flex justify-content-center ">
+                    <button id="addMoneyBtn" class="btn btn-block btn-golden " style="width: 250px;">Add Money to
+                        Wallet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="table_page table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Amount</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>
+                        
+                        {% if transaction.transaction_type == 'CREDIT' %}
+                        <span style="color: green;">{{ transaction.amount }}</span> 
+                        <span style="color: green;">Deposited</span>
+                        {% else %}
+                        <span style="color: red;">{{ transaction.amount }}</span> 
+                        <span style="color: red;">Withdrawal</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ transaction.created_at| date:"g:i ,j M, Y, " }}</td>
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+    /* Custom styles for the SweetAlert */
+    .swal2-popup {
+        width: 300px !important;
+        /* Adjust the width of the SweetAlert card */
+    }
+
+    /* Custom styles for the input field */
+</style>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    document.getElementById('addMoneyBtn').addEventListener('click', () => {
+        Swal.fire({
+            title: "Enter the amount",
+            input: "text",
+            inputAttributes: {
+                autocapitalize: "off",
+
+            },
+            showCancelButton: true,
+            confirmButtonText: "Submit",
+            showLoaderOnConfirm: true,
+            preConfirm: async (amount) => {
+                try {
+                    // Perform fetch request with the entered amount
+                    const response = await fetch('{% url "wallet" %}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrftoken,
+                        },
+                        body: JSON.stringify({
+                            amount: parseFloat(amount) // Convert amount to float
+                        })
+                    });
+                    if (!response.ok) {
+                        return Swal.showValidationMessage(`
+                        ${JSON.stringify(await response.json())}
+                    `);
+                    }
+
+                    const data = await response.json();
+
+                    // Extract payment information from the response
+                    const paymentOrderId = data.payment_order_id;
+                    const paymentAmount = data.amount;
+                    const RAZOR_PAY_KEY_ID = data.RAZOR_PAY_KEY_ID
+
+                    console.log('Payment information:', paymentOrderId, paymentAmount, RAZOR_PAY_KEY_ID);
+
+                    // Use the extracted payment information as needed in your frontend code
+
+                    return {
+                        payment_order_id: paymentOrderId,
+                        amount: paymentAmount,
+                        RAZOR_PAY_KEY_ID: RAZOR_PAY_KEY_ID
+
+                    };
+
+                } catch (error) {
+                    console.log('Request failed:', error);
+                    throw new Error(error);
+                }
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+            const paymentOrderId = result.value.payment_order_id;
+            const paymentAmount = result.value.amount;
+            const razorpayKeyId = result.value.RAZOR_PAY_KEY_ID;
+            const userId = '{{user.id}}'
+            console.log(userId);
+            console.log(paymentOrderId, paymentAmount, razorpayKeyId, 'got it');
+            var options = {
+                "key": razorpayKeyId,
+                "amount": paymentAmount,
+                "currency": "INR",
+                "name": "Home Decor",
+                "description": "Test Transaction",
+                "order_id": paymentOrderId,
+                "callback_url": `http://127.0.0.1:8000/paymenthandler2/?amount=${paymentAmount}&user_id=${userId}`,
+                "prefill": {
+                    "name": "{{ request.user.get_username }}",
+                    "email": "{{ request.user.email }}",
+                    "contact": "{{ request.user.phone_number }}"
+                },
+                "theme": {
+                    "color": "#b19361"
+                }
+            };
+
+            var rzp1 = new Razorpay(options);
+            rzp1.on('payment.failed', function (response) {
+                alert(response.error.code);
+                // alert(response.error.description);
+                // alert(response.error.source);
+                // alert(response.error.step);
+                // alert(response.error.reason);
+                // alert(response.error.metadata.order_id);
+                // alert(response.error.metadata.payment_id);
+            });
+            rzp1.open();
+            e.preventDefault();
+
+
+        });
+    });
+
+</script>
+
+{% endblock content %}

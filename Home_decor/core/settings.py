@@ -158,7 +158,7 @@ EMAIL_USE_TLS       = os.environ["EMAIL_USE_TLS"]
 EMAIL_PORT          = os.environ["EMAIL_PORT"]
 EMAIL_HOST_USER     = os.environ["EMAIL_HOST_USER"]
 EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
-
+SESSION_COOKIE_AGE = 3000
 INTERNAL_IPS = [
     # ...
     "127.0.0.1",

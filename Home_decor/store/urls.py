@@ -1,6 +1,9 @@
 from django.urls import path
 from . import views
 from .views import ShopView, ProductDetailView , ProductUpdateView
+from wallet.views import paymenthandler2 as paymenthandlerView
+
+
 urlpatterns = [
     path('',views.home,name='home'),
 
@@ -10,6 +13,7 @@ urlpatterns = [
     path('product/', ProductUpdateView.as_view(), name='product_update'),
   
 
+    path('paymenthandler2/',paymenthandlerView,name='paymenthandler2')
 
     
 

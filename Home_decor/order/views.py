@@ -127,47 +127,6 @@ def payment(request):
 
 @login_required(login_url='userlogin')
 def order_review(request):
-    # if request.method == 'POST':
-    #     # Retrieve data from the POST request
-    #     payload = request.body
-    #     signature = request.headers.get('X-Razorpay-Signature')
-
-    #     # Verify the signature using the Razorpay client
-    #     client = razorpay.Client(auth=(settings.RAZOR_PAY_KEY_ID, settings.KEY_SECRET))
-    #     try:
-    #         client.utility.verify_webhook_signature(payload, signature)
-    #         # Signature verification successful
-    #         # Extract payment details from the payload
-    #         data = request.POST
-    #         razorpay_payment_id = data.get('razorpay_payment_id')
-    #         razorpay_order_id = data.get('razorpay_order_id')
-    #         # Handle the payment success
-    #         # ...
-    #         return JsonResponse({'status': 'success'})
-    #     except razorpay.errors.SignatureVerificationError:
-    #         # Signature verification failed
-    #         return JsonResponse({'status': 'error', 'message': 'Signature verification failed'}, status=400)
-    # else:
-    #     return JsonResponse({'status': 'error', 'message': 'Only POST requests are allowed'}, status=405)
-
-    #     # payment.payment_status = 'SUCCESS'
-    #     # payment.payment_id = razorpay_payment_id
-    #     # payment.payment_signature = razorpay_signature
-    #     # payment.save()
-    #     # print(payment)
-    #     # print(payment.payment_order_id)
-    #     # print(payment.payment_id)
-    #     # print(payment.payment_signature)
-    #     # print(payment.payment_status)
-    #     # print('payment done')
-
-    #     # client = razorpay.Client(auth=(settings.RAZOR_PAY_KEY_ID, settings.KEY_SECRET))
-    #     # client.utility.verify_payment_signature({
-    #     # 'razorpay_order_id': razorpay_order_id,
-    #     # 'razorpay_payment_id': razorpay_payment_id,
-    #     # 'razorpay_signature': razorpay_signature
-    #     # })
-
     orders_items = OrderProduct.objects.filter(user=request.user,ordered= False,)
     print(orders_items)
     context= {
@@ -250,9 +209,11 @@ def place_order(request):
                 order_product.ordered = True
                 order_product.save()
         cart_items.delete()
-        del request.session['grandtotal']
+        if 'grandtotal' in request.session:
+            del request.session['grandtotal']
+        if 'discount_amount' in request.session:
+            del request.session['discount_amount']
         # del request.session['cart_items_count']
-        del request.session['discount_amount']
 
         
     return render(request,'order_templates/order_success.html')  # Redirect to a page confirming the order placement

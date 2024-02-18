@@ -1,0 +1,108 @@
+{% extends 'store_templates/base.html' %} {% load static %} {% block content %}
+
+<style>
+    ._failed {
+        border-bottom: solid 4px red !important;
+    }
+
+    ._failed i {
+        color: red !important;
+    }
+    
+._success {
+    box-shadow: 0 15px 25px #00000019;
+    padding: 45px;
+    width: 100%;
+    text-align: center;
+    margin: 40px auto;
+    border-bottom: solid 4px #28a745;
+}
+
+._success i {
+    font-size: 55px;
+    color: #28a745;
+}
+
+._success h2 {
+    margin-bottom: 12px;
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-top: 10px;
+}
+
+._success p {
+    margin-bottom: 0px;
+    font-size: 18px;
+    color: #495057;
+    font-weight: 500;
+}
+</style>
+
+
+<!-- ...:::: Start Breadcrumb Section:::... -->
+<div class="breadcrumb-section breadcrumb-bg-color--golden">
+    <div class="breadcrumb-wrapper">
+        <div class="container">
+            <div class="row ">
+                <div class="col-12">
+                    <h3 class="breadcrumb-title">Retry Payment</h3>
+                    <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
+                        <nav aria-label="breadcrumb">
+                            <ul>
+                                <li><a href="{% url 'home' %}">Home</a></li>
+                                <li><a href="{% url 'cart' %}">cart</a></li>
+                                <li class="active" aria-current="page">Payment</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ...:::: End Breadcrumb Section:::... -->
+
+<!-- <div class="container">
+    <div class="ui middle aligned center aligned grid">
+      <div class="ui eight wide column">
+     
+        <form class="ui large form">
+                  
+            <div class="ui icon negative message">
+              <i class="warning icon"></i>
+              <div class="content">
+                <div class="header">
+                  Oops! Something went wrong.
+                </div>
+                <p>While trying to reserve money from your account</p>
+              </div>
+              
+           </div>
+        
+            <span class="ui large teal submit fluid button">Try again</span>
+        
+        </form>
+      </div>
+    </div>
+  </div> -->
+
+<div class="container">
+   
+
+
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="message-box _success _failed" style="border:1px solid #b19361;">
+                <i class="fa fa-times-circle" aria-hidden="true"></i>
+                <h2> Your payment failed </h2>
+                <a href="{% url 'wallet' %}" class="btn btn-block btn-golden" >Try Again</a>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}

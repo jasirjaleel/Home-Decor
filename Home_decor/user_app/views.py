@@ -51,12 +51,8 @@ def usersignup(request):
 
         request.session['storedotp'] = randomotp
         request.session['storedemail']=email
-        # request.session.modified = True 
-        # request.session.set_expiry(300)
-
-        # request.session['storedotp'] = {'value': randomotp,}
-        # request.session['storedemail'] = {'value': email, }
-        # request.session.set_expiry(None)
+        request.session['storedotp'].set_expiry(300)
+        request.session['storedemail'].set_expiry(300)
         request.session.modified = True
 
         subject = "Verify Your One-Time Password (OTP) - Home Decor Ecommerce Store"
@@ -177,7 +173,8 @@ class ForgetPasswordView(View):
         random_otp = str(random.randint(100000, 999999))
         self.request.session['storedotp'] = random_otp
         self.request.session['storedemail'] = email
-        # self.request.session.set_expiry(None)
+        self.request.session['storedotp'].set_expiry(300)
+        self.request.session['storedemail'].set_expiry(300)
         self.request.session.modified = True 
 
         subject = "Verify Your One-Time Password (OTP) - Home Decor Ecommerce Store"

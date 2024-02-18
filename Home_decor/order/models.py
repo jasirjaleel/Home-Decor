@@ -108,15 +108,15 @@ class Order(models.Model):
 
 class OrderProduct(models.Model):
 
-    order           = models.ForeignKey(Order,on_delete=models.CASCADE)
-    user            = models.ForeignKey(Account,on_delete=models.SET_NULL,null=True)
-    product_variant = models.CharField(max_length=255)
-    quantity        = models.IntegerField()
-    product_price   = models.DecimalField(max_digits=12, decimal_places=2)
-    images          = models.ImageField(upload_to='media/order/images')
-    ordered         = models.BooleanField(default=False)
-    created_at      = models.DateTimeField(auto_now_add=True)
-    updated_at      = models.DateTimeField(auto_now=True)
+    order                       = models.ForeignKey(Order,on_delete=models.CASCADE)
+    user                        = models.ForeignKey(Account,on_delete=models.SET_NULL,null=True)
+    product_variant             = models.CharField(max_length=255)
+    quantity                    = models.IntegerField()
+    product_price               = models.DecimalField(max_digits=12, decimal_places=2)
+    images                      = models.ImageField(upload_to='media/order/images')
+    ordered                     = models.BooleanField(default=False)
+    created_at                  = models.DateTimeField(auto_now_add=True)
+    updated_at                  = models.DateTimeField(auto_now=True)
    
 
     def total_price(self):
