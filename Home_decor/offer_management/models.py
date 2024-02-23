@@ -12,7 +12,7 @@ class CategoryOffer(models.Model):
     category             = models.ForeignKey(Category, on_delete=models.CASCADE)  # ForeignKey relationship with Category
     discount_percentage  = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
     category_offer_slug  = models.SlugField(max_length=200, unique=True)
-    category_offer_image = models.ImageField(upload_to='media/category_offer/images/',blank=True)
+    category_offer_image = models.ImageField(upload_to='media/category_offer/',blank=True)
     is_active            = models.BooleanField(default=True)
     
     def save(self, *args, **kwargs):
@@ -39,7 +39,7 @@ class ProductOffer(models.Model):
     product             = models.ForeignKey(Product, on_delete=models.CASCADE)  # ForeignKey relationship with Product
     discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
     product_offer_slug  = models.SlugField(max_length=200, unique=True)
-    product_offer_image = models.ImageField(upload_to='media/product_offer/images/',blank=True)
+    product_offer_image = models.ImageField(upload_to='media/product_offer/',blank=True)
     is_active           = models.BooleanField(default=True)
     
     def save(self, *args, **kwargs):
