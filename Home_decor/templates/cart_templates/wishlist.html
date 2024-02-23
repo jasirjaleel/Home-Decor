@@ -88,7 +88,7 @@ input.qtyminus { width:15px; height:15px;}
                                     <tr>
                                         <td class="product_remove">
                                             <!-- <a href="#"><i class="fa fa-trash-o"></i></a> -->
-                                            <a href="#" ><i class="fa fa-trash-o"></i></a>
+                                            <a href="{% url 'delete-wishlist' %}?wishlistitemId={{i.id}}" ><i class="fa fa-trash-o"></i></a>
                                         </td>
                                         
                                         <td class="d-flex">

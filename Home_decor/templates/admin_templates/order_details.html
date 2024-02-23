@@ -40,7 +40,8 @@
                                     <h5 class="mb-1">
                                         {{order.user.get_usernme}} <br> <template class="__cf_email__" data-cfemail="e2838e879aa2879a838f928e87cc818d8f">[email&#160;protected]</template> <br> +91 {{order.shipping_address.phone_number}}
                                     </h5>
-                                    <a href="#">View profile</a>
+                                    <a href="{% url 'user_details' %}?user_id={{ order.user.id }}">View profile</a>
+
                                 </div>
                             </article>
                         </div> <!-- col// -->
@@ -54,7 +55,7 @@
                                     <p class="mb-1">
                                      Pay method:  {{order.payment.payment_method}} <br> Status: {{order.order_status}}
                                     </p>
-                                    <a href="#">Download info</a>
+                                    <!-- <a href="#">Download info</a> -->
                                 </div>
                             </article>
                         </div> <!-- col// -->
@@ -89,40 +90,52 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% for product in order_products %}
+                                        {% for i in order_products %}
                                         <tr>
                                             <td>
                                                 <a class="itemside" href="#">
                                                     <div class="left">
-                                                        <img src="{{product.images.url}}" width="40" height="40" class="img-xs" alt="Item">
+                                                        <img src="{{i.images.url}}" width="40" height="40" class="img-xs" alt="Item">
                                                     </div>
-                                                    <div class="info">{{product.product_variant}}</div>
+                                                    <div class="info">{{i.product_variant}}</div>
                                                 </a>
                                             </td>
-                                            <td> ${{product.product_price}}</td>
-                                            <td>{{product.quantity}}</td>
-                                            <td class="text-end"> ${{product.total_price}} </td>
+                                            <td> ${{i.product_price}}</td>
+                                            <td>{{i.quantity}}</td>
+                                            <td class="text-end"> ${{i.total_price}} </td>
                                         </tr>
                                         {% endfor %}
                                         <tr>
                                             <td colspan="4">
                                                 <article class="float-end">
                                                     <dl class="dlist">
-                                                        <dt>Subtotal:</dt>
-                                                        <dd>$973.35</dd>
+                                                        <dt>Tax:</dt>
+                                                        <dd>₹{{order.order_tax|floatformat:2}}</dd>
                                                     </dl>
                                                     <dl class="dlist">
                                                         <dt>Shipping cost:</dt>
-                                                        <dd>$100.00</dd>
+                                                        <dd>₹{{order.shipping_charge|floatformat:2}}</dd>
+                                                    </dl>
+                                                    <dl class="dlist">
+                                                        <dt>Offer:</dt>
+                                                        <dd>- ₹{{order.offer|floatformat:2}}</dd>
+                                                    </dl>
+                                                    <dl class="dlist">
+                                                        <dt>Discounted Price:</dt>
+                                                        <dd>- ₹{{order.additional_discount|floatformat:2}}</dd>
                                                     </dl>
                                                     <dl class="dlist">
                                                         <dt>Grand total:</dt>
-                                                        <dd> <b class="h5">${{order.order_total}}</b> </dd>
+                                                        <dd> <b class="h5">₹{{order.order_total}}</b> </dd>
                                                     </dl>
                                                     <dl class="dlist">
                                                         <dt class="text-muted">Status:</dt>
                                                         <dd>
+                                                            {% if order.payment.payment_status == 'SUCCESS' %}
                                                             <span class="badge rounded-pill alert-success text-success">Payment done</span>
+                                                            {% else %}
+                                                            <span class="badge rounded-pill alert-warning text-warning">Pending</span>
+                                                            {% endif %}
                                                         </dd>
                                                     </dl>
                                                 </article>

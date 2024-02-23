@@ -5,14 +5,16 @@ from cart_app.models import CartItem
 from django.contrib.auth.decorators import login_required
 import datetime
 from django.views.decorators.cache import never_cache
-from cart_app.views import _delete_unordered_orders 
+from cart_app.views import _delete_unordered_orders ,_grandtotal_calculation
 from order.models import Order,OrderProduct,PaymentMethod,ShippingAddress,Payment
 import razorpay
 from django.http import JsonResponse,HttpResponseBadRequest
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 import json
-from django.core.serializers import serialize
+from wallet.models import Wallet,Transaction
+from decimal import Decimal
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 @login_required(login_url='userlogin')
@@ -22,22 +24,19 @@ def payment(request):
     _delete_unordered_orders(user)    
     address1 = Address.objects.filter(account=user.id)
     payment_methods = PaymentMethod.objects.filter(is_active=True)
+    wallet = Wallet.objects.get(user=user)
     print('2')
     payment1 = None
+
+    
     if request.method == "POST":
         print('3')
         payload = json.loads(request.body)
-            
-            # Access the data from the payload
         selected_payment_method = payload.get('selected_payment_method')
-        print(selected_payment_method)
-        # selected_payment_method = int(request.GET.get('payment_method'))  
-        # selected_payment_method = request.POST.get('payment_method')
-
+        # if 'wallet_balance' in payload:
+        # wallet_balance = payload.get('wallet_balance')
         payment_methods_instance = PaymentMethod.objects.get(id=selected_payment_method)
-        print(payment_methods_instance)
         address = Address.objects.get(is_default=True,account=user)
-        print(address)
         shipping_address = ShippingAddress.objects.create(
         first_name       = address.first_name,
         last_name        = address.last_name,
@@ -49,17 +48,30 @@ def payment(request):
         zip_code         = address.zip_code
         )
         print('4')
-        
-        grandtotal1 = float(request.session.get('grandtotal'))
-        print(grandtotal1)
-        
+
+        grandtotal,tax,discount_amount,quantity,shipping,total,offer = _grandtotal_calculation(request)
+        print(grandtotal,tax,discount_amount,quantity,shipping,total,offer)
+        # if wallet_balance is not None:
+        #     if wallet.balance <= grandtotal1  :  
+        #         grandtotal1 = grandtotal1- wallet.balance   
+        #         wallet_balance = 0
+        #     else:
+        #         wallet_balance = wallet.balance - grandtotal1
+        #         grandtotal1 = 0
+        #     wallet.balance = wallet_balance
+        #     wallet.save()
+            # Transaction.objects.create(amount=wallet_balance, transaction_type='DEBIT', wallet=wallet)
 
         draft_order = Order.objects.create(
             user                = user,
             # payment             = payment,
+            order_tax           =   tax,
+            shipping_charge     = shipping,
+            additional_discount = discount_amount,
             shipping_address    = shipping_address,
-            order_total         = grandtotal1,
-            order_status        ='New',
+            order_total         = grandtotal,
+            offer               = offer,
+            order_status        = 'New',
             is_ordered          = False,
         )
         print('5')
@@ -69,7 +81,7 @@ def payment(request):
             client = razorpay.Client(auth=(settings.RAZOR_PAY_KEY_ID, settings.KEY_SECRET))
             print(settings.RAZOR_PAY_KEY_ID,settings.KEY_SECRET)
             data = {
-                'amount':(int(grandtotal1)*100),
+                'amount':(int(grandtotal)*100),
                 'currency':'INR',
             }
             payment1 = client.order.create(data=data)
@@ -89,12 +101,6 @@ def payment(request):
             payment_status      ='PENDING',
             payment_order_id    = draft_order.order_number
             )    
-            # payment = Payment.objects.create(
-            # payment_method      = payment_methods_instance,
-            # amount_paid         = 0,        
-            # payment_status      ='PENDING',
-            # payment_order_id    = draft_order.order_number
-            # )    
         print("**********************")
         print(payment)
         print("**********************")
@@ -122,6 +128,7 @@ def payment(request):
         'address': address1,
         'payment_methods': payment_methods,
         'RAZOR_PAY_KEY_ID': settings.RAZOR_PAY_KEY_ID,
+        'wallet': wallet,
     }
     return render(request,'order_templates/payment.html',context)
 
@@ -180,10 +187,7 @@ def paymenthandler(request):
             print('Exception:', str(e))
             return HttpResponseBadRequest()
     else:
-        # Redirect to login page if request method is not POST
         return redirect('payment')
-
-
 
 @login_required(login_url='userlogin')
 @never_cache
@@ -196,7 +200,6 @@ def place_order(request):
             product = cart_item.product
             product.stock -= cart_item.quantity
             product.save()
-
         # Mark the order as processed
         current_date = datetime.datetime.now().strftime("%Y%m%d")
         draft_order = Order.objects.filter(user=user, is_ordered=False, order_number__startswith=f"ORD{current_date}")
@@ -209,46 +212,46 @@ def place_order(request):
                 order_product.ordered = True
                 order_product.save()
         cart_items.delete()
+        # wallet = Wallet.objects.get(user=user)
+        # wallet_balance = float(request.session.get('wallet_balance'))
+        # wallet.balance = wallet_balance
+        # payed_amount = float(request.session.get('grandtotal'))
+        # wallet.save()
+        # Transaction.objects.create(amount=payed_amount, transaction_type='DEBIT', wallet=wallet)
+        print(request.session['grandtotal'],'hihi')
         if 'grandtotal' in request.session:
             del request.session['grandtotal']
         if 'discount_amount' in request.session:
             del request.session['discount_amount']
-        # del request.session['cart_items_count']
-
-        
+        if 'grandtotal_wallet' in request.session:
+            del request.session['grandtotal_wallet']
+        if 'wallet_balance' in request.session:
+            del request.session['wallet_balance']
     return render(request,'order_templates/order_success.html')  # Redirect to a page confirming the order placement
-
-
 
 ###################### ORDER MANAGEMENT #######################
 def all_order(request):
-    orders = Order.objects.all().order_by('-created_at')
+    orders = Order.objects.all().order_by('-created_at').select_related('payment__payment_method')
+    paginator = Paginator(orders,5)
+    page = request.GET.get('page')
+    paged_orders = paginator.get_page(page)
     context = {
-        'orders': orders,
+        # 'orders': orders,
+        'orders':paged_orders
     }
     return render(request, 'admin_templates/all_orders.html', context)
 
 
 def order_details(request, order_id):
-    order = Order.objects.get(id=order_id)
+    order = Order.objects.select_related('payment').get(id=order_id)
     order_products = OrderProduct.objects.filter(order=order)
-    payment = Payment.objects.all()
-    for i in payment:
-        print(i.payment_order_id)
-        print(i.payment_id,i.payment_method)
-   
     order_status = Order.ORDER_STATUS_CHOICES
-
-
-
     context = {
         'order': order,
         'order_products': order_products,
         'order_status': order_status,
     }
     return render(request, 'admin_templates/order_details.html', context)
-    
-
 
 #################### CANCEL ORDER ########################
 def cancel_order(request):
@@ -256,22 +259,13 @@ def cancel_order(request):
     order = Order.objects.get(id=order_id,user=request.user)
     if order.order_status != 'Cancelled' and order.order_status != 'Delivered':
         order.order_status = 'Cancelled'
-        
     else:
         if order.order_status == 'Delivered':
             order.order_status = 'Returned'
     order.save()       
-    
-    # if order.created_at < datetime.datetime.now() - datetime.timedelta(days=7):
-    print(order.order_status)
-    print("##############")
+    amount = order.order_total
+    wallet = Wallet.objects.get(user=request.user)
+    wallet.balance += amount
+    Transaction.objects.create(wallet=wallet, amount=amount, transaction_type='CREDIT')
+    wallet.save()
     return redirect('myorder')    
-
-################### RETURN ORDER #################
-# def return_order(request):
-#     order_id = request.GET.get('order_id')
-#     order = Order.objects.get(id=order_id,user=request.user)
-#     if order.created_at
-
-
-

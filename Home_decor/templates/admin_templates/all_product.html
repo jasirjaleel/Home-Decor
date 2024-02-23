@@ -49,40 +49,37 @@
 
                     <article class="itemlist">
                         <div class="row align-items-center">
-                            <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
+                            <div class="col col-check flex-grow-0">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-1 col-4 flex-grow-1 col-name">
                                 <a class="itemside" href="#">
                                     <div class="left">
-                                        
                                         <img src="{{ product.products.thumbnail_image.url.first }}" class="img-sm img-thumbnail" alt="Item">
-                                        {% comment %}
-                                        <img src="{{ product.products.thumbnail_image }}" class="img-sm img-thumbnail" alt="Item">
-                                        {% endcomment %}
                                     </div>
                                     <div class="info">
-                                   <a href="{% url 'all-variant-product' product_id=product.id %}"><h6 class="">{{product.product_name}}</h6></a>  
+                                        <a href="{% url 'all-variant-product' product_id=product.id %}"><h6 class="">{{product.product_name}}</h6></a>  
                                         <span>{{product.category}}</span>
                                     </div>
                                 </a>
                             </div>
-                            <div class="col-lg-2 col-sm-2 col-4 col-price"> <span>{{product.brand.brand_name}}</span> </div>
+                            <div class="col-lg-1 col-sm-2 col-4 col-price"> <span>{{product.brand.brand_name}}</span> </div>
                             {% if product.is_available   == True %}
-                            <div class="col-lg-2 col-sm-2 col-4 col-status">
+                            <div class="col-lg-1 col-sm-2 col-4 col-status">
                                 <span class="badge rounded-pill alert-success">Active</span>
                             </div>
                             {% else %}
-                            <div class="col-lg-2 col-sm-2 col-4 col-status">
+                            <div class="col-lg-1 col-sm-2 col-4 col-status">
                                 <span class="badge rounded-pill alert-danger">Blocked</span>
                             </div>
                             {% endif %}
-                            <div class="col-lg-1 col-sm-2 col-4 col-date">
+                            <div class="col-lg-2 col-sm-2 col-4 col-date">
                                 <span>{{product.created_date|date:"j M Y" }}</span>
                             </div>
-                            <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
-                                {% comment %}
-                                <a href="{% url 'editproduct' product_id=product.id %}" class="btn btn-sm font-sm rounded btn-brand">
-                                    <i class="material-icons md-edit"></i>
-                                </a>
-                                {% endcomment %}
+                            <div class="col-lg-1 col-sm-2 col-4 col-action text-end">
+                               
                                 {% if product.is_available   == True %}
                                 <a   href="{% url 'unlist-product' product_id=product.id %}"  class="btn btn-sm font-sm alert-danger rounded block-user-btn">
                                     Unlist
@@ -98,24 +95,36 @@
                                 <a href="{% url 'edit_product' %}?product_id={{product.id}}" class="btn btn-sm font-sm rounded btn-brand">
                                     <i class="material-icons md-edit"></i> Edit
                                 </a>
-                                <!-- <a href="#" class="btn btn-sm font-sm btn-light rounded">
-                                    <i class="material-icons md-delete_forever"></i> Delete
-                                </a> -->
+                               
                             </div>
-                        </div> <!-- row .// -->
-                    </article> <!-- itemlist  .// -->
+                        </div>
+                    </article>
+
+
+
+
+
+
+                            
                     {% endfor %}
                 </div> <!-- card-body end// -->
             </div> <!-- card end// -->
             <div class="pagination-area mt-30 mb-50">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-start">
-                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                        <li class="page-item"><a class="page-link" href="#">02</a></li>
-                        <li class="page-item"><a class="page-link" href="#">03</a></li>
-                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#">16</a></li>
-                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                        {% if products.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{ products.previous_page_number }}"><i class="material-icons md-chevron_left"></i></a></li>
+                        {% endif %}
+                        {% for i in products.paginator.page_range %}
+                                {% if products.number == i %}
+                                    <li class="page-item active"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        {% if products.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ products.next_page_number }}"><i class="material-icons md-chevron_right"></i></a></li>
+                        {% endif %}
                     </ul>
                 </nav>
             </div>

@@ -200,6 +200,21 @@
                         
                     </div>
                 </li>
+                <li class="menu-item has-submenu {% if request.path == '/admin/all-offer-product/' or request.path == '/admin/all-offer-category/'  %}active{% endif %}">
+                    <a class="menu-link  "><i class="fa-sharp fa-light fa-tag" ></i>
+                        <span class="text">Offers</span>
+                    </a>
+                    <div class="submenu">  
+                        <a class="{% if request.path == '/admin/all-offer-product/' %}active{% endif %}" href="{% url 'all_products_offer' %}">
+                            <i class="icon material-icons md-menu_open"></i>
+                            <span class="text">Product Offers List</span>
+                        </a>
+                     
+                        <a class="{% if request.path == '/admin/all-offer-category/' %}active{% endif %}" href="{% url 'all_category_offer' %}"> <i class="icon material-icons md-add_box"></i>
+                            <span class="text">Category Offers List</span>
+                        </a>
+                        </div>
+                </li>
 
                 <!-- <li class="menu-item has-submenu">
                     <a class="menu-link" href="page-transactions-1.html"> <i class="icon material-icons md-monetization_on"></i>

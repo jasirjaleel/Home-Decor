@@ -1,6 +1,24 @@
 {% extends 'store_templates/base.html' %} {% load static %} {% block content %}
 <link rel="stylesheet" href="{% static 'assets/css/payment.css' %}">
+<style>
+  .coupon_code2 h3 {
+    color: #fff;
+    line-height: 36px;
+    padding: 5px 15px;
+    background: #333;
+    text-transform: uppercase;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 1px;
+}
+.coupon_code2 {
+    border: 1px solid rgb(222 222 222);
+    border-radius: 4px;
+    margin-bottom: 20px;
+    width: 650px;
+}
 
+</style>
 
 <!-- ...:::: Start Breadcrumb Section:::... -->
 <div class="breadcrumb-section breadcrumb-bg-color--golden">
@@ -25,154 +43,180 @@
 </div>
 <!-- ...:::: End Breadcrumb Section:::... -->
 
-<div class="container">
-  <div class="row">
-
-    <div class="col-lg-6 col-md-6">
-      <div class="coupon_code ">
-        <!-- <form method="POST"> -->
-
-        <h3>Payment Method</h3>
-        <ul class="d-flex flex-column justify-content-center p-2">
-          <!-- <li class="d-flex flex-row p-2">
-            <label for="payment-card" class="d-flex flex-row">
-              <input type="radio" id="payment-card" style="width: 20px;" name="payment-method" value="card" />
-              <h5 class="ml-2 w-100">Credit/Debit Card</h5>
-            </label>
-          </li>
-          <li class="d-flex flex-row p-2">
-            <label for="payment-card" class="d-flex flex-row">
-              <input type="radio" id="payment-card" style="width: 20px;" name="payment-method" value="card" />
-              <h5 class="ml-2 w-100">UPI Payment</h5>
-            </label>
-          </li>
-          <li class="d-flex flex-row p-2">
-            <label for="payment-card" class="d-flex flex-row">
-              <input type="radio" id="payment-card" style="width: 20px;" name="payment-method" value="card" />
-              <h5 class="ml-2 w-100">Cash on Delivery</h5>
-            </label>
-          </li> -->
-          <form>
-            {% csrf_token %}
-            {% for method in payment_methods %}
-            <li class="d-flex flex-row p-2">
-              <label for="payment-{{ method.id }}" class="d-flex flex-row">
-                <input type="radio" id="payment-{{ method.id }}" style="width: 20px;" name="payment_method"
-                  value="{{ method.id }}" />
-                <h5 class="ml-2 w-100">{{ method.method_name }}</h5>
-              </label>
-            </li>
-            {% endfor %}
-
-        </ul>
-
-        <!-- </form> -->
-      </div>
-
-      <div class="coupon_code">
-        <h3>Your Address</h3>
-        <ul class="d-flex flex-column justify-content-center">
-          {% for i in address %}
-          <li class="d-flex flex-row p-2" style="width: 200px;">
-            <label for="payment-card" class="d-flex ">
-              <div class="flex-column">
-                <div class="d-flex flex-row px-3 align-content-center " style="width: 400px;">
-                  <input type="radio" class="address-radio" onclick="default_address('{{ i.id }}')"
-                    id="address-{{ i.id }}" style="width: 25px; height: 16px;position: relative;bottom: -15px"
-                    name="address" value="{{ i.id }}" {% if i.is_default %}checked{% endif %} />
-                  <div class="col pl-2">
-
-                    <h5>{{i.first_name}} {{i.last_name}}</h5>
-                    <div class="col">
-                      <span>{{i.street_address}}</span>,
-                      <span>{{i.town_city}}</span>,
-                      <span>{{i.state}}</span>,
-                      <span>{{i.country_region}}</span>,
-                      <span>{{i.zip_code}}</span>
+<div class="container container-fluid ">
+  <div class="row px-xl-5">
+      <div class="col-8  mb-5">   
+        <div class="">
+          <div class="coupon_code2 ">
+            <h3>Payment Methods</h3>
+            <ul class="d-flex flex-column justify-content-center p-2">
+              <form>
+                {% csrf_token %}
+                <li class="d-flex flex-row p-2">
+                  <label for="" class="d-flex flex-row">
+                      <input type="checkbox" id="walletCheckbox" style="width: 20px;" name=""
+                          value="" />
+                      <h5 class="ml-2 w-100">Use your <strong>₹ <span id="walletBalance">{{ wallet.balance }}</span></strong><strong style="font-size: 0.9em;"> Wallet Balance</strong></h5>
+                  </label>
+                </li>
+                <hr> 
+                {% for method in payment_methods %}
+                <li class="d-flex flex-row p-2">
+                  <label for="payment-{{ method.id }}" class="d-flex flex-row">
+                    <input type="radio" id="payment-{{ method.id }}" style="width: 20px;" name="payment_method"
+                      value="{{ method.id }}" />
+                    <h5 class="ml-2 w-100">{{ method.method_name }}</h5>
+                  </label>
+                </li>
+                {% endfor %}
+            </ul>
+          </div>
+          <div class="coupon_code2">
+            <h3>Your Address</h3>
+            <ul class="d-flex flex-column justify-content-center">
+              {% for i in address %}
+              <li class="d-flex flex-row p-2" style="width: 200px;">
+                <label for="payment-card" class="d-flex ">
+                  <div class="flex-column">
+                    <div class="d-flex flex-row px-3 align-content-center " style="width: 400px;">
+                      <input type="radio" class="address-radio" onclick="default_address('{{ i.id }}')"
+                        id="address-{{ i.id }}" style="width: 25px; height: 16px;position: relative;bottom: -15px"
+                        name="address" value="{{ i.id }}" {% if i.is_default %}checked{% endif %} />
+                      <div class="col pl-2">
+    
+                        <h5>{{i.first_name}} {{i.last_name}}</h5>
+                        <div class="col">
+                          <span>{{i.street_address}}</span>,
+                          <span>{{i.town_city}}</span>,
+                          <span>{{i.state}}</span>,
+                          <span>{{i.country_region}}</span>,
+                          <span>{{i.zip_code}}</span>
+                        </div>
+                        <span>{{i.phone_number}}</span>
+                      </div>
                     </div>
-                    <span>{{i.phone_number}}</span>
                   </div>
+                </label>
+              </li>
+              {% endfor %}
+            </ul>
+    
+            <hr>
+            <div class="btn p-4 ml-2 mb-1"><a href="{% url 'addaddress' %}?next={{ request.path }}"
+                style="color: #b19561;"><i class="fa-solid fa-plus" style="color: #b19561; width: 20px;"></i> Add New
+                Address</a> </div>
+          </div>
+        </div>
+
+
+
+      </div>
+      <div class="col mb-5">
+        <div class="row mb-2">
+            <div class="coupon_area">                        
+                <div class="coupon_code">
+                    <div class="coupon_inner">
+                        <div class="row  " style="justify-content: center;">
+                          {% if 'discount_amount' in request.session %}
+                          <span class="success-message"
+                                style="top: 100%;left: 2px;font-size:16px;font-weight: 400;color: rgb(10, 160, 42);width: 160px;transition: opacity 0.5s;display: flex; align-items: center;">Coupon applied !</span>
+                                <button type="button" id="deleteCouponButton" class="btn btn-block btn-golden ml-1 " style="width: 120px;"><i class="fa-sharp fa-light fa-trash"></i></button>
+                          {% else %}
+                          <input id='coupon' type="text" class="" placeholder="Coupon Code" name="coupon">
+                          <button type="button" class="btn btn-block btn-golden ml-1 " style="width: 140px;" onclick="applyCoupon()">Apply Coupon</button>
+                          {% endif %}
+                        </div>
+                        <div class="row" style="justify-content: start;">
+                            <span class="error-message"
+                                style="top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 230px;transition: opacity 0.5s;"></span>
+                            <span class="success-message"
+                                style="top: 100%;left: 2px;font-size:14px;font-weight: 400;color: rgb(10, 160, 42);width: 230px;transition: opacity 0.5s;"></span>
+                        </div>
+                    </div>
+                    </div>
                 </div>
+        </div> 
+        <div class="row">
+            <div class="checkout-grid col-lg-4">
+            
+            <div class="order-summary js-order-summary"></div>
+        
+        
+            <div class="payment-summary">
+              <div class="payment-summary-title">Order Summary</div>
+              <div class="payment-summary-row">
+              <div id="quantity">Subtotal ({{quantity}} Items):</div>
+              <div class="payment-summary-money" id="total">${{total}}</div>
               </div>
-            </label>
-          </li>
-          {% endfor %}
-        </ul>
-
-        <hr>
-        <div class="btn p-4 ml-2 mb-1"><a href="{% url 'addaddress' %}?next={{ request.path }}"
-            style="color: #b19561;"><i class="fa-solid fa-plus" style="color: #b19561; width: 20px;"></i> Add New
-            Address</a> </div>
+              <div class="payment-summary-row" id="offerDiv">
+              <div >Offer:</div>
+              <div class="payment-summary-money" id="offer"></div>
+              </div>
+              <div class="payment-summary-row">
+              <div>Shipping &amp; handling:</div>
+              <div class="payment-summary-money" id="shipping">${{shipping}}</div>
+              </div>
+              <div class="payment-summary-row subtotal-row">
+              <div>Total before tax:</div>
+              <div class="payment-summary-money" id="before_tax">${{ tax }}</div>
+              </div>
+              <div class="payment-summary-row">
+              <div>Estimated tax (5%):</div>
+              <div class="payment-summary-money" id="tax">${{tax}}</div>
+              </div>
+              <div class="payment-summary-row" id="discountDiv">
+              <div>Discount:</div>
+              <div class="payment-summary-money" id="discount"></div>
+          </div>
+              <div class="payment-summary-row total-row">
+              <div>Order total:</div>
+              <div class="payment-summary-money" id="grandtotal">${{grandtotal}}</div>
+              </div>
+        
+            
+            <button id="rzp-button1" class="btn btn-block btn-golden" type="button">
+              Order Review
+              </button>
+            </div>
+            
+            </div>
+        </div>
       </div>
-    </div>
-
-    <div class="checkout-grid col-lg-4">
-      <div class="order-summary js-order-summary"></div>
-
-
-
-      <div class="payment-summary">
-
-        <div class="payment-summary-title">Order Summary</div>
-
-        <div class="payment-summary-row">
-          <div id="quantity">Subtotal ({{quantity}} Items):</div>
-          <div class="payment-summary-money" id="total">${{total}}</div>
-        </div>
-
-        <div class="payment-summary-row">
-          <div>Shipping &amp; handling:</div>
-          <div class="payment-summary-money" id="shipping">${{shipping}}</div>
-        </div>
-
-        <div class="payment-summary-row subtotal-row">
-          <div>Total before tax:</div>
-          <div class="payment-summary-money" id="before_tax">${{ tax }}</div>
-        </div>
-
-        <div class="payment-summary-row">
-          <div>Estimated tax (5%):</div>
-          <div class="payment-summary-money" id="tax">${{tax}}</div>
-        </div>
-        <div class="payment-summary-row">
-          <div>Discount:</div>
-          <div class="payment-summary-money" id="discount"></div>
-      </div>
-        <div class="payment-summary-row total-row">
-          <div>Order total:</div>
-          <div class="payment-summary-money" id="grandtotal">${{grandtotal}}</div>
-        </div>
-
-        <button id="rzp-button1" class="btn btn-block btn-golden" type="button">
-          Order Review
-        </button>
-        </form>
-      </div>
-    </div>
-
   </div>
-
-
 </div>
-
 <script>
 
-  async function updateOrderSummary() {
-    try {
-      const response = await fetch('/order-summary/');
-      const data = await response.json();
+async function updateOrderSummary() {
+      try {
+          const response = await fetch('/order-summary/');
+          const data = await response.json();
+        
+        if (data.offer && parseFloat(data.offer) > 0) {
+            // Update the discount amount in the HTML
+            document.getElementById('offer').innerText = `-$${data.offer}`;
+        }else {
+            // Hide the HTML element if no offer price is present or it's not greater than 0
+            document.getElementById('offerDiv').style.display       = 'none';
+        }
 
-      // Update DOM elements with the new data
-      document.getElementById('total').innerText = `$${data.total}`;
-      document.getElementById('quantity').innerText = `Subtotal (${data.quantity} items)`;
-      document.getElementById('shipping').innerText = `$${data.shipping}`;
-      document.getElementById('before_tax').innerText = `$${parseInt(data.shipping) + parseInt(data.total)}`;
-      document.getElementById('tax').innerText = `$${data.tax}`;
-      document.getElementById('discount').innerText   = `$${data.discount_amount}`;
-      document.getElementById('grandtotal').innerText = `$${data.grandtotal}`;
-    } catch (error) {
-      console.error('Error fetching order summary:', error);
-    }
+        if (data.discount_amount && parseFloat(data.discount_amount) > 0) {
+            document.getElementById('discount').innerText   = `-$${data.discount_amount}`;
+        }else {
+            // Hide the HTML element if no offer price is present or it's not greater than 0
+            document.getElementById('discountDiv').style.display    = 'none';
+        }
+          // Update DOM elements with the new data
+          document.getElementById('total').innerText      = `$${data.total}`;
+          document.getElementById('quantity').innerText   = `Subtotal (${data.quantity} items)`;
+          document.getElementById('shipping').innerText   = `$${data.shipping}`;
+          document.getElementById('before_tax').innerText = `$${parseInt(data.shipping) + parseInt(data.total)}`;
+          document.getElementById('tax').innerText        = `$${data.tax}`;
+          document.getElementById('grandtotal').innerText = `$${data.grandtotal}`;
+
+          
+      } catch (error) {
+          console.error('Error fetching order summary:', error);
+      }
   }
 
   updateOrderSummary();
@@ -241,122 +285,296 @@
 
 
 
-  document.getElementById('rzp-button1').onclick = function (e) {
+  // document.getElementById('rzp-button1').onclick = function (e) {
+  // // document.getElementById('rzp-button1').addEventListener("click", function(){
+  //   // Check if the Razorpay payment method is selected
+  //   var selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked');
+  //   console.log(selectedPaymentMethod.value, 'as');
+
+  //   if (selectedPaymentMethod.value == 2) {
+
+
+  //     // Create the fetch request
+  //     fetch('/payment/', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'X-CSRFToken': csrftoken,
+  //         // Add any additional headers if needed
+  //       },
+  //       body: JSON.stringify({
+  //         selected_payment_method: selectedPaymentMethod.value
+  //       })
+  //     })
+  //       .then(response => {
+  //         if (!response.ok) {
+  //           throw new Error('Network response was not ok');
+  //         }
+  //         return response.json(); // Parse response JSON
+  //       })
+  //       .then(data => {
+  //         e.preventDefault();
+  //         console.log('Received data:', data);
+    
+  //         const paymentOrderId = data.context.id;
+  //         const paymentAmount = data.context.amount;
+  //         console.log('Payment information:', paymentOrderId);
+  //     // e.preventDefault();
+  //     var razorpayKeyId = '{{ RAZOR_PAY_KEY_ID }}';
+  //     console.log(razorpayKeyId);
+  //     console.log(paymentAmount);
+  //     console.log(paymentOrderId);
+  //     var callbackURL = `http://127.0.0.1:8000/paymenthander/`;
+  //     var options = {
+  //       "key": razorpayKeyId, // Enter the Key ID generated from the Dashboard
+  //       // "amount": "{{payment.amount}}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+  //       "amount": paymentAmount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+  //       // "currency": "INR",
+  //       "name": "Home Decor",
+  //       "description": "Test Transaction",
+  //       "image": "https://example.com/your_logo",
+  //       "order_id": paymentOrderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      
+  //       "callback_url": callbackURL,
+      
+      
+  //       "prefill": {
+  //         "name": "{{request.user.get_usernme}}",
+  //         "email": "{{request.user.email}}",
+  //         "contact": "{{request.user.phone_number}}"
+  //       },
+  //       "theme": {
+  //         "color": "#b19361"
+  //       }
+  //     };
+  //     var rzp1 = new Razorpay(options);
+  //     rzp1.on('payment.failed', function (response) {
+  //       alert(response.error.code);
+  //     });
+
+  //     rzp1.open();
+  //     e.preventDefault();
+  //       })
+  //       .catch(error => {
+  //         console.error('There was a problem with the fetch operation:', error);
+  //       });
+  //   }
+  //   else {
+  //     e.preventDefault();
+  //     fetch('/payment/', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'X-CSRFToken': csrftoken,
+  //       },
+  //       body: JSON.stringify({
+  //         selected_payment_method: selectedPaymentMethod.value,
+           
+  //       })
+  //     })
+  //       .then(response => {
+  //         if (!response.ok) {
+  //           throw new Error('Network response was not ok');
+  //         }
+  //         return response.json();
+  //       })
+  //       .then(data => {
+  //         e.preventDefault();
+  //         window.location.href = 'http://127.0.0.1:8000/order-review/';
+  //       })
+  //       .catch(error => {
+  //         console.error('There was a problem with the fetch operation:', error);
+  //       });
+  //   }
+  // };
+
+  document.getElementById('rzp-button1').addEventListener('click', function(e) {
     // Check if the Razorpay payment method is selected
     var selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked');
     console.log(selectedPaymentMethod.value, 'as');
 
     if (selectedPaymentMethod.value == 2) {
+        // Create the fetch request
+        fetch('/payment/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                    // Add any additional headers if needed
+                },
+                body: JSON.stringify({
+                    selected_payment_method: selectedPaymentMethod.value
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Parse response JSON
+            })
+            .then(data => {
+                e.preventDefault();
+                console.log('Received data:', data);
+
+                const paymentOrderId = data.context.id;
+                const paymentAmount = data.context.amount;
+                console.log('Payment information:', paymentOrderId);
+                // e.preventDefault();
+                var razorpayKeyId = '{{ RAZOR_PAY_KEY_ID }}';
+                console.log(razorpayKeyId);
+                console.log(paymentAmount);
+                console.log(paymentOrderId);
+                var callbackURL = `http://127.0.0.1:8000/paymenthander/`;
+                var options = {
+                    "key": razorpayKeyId, // Enter the Key ID generated from the Dashboard
+                    "amount": paymentAmount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                    "name": "Home Decor",
+                    "description": "Test Transaction",
+                    "image": "https://example.com/your_logo",
+                    "order_id": paymentOrderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+
+                    "callback_url": callbackURL,
 
 
-      // Create the fetch request
-      fetch('/payment/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrftoken,
-          // Add any additional headers if needed
-        },
-        body: JSON.stringify({
-          selected_payment_method: selectedPaymentMethod.value
+                    "prefill": {
+                        "name": "{{request.user.get_usernme}}",
+                        "email": "{{request.user.email}}",
+                        "contact": "{{request.user.phone_number}}"
+                    },
+                    "theme": {
+                        "color": "#b19361"
+                    }
+                };
+                var rzp1 = new Razorpay(options);
+                rzp1.on('payment.failed', function(response) {
+                    alert(response.error.code);
+                });
+
+                rzp1.open();
+                e.preventDefault();
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    } else {
+        e.preventDefault();
+        fetch('/payment/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                },
+                body: JSON.stringify({
+                    selected_payment_method: selectedPaymentMethod.value,
+
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                e.preventDefault();
+                window.location.href = 'http://127.0.0.1:8000/order-review/';
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    }
+});
+
+  function applyCoupon() {
+        var couponCode = document.getElementById('coupon').value;
+        fetch('{% url "apply_coupon" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify({ coupon: couponCode})
         })
-      })
         .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json(); // Parse response JSON
+            if (response.ok) {
+                response.json().then(data => {
+                console.log(data);
+                if (data.status === 'success') {
+                    updateOrderSummary();
+                    document.querySelector('.success-message').textContent = data.success;
+                    document.querySelector('.error-message').textContent = ''; 
+                } else {
+                    console.error("Coupon application failed:", data.message);
+                    document.querySelector('.error-message').textContent = data.error;
+                    document.querySelector('.success-message').textContent = '';
+                }
+            });
+            }else {
+                console.error("Failed to apply coupon. Server returned status:", response.status);
+            }
         })
-        .then(data => {
-          e.preventDefault();
-          console.log('Received data:', data);
-    
-          const paymentOrderId = data.context.id;
-          const paymentAmount = data.context.amount;
-          console.log('Payment information:', paymentOrderId);
-      // e.preventDefault();
-      var razorpayKeyId = '{{ RAZOR_PAY_KEY_ID }}';
-      console.log(razorpayKeyId);
-      console.log(paymentAmount);
-      console.log(paymentOrderId);
-      var callbackURL = `http://127.0.0.1:8000/paymenthander/`;
-      var options = {
-        "key": razorpayKeyId, // Enter the Key ID generated from the Dashboard
-        // "amount": "{{payment.amount}}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-        "amount": paymentAmount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-        // "currency": "INR",
-        "name": "Home Decor",
-        "description": "Test Transaction",
-        "image": "https://example.com/your_logo",
-        "order_id": paymentOrderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-      
-        "callback_url": callbackURL,
-      
-      
-        "prefill": {
-          "name": "{{request.user.get_usernme}}",
-          "email": "{{request.user.email}}",
-          "contact": "{{request.user.phone_number}}"
-        },
-        "theme": {
-          "color": "#b19361"
+        .catch(error => {
+            console.error("Network error:", error);
+        });
+    }
+
+
+    document.getElementById("walletCheckbox").addEventListener("change", function() {
+        var walletContent = document.getElementById("walletContent");
+        if (this.checked) {
+            walletContent.style.display = "block";
+        } else {
+            walletContent.style.display = "none";
         }
-      };
-      var rzp1 = new Razorpay(options);
-      rzp1.on('payment.failed', function (response) {
-        alert(response.error.code);
-        // alert(response.error.description);
-        // alert(response.error.source);
-        // alert(response.error.step);
-        // alert(response.error.reason);
-        // alert(response.error.metadata.order_id);
-        // alert(response.error.metadata.payment_id);
-      });
+    });
 
-      rzp1.open();
-      e.preventDefault();
 
-          
-          // const paymentAmount = paymentInfo.amount;
-          // console.log('++++++');
-          // console.log(paymentAmount,paymentOrderId);
 
-        })
-        .catch(error => {
-          console.error('There was a problem with the fetch operation:', error);
-        });
-    }
-    else {
-      alert('asasdd')
-      e.preventDefault();
+    document.getElementById("rzp-button1").addEventListener("click", function() {
+        // Check if the checkbox is checked
+        if (document.getElementById("walletCheckbox").checked) {
+            fetch('/payment/')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data); // Do something with the response data
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        } else {
+            console.log("Please check the checkbox to proceed with the payment.");
+        }
+    });
 
-      fetch('/payment/', {
+
+    document.getElementById('deleteCouponButton').addEventListener('click', function() {
+    // Make the fetch call when the element is clicked
+    fetch('/delete-coupon/', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrftoken,
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,  // Make sure to include the CSRF token
         },
-        body: JSON.stringify({
-          selected_payment_method: selectedPaymentMethod.value
-        })
-      })
-        .then(response => {
-          if (!response.ok) {
+    })
+    .then(response => {
+        if (!response.ok) {
             throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(data => {
-          e.preventDefault();
-          console.log('Payment successful:', data);
-          window.location.href = 'http://127.0.0.1:8000/order-review/';
-          alert('+++++++++++++++')
-        })
-        .catch(error => {
-          console.error('There was a problem with the fetch operation:', error);
-        });
-    }
-  };
+        }
+        return response.json(); // Parse response JSON
+    })
+    .then(data => {
+        console.log(data); // Log the response data
+        // Optionally, perform any other actions based on the response data
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+    });
+});
 
 </script>
 {% endblock %}

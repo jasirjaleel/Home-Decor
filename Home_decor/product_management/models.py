@@ -101,6 +101,7 @@ class Product_Variant(models.Model):
         return self.stock > 0
         
     def total_price(self):
+        # return self.sale_price + self.product.base_price
         return self.sale_price + self.product.base_price
 
     def save(self, *args, **kwargs):

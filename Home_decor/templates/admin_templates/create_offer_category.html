@@ -1,0 +1,91 @@
+{% extends 'admin_templates/base.html' %}
+{% load static %}
+{% block content %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<section class="content-main">
+    <div class="row">
+        <form method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label class="form-label">Offer Name</label>
+                            <input type="text" placeholder="Type here" class="form-control" name="offer_name">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Date of Expiration</label>
+                            <input type="text" placeholder="Select date" class="form-control" id="expire_date" name="expire_date">
+                        </div>
+        
+                        <div class="row gx-3">
+                            <div class="col-md-6  mb-3">
+                                <label class="form-label">Category</label>
+                                <select class="form-select" name="category">
+                                    {% for i in category %}
+                                    <option value="{{ i.id }}">{{ i.category_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+        
+                            <div class="col-md-6  mb-3">
+                                <label for="discount_percentage" class="form-label">Discount Percentage</label>
+                                <input type="text" placeholder="Type here" class="form-control" name="discount_percentage">
+                            </div>
+                        </div>
+                        <div class="mb-0 mt-2">
+                            <div class="input-upload" id="imagePreviewContainer"></div>
+                            <label class="form-label">Category Offer Image</label>
+                            <input class="form-control" type="file" name="category_offer_image" onchange="previewImages(event)">
+                        </div>
+                    </div>
+                    
+                    <div class="p-4">
+                        <button class="btn btn-md rounded font-sm hover-up">ADD</button>
+                    </div>
+                </div> <!-- card end// -->
+            </div>
+        </form>
+    </div>
+</section>
+
+
+<script>
+    
+function previewImages(event) {
+    const input = event.target;
+    const previewContainer = document.getElementById('imagePreviewContainer');
+    
+    previewContainer.innerHTML = '';  // Clear previous preview
+
+    if (input.files) {
+        for (const file of input.files) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.maxWidth = '100px';  // Adjust the width as needed
+                img.style.maxHeight = '100px';  // Adjust the height as needed
+
+                previewContainer.appendChild(img);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+}
+
+ $(document).ready(function() {
+    $("#expire_date").datepicker({
+        dateFormat: 'd M yy'// Set the date format as YYYY-MM-DD
+    });
+});
+   
+
+
+
+</script>
+{% endblock content %}

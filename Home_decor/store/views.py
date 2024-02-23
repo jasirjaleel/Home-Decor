@@ -5,8 +5,15 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.views import View
 from extra_management.models import Banner
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 def home(request):
+    if 'storedotp' in request.session:
+            print('otp deleted')
+            del request.session['storedotp']
+    if 'storedemail' in request.session:
+            print('Email deleted')
+            del request.session['storedemail']
     hero_banner = Banner.objects.filter(is_active=True)
     products = Product_Variant.objects.filter(is_active=True,product__is_available=True)
     images_dict = {}
@@ -115,8 +122,14 @@ class ShopView(View):
     template_name = 'store_templates/shop.html'
 
     def get(self, request):
-        products = Product_Variant.objects.filter(is_active=True,stock__gt=0,product__is_available=True)
-        return render(request, self.template_name, {'products': products})
+        products = Product_Variant.objects.filter(is_active=True,stock__gt=0,product__is_available=True).order_by('id')
+        products_count = products.count()
+        paginator = Paginator(products,8)
+        page = request.GET.get('page')
+        paged_products = paginator.get_page(page)
+        
+
+        return render(request, self.template_name, {'products': paged_products,'products_count':products_count,})
 
 class ProductDetailView(View):
     template_name = 'store_templates/productdetails.html'
@@ -158,8 +171,7 @@ class ProductDetailView(View):
                 images_list.append(i.image)
 
         request.session['variant_pro_id'] = variant_pro_id
-        request.session.modified = True 
-        request.session.set_expiry(100)
+        request.session.modified = True
 
         context = {
             'variants'          : variants,
@@ -181,6 +193,9 @@ class ProductUpdateView(View):
         selected_color = self.request.GET.get('selectedColor')
         selected_material = self.request.GET.get('selectedMaterial')
         variant_pro_id = request.session['variant_pro_id']
+        if 'variant_pro_id' in request.session:
+            print('variant_pro_id deleted')
+            del request.session['variant_pro_id']
 
         variants = (
             Product_Variant.objects

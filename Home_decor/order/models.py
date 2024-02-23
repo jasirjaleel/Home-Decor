@@ -67,17 +67,20 @@ class Order(models.Model):
     order_number        = models.CharField(max_length=100)
     shipping_address    = models.ForeignKey(ShippingAddress, on_delete=models.CASCADE,null=True)
     order_total         = models.DecimalField(max_digits=12, decimal_places=2)
+    order_tax           = models.DecimalField(max_digits=12, decimal_places=2)
+    additional_discount = models.IntegerField(default=0,null=True)
+    shipping_charge     = models.IntegerField(default=0, null=True)
+    offer               = models.IntegerField(default=0, null=True)
     order_status        = models.CharField(choices = ORDER_STATUS_CHOICES,max_length=20,default='New')
     is_ordered          = models.BooleanField(default=False)
     created_at          = models.DateTimeField(auto_now_add=True)
     updated_at          = models.DateTimeField(auto_now=True)
     
     # coupon_code = models.ForeignKey(Coupon,on_delete=models.SET_NULL,null=True,blank=True)
-    # additional_discount = models.IntegerField(default=0,null=True)
     # wallet_discount = models.IntegerField(default=0,null=True)
     # order_note = models.CharField(max_length=100,blank=True,null=True)
     # ip = models.CharField(max_length=50,blank=True)
-
+   
    
     def generate_order_number(self):
         current_date = datetime.datetime.now().strftime("%Y%m%d")
@@ -98,6 +101,14 @@ class Order(models.Model):
     def save(self, *args, **kwargs):
         if not self.order_number:
             self.order_number = self.generate_order_number()
+        if self.pk:  # Check if the instance is already saved (updating)
+            original_order = Order.objects.get(pk=self.pk)
+            if self.order_status != original_order.order_status:
+                # Update order status
+                original_order_products = original_order.order_products.all()
+                for order_product in original_order_products:
+                    order_product.order_product_status = self.order_status
+                    order_product.save()
         super().save(*args, **kwargs)
 
 
@@ -107,14 +118,22 @@ class Order(models.Model):
 
 
 class OrderProduct(models.Model):
-
-    order                       = models.ForeignKey(Order,on_delete=models.CASCADE)
+    ORDER_STATUS_CHOICES =(
+        ("New", "New"),
+        ("Pending", "Pending"),
+        ("Delivered", "Delivered"),
+        ("Shipped", "Shipped"),
+        ("Cancelled", "Cancelled"),
+        ("Returned", "Returned"),
+        )
+    order                       = models.ForeignKey(Order,on_delete=models.CASCADE, related_name='order_products')
     user                        = models.ForeignKey(Account,on_delete=models.SET_NULL,null=True)
     product_variant             = models.CharField(max_length=255)
     quantity                    = models.IntegerField()
     product_price               = models.DecimalField(max_digits=12, decimal_places=2)
     images                      = models.ImageField(upload_to='media/order/images')
     ordered                     = models.BooleanField(default=False)
+    order_product_status        = models.CharField(choices = ORDER_STATUS_CHOICES,max_length=20,default='New')
     created_at                  = models.DateTimeField(auto_now_add=True)
     updated_at                  = models.DateTimeField(auto_now=True)
    
@@ -123,36 +142,5 @@ class OrderProduct(models.Model):
         return self.product_price * self.quantity
     
     def __str__(self):
-        return self.order.order_number
-    
-
-
-
-
-
-
-
-
-
-
-
-# class Wallet(models.Model):
-#     user    = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='wallet' )
-#     balance = models.IntegerField(default=0, null=True)
-
-# class Transaction(models.Model):
-#     TRANSACTION_CHOICES =(
-#         ("CREDIT", "Credit"),
-#         ("DEBIT", "Debit"),
-#         )
-#     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE, related_name='transactions')
-#     amount = models.IntegerField(default=0)
-#     transaction_type = models.CharField(choices=TRANSACTION_CHOICES,max_length=10)
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-
-   
-
-    
-    
+        return self.order.order_number   
     

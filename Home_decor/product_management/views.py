@@ -4,13 +4,18 @@ from .models import *
 from category_management.models import Category
 from django.http import JsonResponse
 from django.http import  HttpResponseRedirect
+from django.urls import reverse
+from django.core.paginator import Paginator
 # Create your views here.
 ##############   DISPLAYING PRODUCT   ############# 
 def all_product(request):
     products = Product.objects.all().order_by('-id')
     product_count = products.count()
+    paginator = Paginator(products,5)
+    page = request.GET.get('page')
+    paged_products = paginator.get_page(page)
     context = {
-        'products':products,
+        'products':paged_products,
         'products_count':product_count
     }
     return render(request, 'admin_templates/all_product.html',context)
@@ -54,9 +59,7 @@ def create_product(request):
 
 ##############    EDIT PRODUCT    #############
 def edit_product(request):     
-    product_id = int(request.GET.get('product_id'))
-    print(product_id)
-    print("+++++++++++++++++++++++++++=")                                                                   
+    product_id = int(request.GET.get('product_id'))                                                               
     category    = Category.objects.all()
     brand       = Brand.objects.all()
     products    = Product.objects.filter(id=product_id)
@@ -97,8 +100,11 @@ def edit_product(request):
 def all_variant_product(request,product_id):
     product         = Product.objects.get(id=product_id)
     product_variant = Product_Variant.objects.filter(product=product)
+    paginator = Paginator(product_variant,5)
+    page = request.GET.get('page')
+    paged_product_variants = paginator.get_page(page)
     context = {
-        'product_variant':product_variant,
+        'product_variant':paged_product_variants,
         
     }
     return render (request,"admin_templates/all_product_variant.html",context)
@@ -153,7 +159,7 @@ def add_product_variant(request):
             
 
         messages.success(request, 'Product variation Added.')
-        return redirect('create_product')
+        return redirect(reverse('all-variant-product', kwargs={'product_id': product_id.id}))  
     
 
     context= {

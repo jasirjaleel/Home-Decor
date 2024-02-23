@@ -4,12 +4,9 @@
         <section class="content-main">
             <div class="content-header">
                 <div>
-                    <h2 class="content-title card-title">Products List</h2>
-                    <p>Lorem ipsum dolor sit amet.</p>
+                    <h2 class="content-title card-title">Product Variants List</h2>
                 </div>
                 <div>
-                    <!-- <a href="#" class="btn btn-light rounded font-md">Export</a>
-                    <a href="#" class="btn btn-light rounded  font-md">Import</a> -->
                     <a href="{% url 'add_product_variant' %}" class="btn btn-primary btn-sm rounded">Create new</a>
                 </div>
             </div>
@@ -102,12 +99,19 @@
             <div class="pagination-area mt-30 mb-50">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-start">
-                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                        <li class="page-item"><a class="page-link" href="#">02</a></li>
-                        <li class="page-item"><a class="page-link" href="#">03</a></li>
-                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#">16</a></li>
-                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                        {% if product_variant.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{ product_variant.previous_page_number }}"><i class="material-icons md-chevron_left"></i></a></li>
+                        {% endif %}
+                        {% for i in product_variant.paginator.page_range %}
+                                {% if product_variant.number == i %}
+                                    <li class="page-item active"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        {% if product_variant.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ product_variant.next_page_number }}"><i class="material-icons md-chevron_right"></i></a></li>
+                        {% endif %}
                     </ul>
                 </nav>
             </div>

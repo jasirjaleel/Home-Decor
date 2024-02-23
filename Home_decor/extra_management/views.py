@@ -3,10 +3,13 @@ from django.views import View
 from product_management.models import Attribute,Attribute_Value,Brand,Coupon
 from .models import Banner
 from datetime import datetime
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
 
 #===========ATTRIBUTE MANAGEMENT==================
+@login_required(login_url='admin_login')
 def all_attribute(request):
     
     atributes = Attribute.objects.all()
@@ -14,7 +17,7 @@ def all_attribute(request):
         'atributes':atributes
     }
     return render(request, 'admin_templates/all_attribute.html',context)
-
+@login_required(login_url='admin_login')
 def create_attribute(request):
     if request.method == 'POST':
         attribute   = request.POST.get('attribute')
@@ -25,7 +28,7 @@ def create_attribute(request):
 
 
 #===========ATTRIBUTE VALUE MANAGEMENT==================
-
+@login_required(login_url='admin_login')
 def all_attribute_value(request):
     
     atribute_values = Attribute_Value.objects.all()
@@ -34,7 +37,7 @@ def all_attribute_value(request):
     }
     return render(request, 'admin_templates/all_attribute_value.html',context)
 
-
+@login_required(login_url='admin_login')
 def create_attribute_value(request):
     if request.method == 'POST':
         attribute_id  = request.POST.get('attribute_id')
@@ -53,13 +56,13 @@ def create_attribute_value(request):
 
 
 #===========BRAND MANAGEMENT==================
-
+@login_required(login_url='admin_login')
 def all_brand(request):
     brd = Brand.objects.all()
     context = { 'brd':brd }
     return render(request,'admin_templates/all_brand.html',context)
 
-
+@login_required(login_url='admin_login')
 def create_brand(request):
     if request.method == 'POST':
         brand = request.POST.get('brand')
@@ -94,12 +97,15 @@ def create_brand(request):
 
 
 #===========BANNER MANAGEMENT==================
+@login_required(login_url='admin_login')
 def all_banner(request):
     banner = Banner.objects.all()
     context = { 'banner':banner }
     return render(request, 'admin_templates/all_banner.html', context)
 
 
+
+@login_required(login_url='admin_login')
 def create_banner(request):
     if request.method == 'POST':
         banner_name         = request.POST.get('banner_name')
@@ -112,6 +118,7 @@ def create_banner(request):
         return redirect('banner')
     return render(request, 'admin_templates/add_banner.html')
 
+@login_required(login_url='admin_login')
 def edit_banner(request):
     print("=====================")
     banner_id = request.GET.get('id')
@@ -134,6 +141,7 @@ def edit_banner(request):
     context = { 'old_banner':old_banner }
     return render(request, 'admin_templates/edit_banner.html', context)
 
+
 class DeleteBannerView(View):
     def get(self, request):
         id = request.GET.get('id')
@@ -145,12 +153,17 @@ class DeleteBannerView(View):
 
 
 #================= COUPON MANAGEMENT =====================
+@login_required(login_url='admin_login')
 def all_coupon(request):
     coupon = Coupon.objects.all()
-    context = { 'coupon':coupon }
+    paginator = Paginator(coupon,8)
+    page = request.GET.get('page')
+    paged_coupons = paginator.get_page(page)
+    context = { 'coupon':paged_coupons }
     return render(request, 'admin_templates/all_coupon.html', context)
 
 
+@login_required(login_url='admin_login')
 def create_coupon(request):
     if request.method == 'POST':
         coupon_code           = request.POST.get('coupon_code')
@@ -175,6 +188,7 @@ def create_coupon(request):
         return redirect('coupon')
     return render(request, 'admin_templates/add_coupon.html')
 
+@login_required(login_url='admin_login')
 def edit_coupon(request):
     coupon_id = request.GET.get('id')
     old_coupon = Coupon.objects.get(id=coupon_id)

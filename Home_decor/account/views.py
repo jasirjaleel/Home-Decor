@@ -60,7 +60,6 @@ def add_address(request):
         address = Address.objects.create(account=user,first_name=first_name,last_name=last_name,phone_number=phone_number,town_city=town_city,street_address=street_address,state=state,country_region=country_region,zip_code=zip_code)
         make_default = request.POST.get('make_default')
         print(make_default)
-        # Convert 'on' to True and set is_default accordingly
         is_default = make_default == 'on'
         address.is_default = is_default
         address.save()
@@ -72,14 +71,10 @@ def add_address(request):
 
 def delete_address(request):
     address_id = request.GET.get('id')
-    print(address_id)
     address = get_object_or_404(Address, id = address_id)
-    print(address.first_name)
-    
     user_address = Address.objects.filter(first_name = address.first_name )
     if not user_address:
         return redirect('myaddress')
-    
     user_address.delete()
     messages.success(request, 'Address deleted successfully.')
     return redirect('myaddress')
@@ -87,7 +82,7 @@ def delete_address(request):
 def my_order(request):
     user = request.user
     orders = Order.objects.filter(user=user,is_ordered=True).order_by('-created_at')
-    orders = orders.annotate(item_count=Count('orderproduct'))
+    orders = orders.annotate(item_count=Count('order_products'))
     context = {
         'orders': orders,
         }

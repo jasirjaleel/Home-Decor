@@ -49,8 +49,8 @@ def usersignup(request):
         
         randomotp = str(random.randint(100000, 999999))
 
-        request.session['storedotp'] = randomotp
-        request.session['storedemail']=email
+        request.session['storedotp']    = randomotp
+        request.session['storedemail']  = email
         request.session['storedotp'].set_expiry(300)
         request.session['storedemail'].set_expiry(300)
         request.session.modified = True
@@ -59,7 +59,6 @@ def usersignup(request):
         sendermail = "noreply@homedecorestore.com"
         otp = f"Dear User,\n\n Your One-Time Password (OTP) for verification is: {randomotp}\n\nThank you for choosing Home Decor Ecommerce Store."
         send_mail(subject,otp,sendermail,[email])
-        
         context = {
             'email':email
         }

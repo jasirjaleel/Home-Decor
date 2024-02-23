@@ -92,40 +92,35 @@
                     
                 
                     <div class="payment-summary">
-                        {% comment %}
-                        <div class="">
-                            <input id='coupon' type="text" class="" placeholder="Coupon Code" name="coupon">
-                            <div class="">
-                                <button type="submit" class="btn btn-sm btn-golden">Apply Coupon</button>
-                            </div>
-                        </div>
-                        {% endcomment %}
-                      <div class="payment-summary-title">Order Summary</div>
-                
-                      <div class="payment-summary-row">
+                        <div class="payment-summary-title">Order Summary</div>
+                        <div class="payment-summary-row">
                         <div id="quantity">Subtotal ({{quantity}} Items):</div>
                         <div class="payment-summary-money" id="total">${{total}}</div>
-                      </div>
-                
-                      <div class="payment-summary-row">
+                        </div>
+                        <div class="payment-summary-row" id="offerDiv">
+                        <div >Offer:</div>
+                        <div class="payment-summary-money" id="offer"></div>
+                        </div>
+                        <div class="payment-summary-row">
                         <div>Shipping &amp; handling:</div>
                         <div class="payment-summary-money" id="shipping">${{shipping}}</div>
-                      </div>
-                
-                      <div class="payment-summary-row subtotal-row">
+                        </div>
+                        <div class="payment-summary-row subtotal-row">
                         <div>Total before tax:</div>
-                        <div class="payment-summary-money" id="before_tax"></div>
-                      </div>
-                
-                      <div class="payment-summary-row">
+                        <div class="payment-summary-money" id="before_tax">${{ tax }}</div>
+                        </div>
+                        <div class="payment-summary-row">
                         <div>Estimated tax (5%):</div>
                         <div class="payment-summary-money" id="tax">${{tax}}</div>
-                      </div>
-                
-                      <div class="payment-summary-row total-row">
+                        </div>
+                        <div class="payment-summary-row" id="discountDiv">
+                        <div>Discount:</div>
+                        <div class="payment-summary-money" id="discount"></div>
+                    </div>
+                        <div class="payment-summary-row total-row">
                         <div>Order total:</div>
                         <div class="payment-summary-money" id="grandtotal">${{grandtotal}}</div>
-                      </div>
+                        </div>
 
                       <form action="{% url 'place_order' %}" method="post">
                         {% csrf_token %}
@@ -139,92 +134,24 @@
    <!-- End Cart Table -->
 
     <!-- Start Coupon Start -->
-    <div class="coupon_area">
-        <div class="container">
-            <div class="row">
-                <!-- <div class="col-lg-6 col-md-6">
-                        <div class="coupon_code left" data-aos="fade-up" data-aos-delay="200">
-                            <h3>Coupon</h3>
-                            <div class="coupon_inner">
-                                <p>Enter your coupon code if you have one.</p>
-                                <input class="mb-2" placeholder="Coupon code" type="text">
-                                <button type="submit" class="btn btn-md btn-golden">Apply coupon</button>
-                            </div>
-                        </div> -->
-            </div>
-           
-
-        </div>
-    </div>
-        </div> 
-
-<!-- End Coupon Start -->
- <!-- ...:::: End Cart Section:::... -->
-
-<!-- <script>
-    function updateCart(cartItemId, newQuantity) {
-        fetch(`/update_cart/${cartItemId}/${newQuantity}/`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Update the subtotal in your HTML
-                    document.getElementById(`subtotal-${cartItemId}`).innerText = `$${data.subtotal}`;
-                } else {
-                    console.error(data.message);
-                    // Handle the error, e.g., display an alert to the user
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                // Handle the error, e.g., display an alert to the user
-            });
-    }
-</script> -->
-
+    
 <script>
 
-
-
-
-
-
-function deleteCartItem(cartItemId) {
-    fetch(`/delete_cart_item/${cartItemId}/`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Remove the deleted item from the HTML
-                const deletedItem = document.getElementById(`cart-item-${cartItemId}`);
-                deletedItem.remove();
-
-                // Check if the cart is empty
-                const cartTable = document.getElementById('cart-table');
-                if (cartTable && !cartTable.querySelector('tbody tr')) {
-                    // Cart is empty, redirect to the cart page
-                    window.location.href = '/cart/';
-                }
-            } else {
-                console.error(data.message);
-                
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            
-        });
-
-    // Prevent the default action (page reload) of the link click
-    // event.preventDefault();
-}
-
-
-    
-  async function updateOrderSummary() {
+async function updateOrderSummary() {
       try {
           const response = await fetch('/order-summary/');
           const data = await response.json();
-
-          // Update DOM elements with the new data
+        
+        if (data.offer && parseFloat(data.offer) > 0) {
+            document.getElementById('offer').innerText = `-$${data.offer}`;
+        }else {
+            document.getElementById('offerDiv').style.display       = 'none';
+        }
+        if (data.discount_amount && parseFloat(data.discount_amount) > 0) {
+            document.getElementById('discount').innerText   = `-$${data.discount_amount}`;
+        }else {
+            document.getElementById('discountDiv').style.display    = 'none';
+        }
           document.getElementById('total').innerText      = `$${data.total}`;
           document.getElementById('quantity').innerText   = `Subtotal (${data.quantity} items)`;
           document.getElementById('shipping').innerText   = `$${data.shipping}`;
@@ -235,45 +162,7 @@ function deleteCartItem(cartItemId) {
           console.error('Error fetching order summary:', error);
       }
   }
-
-  // Call the function to update order summary on page load
   updateOrderSummary();
-
-
-
-
-    function updateCart(cartItemId, newQuantity) {
-      if (newQuantity == 0) {
-        deleteCartItem(cartItemId);
-        return;
-    }
-
-
-    fetch(`/update_cart/${cartItemId}/${newQuantity}/`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Update the subtotal in your HTML
-                const subtotalElement = document.getElementById(`subtotal-${cartItemId}`);
-                subtotalElement.innerText = `$${data.subtotal}`;
-                console.log('Updating +++++++++++++++++++++++');
-                
-
-                // Call the endpoint to update the cart total
-                updateOrderSummary();
-            } else {
-                console.error(data.message);
-                // Handle the error, e.g., display an alert to the user
-                alert(`Error: `);
-            }
-        })
-        .catch(error => {
-            console.error('Fetch error:', error);
-            // Handle the fetch error, e.g., display an alert to the user
-            alert('Error updating cart. Please try again.');
-        });
-}
-
 </script>
 
 

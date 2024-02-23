@@ -14,7 +14,54 @@
     <link rel="shortcut icon" href="{% static 'assets/images/favicon.icon' %}" type="image/png">
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css">
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/sharp-light.css">
+    <style>
+        #snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+  font-size: 17px;
+}
 
+#snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;} 
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;} 
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+
+
+
+
+    </style>
     <!-- ::::::::::::::All CSS Files here :::::::::::::: -->
     <!-- Vendor CSS -->
     <!-- <link rel="stylesheet" href="{% static 'assets/css/vendor/font-awesome.min.css' %}">
@@ -559,6 +606,7 @@
                             >
                                 <h5 class="title">MY ACCOUNT</h5>
                                 <ul class="footer-nav">
+                                    <div id="snackbar"></div>
                                     <li><a href="my-account.html">My account</a></li>
                                     <li><a href="wishlist.html">Wishlist</a></li>
                                     <li><a href="privacy-policy.html">Privacy Policy</a></li>
@@ -909,6 +957,33 @@
 
     <!-- Main JS -->
     <script src="{% static 'assets/js/main.js' %}"></script>
+    <script>
+        // function Toast() {
+        // var x = document.getElementById("snackbar");
+        // x.className = "show";
+        // setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        // }
+
+    function myFunction(message) {
+        var x = document.getElementById("snackbar");
+        // Set the message text
+        x.innerHTML = message;
+        x.className = "show";
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+    }
+
+    // Check if a success message is present
+    var successMessage = "{{ messages }}"; // Assuming "messages" is the context variable containing the messages
+
+    // Iterate over each success message and display it using myFunction()
+    {% for message in messages %}
+        {% if message.tags == 'success' %}
+            myFunction("{{ message }}");
+        {% endif %}
+    {% endfor %}
+
+
+    </script>
 </body>
 
 

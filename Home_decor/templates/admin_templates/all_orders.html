@@ -58,10 +58,26 @@
                                     <td>{{i.created_at|date:"j M Y"}}</td>
                                     <td>${{i.order_total}}</td>
                                     <td>
-                                        <span class="badge badge-pill badge-soft-danger">Chargeback</span>
+                                        {% if i.payment.payment_status == 'SUCCESS' %}
+                                        <span class="badge badge-pill badge-soft-success">
+                                            {{ i.payment.payment_status }}
+                                        </span>
+                                        {% elif i.payment.payment_status == 'PENDING' %}
+                                        <span class="badge badge-pill badge-soft-warning">
+                                            {{ i.payment.payment_status }}
+                                        </span>
+                                        {% elif i.payment.payment_status == 'FAILED' %}
+                                        <span class="badge badge-pill badge-soft-danger">
+                                            {{ i.payment.payment_status }}
+                                        </span>
+                                        {% endif %}
                                     </td>
                                     <td>
-                                        <i class="material-icons md-payment font-xxl text-muted mr-5"></i> Visa
+                                            {% if i.payment.payment_method.method_name == 'Razorpay' %}
+                                            <i class="material-icons md-payment font-xxl text-muted mr-5"></i>Razorpay
+                                            {% elif i.payment.payment_method.method_name == 'Cash On Delivery' %}
+                                            <i class="material-icons md-payments font-xxl text-muted mr-5"></i>COD
+                                            {% endif %}
                                     </td>
                                     <td>
                                         {% for choice in i.ORDER_STATUS_CHOICES %}
@@ -87,12 +103,19 @@
             <div class="pagination-area mt-15 mb-50">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-start">
-                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                        <li class="page-item"><a class="page-link" href="#">02</a></li>
-                        <li class="page-item"><a class="page-link" href="#">03</a></li>
-                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#">16</a></li>
-                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                        {% if orders.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{ products.previous_page_number }}"><i class="material-icons md-chevron_left"></i></a></li>
+                        {% endif %}
+                        {% for i in orders.paginator.page_range %}
+                                {% if orders.number == i %}
+                                    <li class="page-item active"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        {% if orders.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ products.next_page_number }}"><i class="material-icons md-chevron_right"></i></a></li>
+                        {% endif %}
                     </ul>
                 </nav>
             </div>

@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from .models import CartItem
 from django.contrib import messages
 from django.http import JsonResponse
-from product_management.models import Product_Variant,Coupon,UserCoupon
+from product_management.models import Product_Variant,Coupon,UserCoupon,Product
 from .models import Cart,CartItem,Wishlist,WishlistItem
 from order.models import OrderProduct,Order
 from django.views.decorators.cache import never_cache
@@ -12,6 +12,10 @@ from django.core.paginator import EmptyPage,PageNotAnInteger,Paginator
 import json
 from decimal import Decimal
 from django.utils import timezone
+from django.shortcuts import get_object_or_404
+from wallet.models import Wallet,Transaction
+from django.core.cache import cache
+from offer_management.models import ProductOffer,CategoryOffer
 # Create your views here.
 def _cart_id(request):
     # cart = request.session.session_key()
@@ -52,6 +56,68 @@ def _delete_unwanted_sessions(request):
     print('Deleted unwanted sessions')
         # del request.session['cart_items_count']
        
+def _product_offer_price(request):
+    cartitems = CartItem.objects.filter(user=request.user).select_related('product').select_related('product__product')
+    now = timezone.now()
+    offer_price = 0
+    
+    for cartitem in cartitems:
+        product_offer = ProductOffer.objects.filter(product=cartitem.product.product,is_active=True).first()
+        print(product_offer,'hello')
+        if product_offer:
+            final_price = product_offer.calculate_discounted_price(cartitem.product)
+            offer_price += final_price * cartitem.quantity
+    
+    return round(offer_price,2)
+
+def _category_offer_price(request):
+    cartitems = CartItem.objects.filter(user=request.user).select_related('product').select_related('product__product')
+    now = timezone.now()
+    offer_price = 0
+
+    for cartitem in cartitems:
+        category_offer = CategoryOffer.objects.filter(category=cartitem.product.product.category,is_active=True).first()
+
+        print(category_offer, 'hello')
+        if category_offer:
+            final_price = category_offer.calculate_discounted_price(cartitem.product)
+            offer_price += final_price * cartitem.quantity
+
+    return round(offer_price, 2)
+
+def _grandtotal_calculation(request):
+    total       = 0
+    quantity    = 0
+    shipping    = 100
+    offer       = 0
+    # Calculate total, quantity, tax, and grandtotal
+    for cart_item in CartItem.objects.filter(user=request.user):
+        total += round(cart_item.sub_total(), 2)
+        quantity += cart_item.quantity
+
+    categoey_offer = _category_offer_price(request)
+    product_offer  = _product_offer_price(request)
+    print(categoey_offer,product_offer)
+    if categoey_offer < product_offer:
+        offer_price = product_offer
+    else:
+        offer_price = categoey_offer
+    if offer_price == 0:
+        offer = 0
+    else:
+        offer = (total - offer_price)
+    print(offer)
+    tax = round(total / 100 * 5, 0)
+    grandtotal = Decimal(round(tax + total + shipping, 2))
+    discount_amount = request.session.get('discount_amount')
+    if discount_amount:
+        discount_amount = round(Decimal(discount_amount),2)
+        grandtotal -= discount_amount
+    grandtotal-=offer
+    print
+    
+    grandtotal = round(grandtotal, 2)
+    return grandtotal,tax,discount_amount,quantity,shipping,total,offer
 
     
 
@@ -59,25 +125,18 @@ def _delete_unwanted_sessions(request):
 @never_cache
 def cart(request):
     _delete_unordered_orders(request.user)
-    _delete_unwanted_sessions(request)
+    # _delete_unwanted_sessions(request)
+    if 'discount_amount' in request.session:
+        del request.session['discount_amount']
     total = 0
     quantity = 0
     cart_items = None
-
     if request.user.is_authenticated:
-        tax = 0
-        grandtotal = 0
         cart_items = CartItem.objects.filter(user=request.user)
 
         if not cart_items.exists():
             return render(request, 'cart_templates/empty-cart.html')
-        
-        for cart_item in cart_items:
-            total += round(cart_item.sub_total(), 2)
-            quantity += cart_item.quantity
-        shipping = 100
-        tax = round(total / 100 * 5, 2)
-        grandtotal = round(tax + total + shipping, 2)
+        grandtotal,tax,discount_amount,quantity,shipping,total,offer = _grandtotal_calculation(request)
       
         context = {
             'total' : total,
@@ -87,11 +146,10 @@ def cart(request):
             'grandtotal': grandtotal,
             'shipping'  : shipping
         }
-        return render(request, 'cart_templates/cart.html', context)
+        return render(request, 'cart_templates/cart.html',context)
     else:
-        # Handle unauthenticated user case (redirect or display message)
-        return redirect('userlogin')  # Example redirection
-    # return render(request,'cart_templates/cart.html')
+        return redirect('userlogin')
+    
 
 
 @login_required(login_url='userlogin')
@@ -139,30 +197,6 @@ def add_to_cart(request, slug):
                     user     = request.user,
                 )
                 cart_item.save()
-            
-
-            # Calculate totals
-            tax         = 0
-            grandtotal  = 0
-            total       = 0
-            quantity    = 0
-            cart_items  = CartItem.objects.filter(user=request.user)
-
-            for cart_item1 in cart_items:
-                total       += round(cart_item1.sub_total(), 2)
-                quantity    += cart_item1.quantity
-            shipping=100
-            tax         = round(total / 100 * 5, 2)
-            grandtotal  = round(tax + total + shipping, 2)
-
-            context = {
-                'total'     : total,
-                'quantity'  : quantity,
-                'cart_items': cart_items,
-                'tax'       : tax,
-                'grandtotal': grandtotal,
-                
-            }
             messages.success(request, "Item added to cart")
             # return render(request, 'cart_templates/cart.html', context)
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -180,23 +214,30 @@ def add_to_cart(request, slug):
 @login_required(login_url='userlogin')
 @never_cache
 def order_summary(request):
-    total = 0
-    quantity = 0
-    shipping = 100
+    grandtotal,tax,discount_amount,quantity,shipping,total,offer= _grandtotal_calculation(request)
+    # print('Before request body')
+    # is_wallet_checked = request.GET.get('isWalletChecked',False)
+    # print(is_wallet_checked)
+    # if is_wallet_checked == 'true':
+    #     print('wallet checked')
+    #     wallet = Wallet.objects.get(user=request.user)
+    #     wallet_balance = wallet.balance
+    #     if wallet.balance <= grandtotal  :  
+    #         grandtotal = grandtotal- wallet.balance   
+    #         wallet_balance = 0
+    #         print('wallet 0')
+    #     else:
+    #         wallet_balance = wallet.balance - grandtotal
+    #         grandtotal     = 0
+    #         print('grandtotal 0')
+    #     request.session['wallet_balance'] = str(wallet_balance)    
+    #     request.session['grandtotal_wallet'] = str(grandtotal)
+    # if is_wallet_checked == 'false':
+    #     if 'grandtotal_wallet' in request.session:
+    #         del request.session['grandtotal_wallet']
 
-    # Calculate total, quantity, tax, and grandtotal
-    for cart_item in CartItem.objects.filter(user=request.user):
-        total += round(cart_item.sub_total(), 2)
-        quantity += cart_item.quantity
-
-    tax = round(total / 100 * 5, 0)
-    grandtotal = Decimal(round(tax + total + shipping, 2))
-    discount_amount = request.session.get('discount_amount')
-    if discount_amount:
-        discount_amount = Decimal(discount_amount)
-        grandtotal -= discount_amount
-    
-    grandtotal = round(grandtotal, 2)
+    # if 'grandtotal_wallet' in request.session:
+    #     grandtotal = request.session['grandtotal_wallet']
     request.session['grandtotal'] = str(grandtotal)
     # Return JSON response
     return JsonResponse({
@@ -205,6 +246,7 @@ def order_summary(request):
         'shipping': shipping,
         'tax': tax,
         'grandtotal': grandtotal,
+        'offer': offer,
         'discount_amount': request.session.get('discount_amount',0),
     })
 
@@ -217,6 +259,8 @@ def applying_coupon(request):
         if discount_amount is None :
             data = json.loads(request.body)
             coupon_code = data.get('coupon')
+            coupn_dict = {'coupon':coupon_code,}
+            cache.set('coupon_code',coupn_dict )
             print(coupon_code)
             grand_total = float(request.session.get('grandtotal'))
             print(grand_total)
@@ -248,7 +292,7 @@ def applying_coupon(request):
                 coupon.total_coupons-=1
                 coupon.save()
                 print(discount_amount, 'Success')
-                request.session['discount_amount'] = discount_amount 
+                request.session['discount_amount'] = round(discount_amount,2) 
                 data={'discount_amount':discount_amount,'discount':discount}
                 print(data,'3')
                 return JsonResponse({'success':'Coupon Applied'})
@@ -272,6 +316,26 @@ def applying_coupon(request):
         else:
             return JsonResponse({'error': 'Coupon already applied'})
         
+
+def delete_coupon(request):
+    if request.method == 'POST':
+        if 'discount_amount' in request.session:
+            coupon1 = cache.get('coupon_code')
+            coupon_code = coupon1['coupon']
+            print(coupon_code)
+            # coupon_obj = Coupon.objects.get(coupon_code=coupon_code)
+            usercoupon = UserCoupon.objects.select_related('coupon').get(user=request.user,coupon__coupon_code=coupon_code)
+            # print(usercoupon.usage_count)
+            usercoupon.usage_count -=1
+            print('users coupon usage undone')
+            coupon = Coupon.objects.get(coupon_code=coupon_code)
+            coupon.total_coupons+=1
+            del request.session['discount_amount']
+            coupon.save() 
+            usercoupon.save()
+        return JsonResponse({'success': 'Coupon deleted successfully'})
+    else:
+        return JsonResponse({'error': 'Invalid request method'})
 
 @login_required(login_url='userlogin')
 def update_cart(request, cart_item_id, new_quantity):
@@ -353,18 +417,30 @@ def add_wishlist(request):
     else:
         return JsonResponse({"status": "error", "message": "Invalid request"})
 
-    # current_user    = request.user
-    # slug = request.GET.get('slug')
-    # product = get_object_or_404(Product_Variant, product_variant_slug=slug)
-    # wishlist, created = Wishlist.objects.get_or_create(user=current_user)
+    # # current_user    = request.user
+    # # slug = request.GET.get('slug')
+    # # product = get_object_or_404(Product_Variant, product_variant_slug=slug)
+    # # wishlist, created = Wishlist.objects.get_or_create(user=current_user)
     
-    # # Check if the product is already in the wishlist
-    # if WishlistItem.objects.filter(wishlist=wishlist,product=product).exists():
-    #     return JsonResponse({'message': 'Product is already in the wishlist'}, status=400)
+    # # # Check if the product is already in the wishlist
+    # # if WishlistItem.objects.filter(wishlist=wishlist,product=product).exists():
+    # #     return JsonResponse({'message': 'Product is already in the wishlist'}, status=400)
     
-    # # Add the product to the wishlist
-    # WishlistItem.objects.create(wishlist=wishlist, product=product)
+    # # # Add the product to the wishlist
+    # # WishlistItem.objects.create(wishlist=wishlist, product=product)
     
-    # return JsonResponse({'message': 'Product added to wishlist'}, status=200)
+    # # return JsonResponse({'message': 'Product added to wishlist'}, status=200)
 
-    return render(request, 'cart_templates/wishlist.html')
+    # return render(request, 'cart_templates/wishlist.html')
+
+
+##################### Delete User Wishlist ####################
+def delete_wishlist(request):
+    wishlist_item_id = request.GET.get('wishlistitemId')
+    print(wishlist_item_id)
+    
+    # wishlist = Wishlist.objects.get(user=request.user)  
+    wishlist_item = get_object_or_404(WishlistItem, id=wishlist_item_id)
+    print(wishlist_item)
+    wishlist_item.delete()
+    return redirect('wishlist')

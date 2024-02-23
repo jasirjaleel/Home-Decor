@@ -27,6 +27,7 @@
 <div class=" container col-sm-12 col-md-9 col-lg-9 p-4 mb-3">
     <!-- <div class="tab-pane justify-content-center" id="orders">
     <h4 class="justify-content-center">Orders</h4> -->
+    
     <div class="table_page table-responsive">
         <table>
             <thead>
@@ -35,7 +36,7 @@
                     <th>Total</th>
                     <th>Order Placed</th>
                     <th>Status</th>
-                    <th>Actions</th>
+                    
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -62,7 +63,7 @@
                     {% elif order.order_status == "Returned" %}
                         <td>Returned</td>
                     {% endif %}
-                    <td><a href="cart.html" class="view">{{order.order_number}}</a></td>
+                    
                     <td>
                         {% if order.order_status == 'Delivered' %}
                         <a href="#" class="return-order" data-order-id="{{ order.id }}" data-order-created-at='{{ order.created_at|date:"Y-m-d\TH:i:s" }}'>Return</a>
@@ -79,6 +80,74 @@
             </tbody>
         </table>
     </div>
+    
+
+
+
+
+
+
+                            <!--============= Listing Orders ============-->
+                            {% comment %}
+                            <div class="row">
+                                <div class="table-responsive">
+                                    <table class="table shopping-summery text-center clean">
+                                        <thead>
+                                            <tr class="main-heading"> 
+                                                <th>Order ID</th> 
+                                                <th colspan="2">Product</th>
+                                                <th>Quantity</th>
+                                                <th>Price</th>
+                                                <th>Order Status</th>
+                                                <th>Ordered date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for order in orders %}
+                                                {% for order_product in order.order_products.all %}
+                                                <tr>
+                                                    {% if forloop.first %}
+                                                    <td rowspan="{{ order.item_count }}">
+                                                        <a href="cart.html" class="view">{{ order.order_number }}</a>
+                                                        <br>
+                                                        {% if order.order_status == 'Delivered' %}
+                                                            <a href="#" class="return-order" data-order-id="{{ order.id }}" data-order-created-at="{{ order.created_at|date:'Y-m-d\\TH:i:s' }}">Return</a>
+                                                        {% elif order.order_status == 'Cancelled' %}
+                                                            <strong class="view text-danger">Cancelled</strong>
+                                                        {% elif order.order_status == 'Returned' %}
+                                                            <strong class="view text-secondary">Returned</strong>
+                                                        {% else %}
+                                                            <a href="#" class="view text-secondary btn-link" onclick="cancelOrderConfirmation('{{ order.id }}')">Cancel Order</a>
+                                                        {% endif %}
+                                                    </td>
+                                                    {% endif %}
+                                                    <td class="image product-thumbnail"><img src="{{ order_product.images.url }}" style="width: 50px;" alt="#"></td>
+                                                    <td class="product-des product-name">
+                                                        <h5 class="product-name"><a href="#">{{ order_product.product_variant }}</a></h5>
+                                                      
+                                                    </td>
+                                                    <td class="quantity" data-title="Quantity"><span>{{ order_product.quantity }}</span></td>
+                                                    <td class="price" data-title="Price"><span>Rs.{{ order_product.product_price }} </span></td>
+                                                    <td>{{ order.order_status }}</td>
+                                                    <td>{{ order.created_at|date:"j M Y" }}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            {% endcomment %}
+                                               
+                            <!--============= Listing Orders ============-->
+                            
+
+
+
+
+
+
+
 </div>
 </div>
 <style>

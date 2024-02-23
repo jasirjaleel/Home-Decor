@@ -70,7 +70,7 @@ input.qtyminus { width:15px; height:15px;}
                     <div class="table_desc">
                         <div class="table_page table-responsive " id="cart-table">
                             <table>
-                                <!-- Start Cart Table Head -->
+                                
                                 <thead>
                                     <tr>
                                         <th class="product_remove">Delete</th>
@@ -80,8 +80,8 @@ input.qtyminus { width:15px; height:15px;}
                                         <th class="product_quantity">Quantity</th>
                                         <th class="product_total">Total</th>
                                     </tr>
-                                </thead> <!-- End Cart Table Head -->
-                             <tbody>
+                                </thead>
+                                <tbody>
                                     <!-- Start Cart Single Item-->
                                     {% for cart_item in cart_items %}
                                     <tr>
@@ -111,106 +111,54 @@ input.qtyminus { width:15px; height:15px;}
                                     </tr>
                                     {% endfor %}<!-- End Cart Single Item-->
 
-                                </tbody>
-
-                    
-
-                                
+                                </tbody> 
                             </table>
                         </div>
-
                     </div>
                 </div>
-                
                 <div class="col mb-5">
-                    <div class="row mb-2">
-                        <div class="coupon_area">                        
-                            <div class="coupon_code">
-                                <div class="coupon_inner">
-                                    <div class="row  " style="justify-content: center;">
-
-                                        <input id='coupon' type="text" class="" placeholder="Coupon Code" name="coupon">
-                                        <button type="button" class="btn btn-block btn-golden ml-1 " style="width: 140px;" onclick="applyCoupon()">Apply Coupon</button>
-                                    </div>
-                                    <div class="row" style="justify-content: start;">
-
-                                        <span class="error-message"
-                                            style="top: 100%;left: 2px;font-size:14px;font-weight: 400;color: red;width: 230px;transition: opacity 0.5s;"></span>
-                                        <span class="success-message"
-                                            style="top: 100%;left: 2px;font-size:14px;font-weight: 400;color: rgb(10, 160, 42);width: 230px;transition: opacity 0.5s;"></span>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                    </div> 
-                    <div class="row">
-                        <div class="checkout-grid col-lg-4">
-                        
-                        <div class="order-summary js-order-summary"></div>
-                    
-                    
+                    <div class="checkout-grid col-lg-4">
+                        <div class="order-summary js-order-summary">
+                        </div>
                         <div class="payment-summary">
-                        <div class="payment-summary-title">Order Summary</div>
-                    
-                        <div class="payment-summary-row">
+                            <div class="payment-summary-title">Order Summary</div>
+                            <div class="payment-summary-row">
                             <div id="quantity">Subtotal ({{quantity}} Items):</div>
                             <div class="payment-summary-money" id="total">${{total}}</div>
-                        </div>
-                    
-                        <div class="payment-summary-row">
+                            </div>
+                            <div class="payment-summary-row" id="offerDiv">
+                            <div >Offer:</div>
+                            <div class="payment-summary-money" id="offer"></div>
+                            </div>
+                            <div class="payment-summary-row">
                             <div>Shipping &amp; handling:</div>
                             <div class="payment-summary-money" id="shipping">${{shipping}}</div>
-                        </div>
-                    
-                        <div class="payment-summary-row subtotal-row">
+                            </div>
+                            <div class="payment-summary-row subtotal-row">
                             <div>Total before tax:</div>
-                            <div class="payment-summary-money" id="before_tax">${{ total|add:shipping }}</div>
-                        </div>
-                    
-                        <div class="payment-summary-row">
+                            <div class="payment-summary-money" id="before_tax">${{ tax }}</div>
+                            </div>
+                            <div class="payment-summary-row">
                             <div>Estimated tax (5%):</div>
                             <div class="payment-summary-money" id="tax">${{tax}}</div>
-                        </div>
-                        <div class="payment-summary-row">
+                            </div>
+                            <div class="payment-summary-row" id="discountDiv">
                             <div>Discount:</div>
                             <div class="payment-summary-money" id="discount"></div>
                         </div>
-                        <div class="payment-summary-row total-row">
+                            <div class="payment-summary-row total-row">
                             <div>Order total:</div>
                             <div class="payment-summary-money" id="grandtotal">${{grandtotal}}</div>
+                            </div>
+                            <a href="{% url 'payment' %}" class="btn btn-block btn-golden"  >
+                                Proceed To Payment
+                            </a>
                         </div>
-                    
-                        <button class="btn btn-block btn-golden" >
-                            <a href="{% url 'payment' %}" style="color:white;">Proceed To Payment</a>
-                        </button>
-                        </div>
-                        
-                        </div>
-                    </div>
-                    </div>
-            </div>
-            
-        </div>
-   <!-- End Cart Table -->
-
-    <!-- Start Coupon Start -->
-    <!-- <div class="coupon_area">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 col-md-4">
-                    <div class="coupon_code ">
-                        <div class="coupon_inner">
-                            <input id='coupon' type="text" class="" placeholder="Coupon Code" name="coupon">
-                            <button type="submit" class="btn btn-sm btn-golden">Apply Coupon</button>
-                        </div>
-                    </div>
+                    </div>                
                 </div>
             </div>
         </div>
-    </div> -->
 
-<!-- End Coupon Start -->
- <!-- ...:::: End Cart Section:::... -->
 
 <script>
     function getCookie(name) {
@@ -268,14 +216,27 @@ function deleteCartItem(cartItemId) {
       try {
           const response = await fetch('/order-summary/');
           const data = await response.json();
+        
+        if (data.offer && parseFloat(data.offer) > 0) {
+            // Update the discount amount in the HTML
+            document.getElementById('offer').innerText = `-$${data.offer}`;
+        }else {
+            // Hide the HTML element if no offer price is present or it's not greater than 0
+            document.getElementById('offerDiv').style.display       = 'none';
+        }
 
+        if (data.discount_amount && parseFloat(data.discount_amount) > 0) {
+            document.getElementById('discount').innerText   = `-$${data.discount_amount}`;
+        }else {
+            // Hide the HTML element if no offer price is present or it's not greater than 0
+            document.getElementById('discountDiv').style.display    = 'none';
+        }
           // Update DOM elements with the new data
           document.getElementById('total').innerText      = `$${data.total}`;
           document.getElementById('quantity').innerText   = `Subtotal (${data.quantity} items)`;
           document.getElementById('shipping').innerText   = `$${data.shipping}`;
           document.getElementById('before_tax').innerText = `$${parseInt(data.shipping) + parseInt(data.total)}`;
           document.getElementById('tax').innerText        = `$${data.tax}`;
-          document.getElementById('discount').innerText   = `$${data.discount_amount}`;
           document.getElementById('grandtotal').innerText = `$${data.grandtotal}`;
 
           

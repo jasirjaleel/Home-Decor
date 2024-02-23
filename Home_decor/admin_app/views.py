@@ -10,6 +10,8 @@ from django.http import JsonResponse
 import json
 from order.models import OrderProduct,Order
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator
+from wallet.models import Wallet,Transaction
 # Create your views here.
 
 
@@ -51,7 +53,10 @@ def all_users(request):
     #         data = User.objects.filter(Q(username__icontains=search_word)| Q(email__icontains=search_word)).order_by('id').values()
     #     else:
         data = Account.objects.all().order_by('id').exclude(is_superadmin=True)
-        context={'users': data}
+        paginator = Paginator(data,5)
+        page = request.GET.get('page')
+        paged_users = paginator.get_page(page)
+        context={'users': paged_users }
         return render(request,"admin_templates/all_users.html", context=context)
     return redirect('usersignup')
     
@@ -91,10 +96,11 @@ def blockuser(request):
     # # return JsonResponse({'message': 'User blocked successfully'})
     # return redirect('user_management')
 
-
+@login_required(login_url='admin_login')
 def user_details(request):
     user_id = request.GET.get('user_id')
     user = Account.objects.get(id=user_id)
+    wallet = Wallet.objects.filter(user=user).first()
     address = Address.objects.filter(account=user.id,is_default=True).first()
     ordered_products = OrderProduct.objects.filter(user=user,ordered=True).order_by('-id')
 
@@ -102,7 +108,8 @@ def user_details(request):
         "user":user,
         'address':address,
         'ordered_products':ordered_products,
-        'ordered_products_count':ordered_products.count()
+        'ordered_products_count':ordered_products.count(),
+        'wallet':wallet,
     }
     return render(request,'admin_templates/user_details.html',context)
 

@@ -106,10 +106,10 @@
                                       <div class="d-flex" style="gap: 5px;align-items: center;">
                                         <div>
                                             {% if user.is_blocked %}
-                                            <button class="btn  alert-success unblock-user-btn"  onclick="sweet_alert('{{user.id}}')"
+                                            <button class="btn btn-xs alert-success unblock-user-btn"  onclick="sweet_alert('{{user.id}}')"
                                           >Unblock User</button>
                                             {% else %}
-                                            <button class="btn alert-danger block-user-btn" onclick="sweet_alert('{{user.id}}')"
+                                            <button class="btn btn-xs alert-danger block-user-btn" onclick="sweet_alert('{{user.id}}')"
                                           >Block User</button>
                                             {% endif %}
                                         </div>
@@ -130,12 +130,19 @@
             <div class="pagination-area mt-15 mb-50">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-start">
-                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                        <li class="page-item"><a class="page-link" href="#">02</a></li>
-                        <li class="page-item"><a class="page-link" href="#">03</a></li>
-                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#">16</a></li>
-                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                        {% if users.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{ products.previous_page_number }}"><i class="material-icons md-chevron_left"></i></a></li>
+                        {% endif %}
+                        {% for i in users.paginator.page_range %}
+                                {% if users.number == i %}
+                                    <li class="page-item active"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        {% if users.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ products.next_page_number }}"><i class="material-icons md-chevron_right"></i></a></li>
+                        {% endif %}
                     </ul>
                 </nav>
             </div>
