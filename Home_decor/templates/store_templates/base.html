@@ -158,7 +158,13 @@
                                 <li>
                                     <a href="{% url 'cart' %}">
                                         <i class="icon-bag"></i>
-                                        <span class="item-count">3</span>
+                                        {% if request.user.is_authenticated %}
+                                            {% with request.user.cart.items_count as cart_items_count %}
+                                                {% if cart_items_count %}
+                                                <span class="item-count"> {{ cart_items_count }}</span>                                                   
+                                                {% endif %}
+                                            {% endwith %}
+                                        {% endif %}
                                     </a>
                                 </li>
                                 <li>

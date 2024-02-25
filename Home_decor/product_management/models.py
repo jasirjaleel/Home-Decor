@@ -103,6 +103,8 @@ class Product_Variant(models.Model):
     def total_price(self):
         # return self.sale_price + self.product.base_price
         return self.sale_price + self.product.base_price
+    def mrp(self):
+        return self.max_price + self.product.base_price
 
     def save(self, *args, **kwargs):
         product_variant_slug_name = f'{self.product.brand.brand_name}-{self.product.product_name}-{self.product.category.category_name}-{self.sku_id}'
@@ -127,7 +129,7 @@ class Product_Variant(models.Model):
         return reverse('product-variant-detail',args=[self.product.category.slug,self.product_variant_slug])
     
     def get_product_name(self):
-        return f'{self.product.brand} {self.product.product_name} - {", ".join([value[0] for value in self.attributes.all().values_list("attribute_value")])}'
+        return f'{self.product.product_name} - {", ".join([value[0] for value in self.attributes.all().values_list("attribute_value")])}'
     
     def __str__(self):
         return self.get_product_name()

@@ -397,8 +397,6 @@ def user_wishlist(request):
 
 @login_required(login_url='userlogin')
 def add_wishlist(request):
-    print('jhi')
-    
     if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         data = json.loads(request.body)
         slug = data.get('variant')
@@ -413,7 +411,7 @@ def add_wishlist(request):
         # if not created:
         #     wishlist_item.delete()
 
-        return JsonResponse({"status": "success"})
+        return JsonResponse({"status": "success", "message": "Added to wishlist"})
     else:
         return JsonResponse({"status": "error", "message": "Invalid request"})
 

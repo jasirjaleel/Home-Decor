@@ -127,52 +127,31 @@ class ShopView(View):
         products = Product_Variant.objects.filter(is_active=True,stock__gt=0,product__is_available=True).order_by('id')
         product_offers = ProductOffer.objects.filter(is_active=True)
         category_offers = CategoryOffer.objects.filter(is_active=True)
-
-        # for product in products:
-        #     discounted_price = product.total_price
-        #     for offer in product_offers:
-        #         if offer.product == product.product:
-        #             offer_discount = (offer.discount_percentage / Decimal(100)) * product.total_price
-        #             discounted_price -= offer_discount
-        #     product.discounted_price = discounted_price
-        #     print(product.discounted_price,product.total_price)
+        
         
         for product in products:
-            # Calculate the total price of the product
             total_price = product.total_price
-
-            # Initialize variables to hold the maximum discounted price and the corresponding offer
             max_discount_price = total_price
             best_offer = None
-
-            # Check for product offers and find the one with the highest discount
             for offer in product_offers:
                 if offer.product == product.product:
                     offer_discount = (offer.discount_percentage / Decimal(100)) * total_price
                     discounted_price = total_price - offer_discount
                     if discounted_price < max_discount_price:
                         max_discount_price = discounted_price
-                        best_offer = offer
-
-            # Check for category offers and find the one with the highest discount
+                        best_offer = offer.discount_percentage
             for category_offer in category_offers:
                 if category_offer.category == product.product.category:
                     offer_discount = (category_offer.discount_percentage / Decimal(100)) * total_price
                     discounted_price = total_price - offer_discount
                     if discounted_price < max_discount_price:
                         max_discount_price = discounted_price
-                        best_offer = category_offer
-
-            # Apply the best offer to the product variant
+                        best_offer = category_offer.discount_percentage
             if best_offer:
                 product.discounted_price = max_discount_price
                 product.best_offer = best_offer
             else:
-                # No offer found, set the discounted price to the original total price
                 product.discounted_price = total_price
-            print(product.discounted_price, product.total_price)
-            print(product.best_offer)
-
         products_count = products.count()
         paginator = Paginator(products,8)
         page = request.GET.get('page')
@@ -196,6 +175,34 @@ class ProductDetailView(View):
             # Query the images related to the current variant
             variant_images = Additional_Product_Image.objects.filter(product_variant=variant_id)
 
+        ########################### Calculate discounted price for the current variant based on offers #############################
+            total_price = variant.total_price
+            max_discount_price = total_price
+            best_offer = None
+
+            # Check for product offers
+            product_offers = ProductOffer.objects.filter(is_active=True, product=variant_pro)
+            for offer in product_offers:
+                offer_discount = (offer.discount_percentage / Decimal(100)) * total_price
+                discounted_price = total_price - offer_discount
+                if discounted_price < max_discount_price:
+                    max_discount_price = discounted_price
+                    best_offer = offer.discount_percentage
+
+            # Check for category offers
+            category_offers = CategoryOffer.objects.filter(is_active=True, category=variant_pro.category)
+            for category_offer in category_offers:
+                offer_discount = (category_offer.discount_percentage / Decimal(100)) * total_price
+                discounted_price = total_price - offer_discount
+                if discounted_price < max_discount_price:
+                    max_discount_price = discounted_price
+                    best_offer = category_offer.discount_percentage
+            # Assign the best offer and discounted price to the variant
+            variant.discounted_price = max_discount_price
+            variant.best_offer = best_offer
+            print(variant.discounted_price,total_price)
+            print(variant.best_offer)
+        ########################################################################################################################
         m = Product_Variant.objects.prefetch_related('attributes').filter(product=variant_pro)
         unique_colors = set()
         unique_materials = set()
@@ -207,15 +214,13 @@ class ProductDetailView(View):
                     unique_colors.add(attribute.attribute_value)
                 elif attribute.attribute.attribute_name == 'Material':
                     unique_materials.add(attribute.attribute_value)
-      
-
         # print(variant_att)
         for i in variant_att:
              att_list.append(i.attribute_value)
         
         for i in variant_images:
                 # Append the queryset to the list
-                images_list.append(i.image)
+            images_list.append(i.image)
 
         request.session['variant_pro_id'] = variant_pro_id
         request.session.modified = True
@@ -226,8 +231,7 @@ class ProductDetailView(View):
             'att_list'          : att_list,
             'unique_colors'     : unique_colors,
             'unique_materials'  : unique_materials,
-            'stock': stock
-
+            'stock'             : stock,
         }
         return render(request, self.template_name, context)
     

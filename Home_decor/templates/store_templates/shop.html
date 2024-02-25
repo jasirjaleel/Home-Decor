@@ -1,6 +1,7 @@
 {% extends 'store_templates/base.html' %}
 {% load static %}
 {% block content %}
+<script src="{% static 'assets/js/csrftkn.js' %}" ></script>
 <div class="breadcrumb-section breadcrumb-bg-color--golden">
     <div class="breadcrumb-wrapper">
         <div class="container">
@@ -11,8 +12,7 @@
                         <nav aria-label="breadcrumb">
                             <ul>
                                 <li><a href="{% url 'home' %}">Home</a></li>
-                                <li><a href="shop-grid-sidebar-left.html">Shop</a></li>
-                                <li class="active" aria-current="page">Shop Full Width</li>
+                                <li class="active" aria-current="page">Shop</li>
                             </ul>
                         </nav>
                     </div>
@@ -247,7 +247,7 @@
                                                             </a>
                                                             {% if product.discounted_price != product.total_price %}
                                                             <div class="tag">
-                                                                <span>Offer</span>
+                                                                <span>{{product.best_offer|floatformat:0}}% Off</span>
                                                             </div>
                                                             {% endif %}
                                                             <div class="action-link">
@@ -258,7 +258,7 @@
                                                                     <a href="#" data-bs-toggle="modal"
                                                                         data-bs-target="#modalQuickview"><i
                                                                             class="icon-magnifier"></i></a>
-                                                                    <a href="wishlist.html"><i
+                                                                    <a class="add-to-wishlist"  data-variant-slug="{{ product.product_variant_slug }}"><i
                                                                             class="icon-heart"></i></a>
                                                                     
                                                                 </div>
@@ -327,5 +327,41 @@
         </div>
     </div> <!-- ...:::: End Shop Section:::... -->
 
-    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.add-to-wishlist').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var variantSlug = this.getAttribute('data-variant-slug');
+
+            fetch('/add-wishlist/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': csrftoken,
+                },
+                body: JSON.stringify({ variant: variantSlug }) // Send variant slug in JSON format
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.status === "success") {
+                    
+                    console.log("Item added to wishlist successfully");
+                    showToast(data.message,'success')
+                    // Optionally, update UI to reflect item added to wishlist
+                } else {
+                    console.error("Error:", data.message);
+                    // Optionally, display error message to user
+                }
+            })
+            .catch(error => {
+                console.error("Fetch error:", error);
+                // Optionally, handle fetch errors
+            });
+        });
+    });
+});
+
+    </script>
     {% endblock content %}
