@@ -56,9 +56,6 @@
                             </div>
                             <div class="col-lg-3 col-sm-1 col-4 flex-grow-1 col-name">
                                 <a class="itemside" href="#">
-                                    <div class="left">
-                                        <img src="{{ product.products.thumbnail_image.url.first }}" class="img-sm img-thumbnail" alt="Item">
-                                    </div>
                                     <div class="info">
                                         <a href="{% url 'all-variant-product' product_id=product.id %}"><h6 class="">{{product.product_name}}</h6></a>  
                                         <span>{{product.category}}</span>

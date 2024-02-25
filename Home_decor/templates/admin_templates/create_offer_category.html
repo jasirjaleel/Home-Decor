@@ -6,7 +6,7 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <section class="content-main">
     <div class="row">
-        <form method="POST" action="" enctype="multipart/form-data">
+        <form method="POST" action="" enctype="multipart/form-data" id="categoryOffer">
             {% csrf_token %}
             <div class="col-lg-6">
                 <div class="card mb-4">
@@ -84,8 +84,13 @@ function previewImages(event) {
     });
 });
    
-
-
+document.getElementById('categoryOffer').addEventListener('submit', function(event) {
+    const discountPercentage = parseFloat(document.querySelector('input[name="discount_percentage"]').value);
+    if (isNaN(discountPercentage) || discountPercentage < 0 || discountPercentage > 100) {
+        showToast('Discount Percentage must be a number between 0 and 100', "error");
+        event.preventDefault();
+    }
+});
 
 </script>
 {% endblock content %}

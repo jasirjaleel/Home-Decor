@@ -23,7 +23,7 @@
                     <h4>General Information</h4>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{% url 'add-coupon' %}"  enctype="multipart/form-data">
+                    <form method="post" action="{% url 'add-coupon' %}"  enctype="multipart/form-data" id="couponForm">
                         {% csrf_token %}
                         <div class="mb-4">
                             <label class="form-label">Coupon Code</label>
@@ -32,7 +32,7 @@
                         <div class="row gx-3">
                             <div class="col-md-4  mb-3">
                                 <label class="form-label">Discount Percentage</label>
-                                <input type="number" placeholder="Type here" class="form-control"  name="discount_percentage" required>
+                                <input type="number" placeholder="Type here" class="form-control"  name="discount_percentage" id="discount" required>
                             </div>
 
 
@@ -76,7 +76,29 @@
         dateFormat: 'd M yy'// Set the date format as YYYY-MM-DD
     });
 });
-   
 
+  document.getElementById('couponForm').addEventListener('submit', function(event) {
+    const discountPercentage = parseInt(document.querySelector('input[name="discount_percentage"]').value);
+    const minimumAmount = parseInt(document.querySelector('input[name="minimum_amount"]').value);
+    const totalCoupons = parseInt(document.querySelector('input[name="total_coupons"]').value);
+    const maxUses = parseInt(document.querySelector('input[name="max_uses"]').value);
+
+    if (isNaN(discountPercentage) || discountPercentage < 0 || discountPercentage > 100) {
+        showToast('Discount Percentage must be a number between 0 and 100', "error");
+        event.preventDefault();
+    }
+    if (isNaN(minimumAmount) || minimumAmount < 0) {
+        showToast('Minimum Amount must be a positive number', "error");
+        event.preventDefault();
+    }
+    if (isNaN(totalCoupons) || totalCoupons < 0) {
+        showToast('Total Coupons must be a positive number', "error");
+        event.preventDefault();
+    }
+    if (isNaN(maxUses) || maxUses < 0) {
+        showToast('Maximum Number of usage per user must be a positive number', "error");
+        event.preventDefault();
+    }
+});
 </script>
 {% endblock content %}

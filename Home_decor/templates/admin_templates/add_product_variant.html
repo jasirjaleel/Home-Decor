@@ -3,7 +3,7 @@
 {% block content %}
 <section class="content-main">
     <div class="row">
-        <form method="POST" action="" enctype="multipart/form-data">
+        <form method="POST" action="" enctype="multipart/form-data" id="productForm">
             {% csrf_token %}
             <div class="col-lg-6">
                 <div class="card mb-4">
@@ -36,22 +36,19 @@
                             {% endfor %}
                         </div>
                         <div class="row gx-3">
-
                             <div class="col-md-4  mb-3">
                                 <label for="product_size" class="form-label">Max Price</label>
-                                <input type="text" placeholder="Type here" class="form-control" id="product_size"
+                                <input type="text" placeholder="Type here" class="form-control" id="max_price"
                                     name="max_price">
                             </div>
-
-
                             <div class="col-md-4  mb-3">
-                                <label for="product_size" class="form-label">Sale price</label>
-                                <input type="text" placeholder="Type here" class="form-control" id="product_size"
+                                <label for="product_size" class="form-label">Additional price</label>
+                                <input type="text" placeholder="Type here" class="form-control" id="sale_price"
                                     name="sale_price">
                             </div>
                             <div class="col-md-4  mb-3">
                                 <label for="product_size" class="form-label">Stock</label>
-                                <input type="text" placeholder="Type here" class="form-control" id="product_size"
+                                <input type="text" placeholder="Type here" class="form-control" id="stock"
                                     name="stock">
                             </div>
                         </div>
@@ -108,5 +105,30 @@ function previewImages(event) {
         }
     }
 }
+
+document.getElementById('productForm').addEventListener('submit', function(event) {
+    const maxPriceInput = document.getElementById('max_price');
+    const salePriceInput = document.getElementById('sale_price');
+    const stockInput = document.getElementById('stock');
+
+    const maxPrice = parseInt(maxPriceInput.value);
+    const salePrice = parseInt(salePriceInput.value);
+    const stock = parseInt(stockInput.value);
+
+    if (isNaN(maxPrice) || maxPrice < 0) {
+        showToast('Max price must be a positive integer', "error");
+        event.preventDefault();
+    }
+    if (isNaN(salePrice) || salePrice < 0) {
+        showToast('Additional price must be a positive integer', "error");
+        event.preventDefault();
+    }
+    if (isNaN(stock) || stock < 0) {
+        showToast('Stock must be a positive integer', "error");
+        event.preventDefault();
+    }
+});
+
+
 </script>
 {% endblock content %}

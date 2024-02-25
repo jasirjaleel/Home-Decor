@@ -1,0 +1,106 @@
+{% extends 'admin_templates/base.html' %}
+{% load static %}
+{% block content %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<section class="content-main">
+    <div class="row">
+        <div class="col-9">
+            <div class="content-header">
+                <h2 class="content-title">Edit Product Offer</h2>
+            </div>
+        </div>
+        <form method="POST" action="" enctype="multipart/form-data" id="productOffer">
+            {% csrf_token %}
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label class="form-label">Offer Name</label>
+                            <input type="text" placeholder="Type here" class="form-control" name="offer_name" value="{{product_offer.offer_name}}">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Date of Expiration</label>
+                            <input type="text" placeholder="Select date" class="form-control" id="expire_date" name="expire_date" value="{{product_offer.expire_date|date:'d M Y'}}">
+                        </div>
+        
+                        <div class="row gx-3">
+                            <div class="col-md-6  mb-3">
+                                <label class="form-label">Product</label>
+                                <select class="form-select" name="product">
+                                    {% for i in product %}
+                                    <option value="{{ i.id }}"{% if i.id == product_offer.product.id %} selected {% endif %}>{{ i.product_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+        
+                            <div class="col-md-6  mb-3">
+                                <label for="discount_percentage" class="form-label">Discount Percentage</label>
+                                <input type="text" placeholder="Type here" class="form-control" name="discount_percentage" value="{{product_offer.discount_percentage}}">
+                            </div>
+                        </div>
+                        <div class="mb-0 mt-2">
+                            <div class="input-upload" id="imagePreviewContainer"></div>
+                            <img src="{{product_offer}}" alt="">
+                            <label class="form-label">Category Offer Image</label>
+                            <input class="form-control" type="file" name="product_offer_image" onchange="previewImages(event)">
+                        </div>
+                    </div>
+                    
+                    <div class="p-4">
+                        <button class="btn btn-md rounded font-sm hover-up">Edit</button>
+                    </div>
+                </div> <!-- card end// -->
+            </div>
+        </form>
+    </div>
+</section>
+
+
+<script>
+    
+function previewImages(event) {
+    const input = event.target;
+    const previewContainer = document.getElementById('imagePreviewContainer');
+    
+    previewContainer.innerHTML = '';  // Clear previous preview
+
+    if (input.files) {
+        for (const file of input.files) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.maxWidth = '100px';  // Adjust the width as needed
+                img.style.maxHeight = '100px';  // Adjust the height as needed
+
+                previewContainer.appendChild(img);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+}
+
+ $(document).ready(function() {
+    $("#expire_date").datepicker({
+        dateFormat: 'd M yy'// Set the date format as YYYY-MM-DD
+    });
+});
+   
+
+document.getElementById('productOffer').addEventListener('submit', function(event) {
+    const discountPercentage = parseFloat(document.querySelector('input[name="discount_percentage"]').value);
+    
+    // Check if discountPercentage is a number and within the range of 0 to 100
+    if (isNaN(discountPercentage) || discountPercentage < 0 || discountPercentage > 100) {
+        showToast('Discount Percentage must be a number between 0 and 100', "error");
+        event.preventDefault(); // Prevent form submission
+    }
+});
+
+
+</script>
+{% endblock content %}

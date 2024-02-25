@@ -6,6 +6,8 @@ from django.http import JsonResponse
 from django.views import View
 from extra_management.models import Banner
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from offer_management.models import ProductOffer,CategoryOffer
+from decimal import Decimal
 # Create your views here.
 def home(request):
     if 'storedotp' in request.session:
@@ -123,13 +125,59 @@ class ShopView(View):
 
     def get(self, request):
         products = Product_Variant.objects.filter(is_active=True,stock__gt=0,product__is_available=True).order_by('id')
+        product_offers = ProductOffer.objects.filter(is_active=True)
+        category_offers = CategoryOffer.objects.filter(is_active=True)
+
+        # for product in products:
+        #     discounted_price = product.total_price
+        #     for offer in product_offers:
+        #         if offer.product == product.product:
+        #             offer_discount = (offer.discount_percentage / Decimal(100)) * product.total_price
+        #             discounted_price -= offer_discount
+        #     product.discounted_price = discounted_price
+        #     print(product.discounted_price,product.total_price)
+        
+        for product in products:
+            # Calculate the total price of the product
+            total_price = product.total_price
+
+            # Initialize variables to hold the maximum discounted price and the corresponding offer
+            max_discount_price = total_price
+            best_offer = None
+
+            # Check for product offers and find the one with the highest discount
+            for offer in product_offers:
+                if offer.product == product.product:
+                    offer_discount = (offer.discount_percentage / Decimal(100)) * total_price
+                    discounted_price = total_price - offer_discount
+                    if discounted_price < max_discount_price:
+                        max_discount_price = discounted_price
+                        best_offer = offer
+
+            # Check for category offers and find the one with the highest discount
+            for category_offer in category_offers:
+                if category_offer.category == product.product.category:
+                    offer_discount = (category_offer.discount_percentage / Decimal(100)) * total_price
+                    discounted_price = total_price - offer_discount
+                    if discounted_price < max_discount_price:
+                        max_discount_price = discounted_price
+                        best_offer = category_offer
+
+            # Apply the best offer to the product variant
+            if best_offer:
+                product.discounted_price = max_discount_price
+                product.best_offer = best_offer
+            else:
+                # No offer found, set the discounted price to the original total price
+                product.discounted_price = total_price
+            print(product.discounted_price, product.total_price)
+            print(product.best_offer)
+
         products_count = products.count()
         paginator = Paginator(products,8)
         page = request.GET.get('page')
         paged_products = paginator.get_page(page)
-        
-
-        return render(request, self.template_name, {'products': paged_products,'products_count':products_count,})
+        return render(request, self.template_name, {'products': paged_products,'products_count':products_count,'discounded_price':product.discounted_price})
 
 class ProductDetailView(View):
     template_name = 'store_templates/productdetails.html'
@@ -140,7 +188,6 @@ class ProductDetailView(View):
         images_list = []
         att_list = []
         for variant in variants:
-            # Access the id attribute for each variant
             stock = variant.stock
             variant_id = variant.id
             variant_att = variant.attributes.all()

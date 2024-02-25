@@ -24,7 +24,7 @@ def payment(request):
     _delete_unordered_orders(user)    
     address1 = Address.objects.filter(account=user.id)
     payment_methods = PaymentMethod.objects.filter(is_active=True)
-    wallet = Wallet.objects.get(user=user)
+    wallet,created = Wallet.objects.get_or_create(user=user)
     print('2')
     payment1 = None
 

@@ -19,7 +19,7 @@ class CartItem(models.Model):
 
 
     def sub_total(self):
-        return self.quantity * self.product.total_price()
+        return self.quantity * self.product.total_price
     
     def items_count(self):
         return CartItem.objects.filter(cart=self.cart).count()

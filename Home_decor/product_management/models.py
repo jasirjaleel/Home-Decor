@@ -99,7 +99,7 @@ class Product_Variant(models.Model):
 
     def is_available(self):
         return self.stock > 0
-        
+    @property  
     def total_price(self):
         # return self.sale_price + self.product.base_price
         return self.sale_price + self.product.base_price

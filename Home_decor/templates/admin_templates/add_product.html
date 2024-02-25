@@ -10,7 +10,7 @@
             </div>
         </div>
         <!-- Add new product form  -->
-        <form method="POST" action="{% url 'create_product' %}">
+        <form method="POST" action="{% url 'create_product' %}" id="productForm">
             {% csrf_token %}
             <div class="col-lg-6">
                 <div class="card mb-4">
@@ -44,11 +44,6 @@
                                 <input type="text" placeholder="Type here" name="price" class="form-control"
                                 id="price">
                             </div>
-                            <!-- <div class="col-md-4  mb-3">
-                            <label for="product_size" class="form-label">Size</label>
-                            <input type="text" placeholder="Type here" class="form-control" id="product_size">
-                        </div> -->
-                        </div>
 
                     </div>
                     <div class="card mb-4">
@@ -73,4 +68,15 @@
 
     </div>
 </section>
+<script>
+    document.getElementById('productForm').addEventListener('submit', function(event) {
+    const priceInput = document.getElementById('price');
+    const price = parseFloat(priceInput.value);
+
+    if (price < 0) {
+        showToast("Price cannot be negative", "error");
+        event.preventDefault();
+    }
+});
+</script>
 {% endblock content %}

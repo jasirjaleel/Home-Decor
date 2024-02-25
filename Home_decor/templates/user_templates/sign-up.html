@@ -32,11 +32,11 @@
                 <!--register area start-->
                 <div class="col-lg-6 col-md-6">
                     <div class="account_form register" data-aos="fade-up" data-aos-delay="200">
-                        <h3>Welcome !</h3>
+                        <h3 style="display: flex;justify-content: center;">Welcome !</h3>
                       
                         <form method="post" id="form" action="{% url 'usersignup' %}">
                             {% csrf_token %}
-                            <h3>
+                            <h3 style="display: flex;justify-content: center;">
                                 <span>Register your account.</span>
                             </h3>
                             <div class="d-flex " style="gap: 178px; width: 260;">
@@ -72,10 +72,10 @@
                                     <span class="error" id="password2Error" style="position: absolute; top: 100%; left: 2px; font-size: 14px; font-weight: 400; color: red; width: 190px; transition: opacity 0.5s;"></span>
                                 </div>
                             </div>
-                            <div class="login_submit pt-4">
-                                <button class="btn  btn-black-default-hover  w-25"  type="submit">Sign Up</button>
+                            <div class="login_submit pt-4" style="display: flex;justify-content: center;">
+                                <button class="btn  btn-black-default-hover w-50"  type="submit">Sign Up</button>
                             </div>
-                            <div class="mt-3"><h4>Already have an account? <a href="{% url 'userlogin' %}" class="text-decoration-none">Login</a></h4></div>
+                            <div class="mt-3"style="display: flex;justify-content: center;"><h4>Already have an account? <a href="{% url 'userlogin' %}" class="text-decoration-none">Login</a></h4></div>
                         </form>
                       </div>
                 </div>
@@ -86,16 +86,20 @@
 
 <script>
     function validateName() {
-        const name = document.getElementById('username').value;
+        const name = document.getElementById('username').value.trim();
         const nameError = document.getElementById('nameError');
 
         if (name === "") {
-            nameError.innerHTML = 'Enter your Name';
+            nameError.innerHTML = 'Enter your Username';
             return false;
         }
-        if (!name.match(/^[a-zA-Z\s-, ]+$/)) {
-            nameError.innerHTML = 'Numbers and symbols are not allowed';
-            return false;
+        // if (!name.match(/^[a-zA-Z\s-, ]+$/)) {
+        //     nameError.innerHTML = 'Numbers and symbols are not allowed';
+        //     return false;
+        // }
+        if (!name.match(/^[a-zA-Z\s-,0-9]+$/) || /^\d+$/.test(name)) {
+        nameError.innerHTML = 'Invalid username format';
+        return false;
         }
         if (name.length < 3) {
             nameError.innerHTML = "Must be three characters";
@@ -106,7 +110,7 @@
     }
 
     function validateFname() {
-        const fname = document.getElementById('firstname').value;
+        const fname = document.getElementById('firstname').value.trim();
         const fnameError = document.getElementById('fnameError');
 
         if (fname === "") {
@@ -126,7 +130,7 @@
     }
 
     function validateLname() {
-        const lname = document.getElementById('lastname').value;
+        const lname = document.getElementById('lastname').value.trim();
         const lnameError = document.getElementById('lnameError');
 
         if (lname === "") {
@@ -146,7 +150,7 @@
     }
 
     function validateEmail() {
-        const email = document.getElementById('email').value;
+        const email = document.getElementById('email').value.trim();
         const emailError = document.getElementById('emailError');
 
         if (email === "") {
@@ -162,7 +166,7 @@
     }
 
     function validatePassword() {
-        const password = document.getElementById('password').value;
+        const password = document.getElementById('password').value.trim();
         const passwordError = document.getElementById('passwordError');
 
         if (password === "") {
@@ -180,7 +184,7 @@
 
     function validatePassword2() {
         const password1 = document.getElementById('password').value;
-        const password2 = document.getElementById('password2').value;
+        const password2 = document.getElementById('password2').value.trim();
         const password2Error = document.getElementById('password2Error');
 
         if (password2 === "") {

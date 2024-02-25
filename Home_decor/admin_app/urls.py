@@ -37,6 +37,8 @@ urlpatterns = [
     path('all-offer-category/', offerView.all_category_offer, name='all_category_offer'),
     path('create-product-offer/', offerView.create_product_offer, name='create_product_offer'),
     path('create-category-offer/', offerView.create_category_offer, name='create_category_offer'),
+    path('edit-product-offer/', offerView.edit_product_offer, name='edit_product_offer'),
+    path('edit-category-offer/', offerView.edit_category_offer, name='edit_category_offer'),
     path('toggle_product_offer/',offerView.toggle_offer_active_status,name='toggle_offer_active_status'),
     path('toggle_category_offer/',offerView.toggle_offer_category_status,name='toggle_offer_category_status'),
     

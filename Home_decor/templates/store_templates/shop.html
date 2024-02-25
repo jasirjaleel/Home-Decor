@@ -27,6 +27,7 @@
         <div class="container">
             <div class="row flex-column-reverse flex-lg-row">
                 <div class="col-lg-12">
+                    {% comment %}
                     <div class="d-flex">
                         <div class="sidebar-single-widget">
                             <h6 class="sidebar-title">CATEGORIES</h6>
@@ -170,6 +171,8 @@
                         </div>
                     </div>  
                     </div>
+                    {% endcomment %}
+
                    
                     <!-- Start Shop Product Sorting Section -->
                     <div class="shop-sort-section">
@@ -184,8 +187,7 @@
                                             <li><a class="nav-link active" data-bs-toggle="tab"
                                                     href="#layout-4-grid"><img src="{% static 'assets/images/icons/bkg_grid.png' %}"
                                                         alt=""></a></li>
-                                            <li><a class="nav-link" data-bs-toggle="tab" href="#layout-list"><img
-                                                        src="{% static 'assets/images/icons/bkg_list.png' %}" alt=""></a></li>
+                                            
                                         </ul>
                                         <!-- <div class="tag">
                                             <span>sale</span>
@@ -243,16 +245,14 @@
                                                                 <img src="{{ product.thumbnail_image.url }}"
                                                                     alt="">
                                                             </a>
-                                                            <!-- <div class="tag">
-                                                                <span>sale</span>
-                                                            </div> -->
+                                                            {% if product.discounted_price != product.total_price %}
+                                                            <div class="tag">
+                                                                <span>Offer</span>
+                                                            </div>
+                                                            {% endif %}
                                                             <div class="action-link">
                                                                 <div class="action-link-left">
-                                                                    
-    
                                                                     <a href="{% url 'addtocart' slug=product.product_variant_slug %}"   >Add To Cart</a>
-                                                                  
-                                                                    
                                                                 </div>
                                                                 <div class="action-link-right">
                                                                     <a href="#" data-bs-toggle="modal"
@@ -260,8 +260,7 @@
                                                                             class="icon-magnifier"></i></a>
                                                                     <a href="wishlist.html"><i
                                                                             class="icon-heart"></i></a>
-                                                                    <a href="compare.html"><i
-                                                                            class="icon-shuffle"></i></a>
+                                                                    
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -283,7 +282,12 @@
                                                                 </ul>
                                                             </div>
                                                             <div class="content-right">
+                                                                {% if product.discounted_price != product.total_price %}
+                                                                <span class="price">${{ product.discounted_price|floatformat:0 }}</span>
+                                                                <span class="price"> <del>${{ product.total_price|floatformat:0 }}</del></span>
+                                                                {% else %}
                                                                 <span class="price">${{ product.total_price|floatformat:0 }}</span>
+                                                                {% endif %}
                                                             </div>
 
                                                         </div>
@@ -293,59 +297,7 @@
                                                 {% endfor %}
                                             </div>
                                         </div> <!-- End Grid View Product -->
-                                        <!-- Start List View Product -->
-                                        <div class="tab-pane sort-layout-single" id="layout-list">
-                                            <div class="row">
-                                                {% for product in products %}
-                                                <div class="col-12">
-                                                    <!-- Start Product Defautlt Single -->
-                                                    <div class="product-list-single product-color--golden">
-                                                        <a href=""
-                                                            class="product-list-img-link">
-                                                            <img class="img-fluid"
-                                                                src="{{ product.thumbnail_image.url }} "
-                                                                alt="">
-                                                            <img class="img-fluid"
-                                                                src="{{ product.thumbnail_image.url }}"
-                                                                alt="">
-                                                        </a>
-                                                        <div class="product-list-content">
-                                                            <h5 class="product-list-link"><a
-                                                                    href="product-details-default.html">{{ product.product.product_name }}</a></h5>
-                                                            <ul class="review-star">
-                                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                                <li class="fill"><i class="ion-android-star"></i></li>
-                                                                <li class="empty"><i class="ion-android-star"></i></li>
-                                                            </ul>
-                                                            <span class="product-list-price"><del>{{ product.max_price }}</del>
-                                                                {{ product.sale_price }}</span>
-                                                            <p>{{ product.product.description }}</p>
-                                                            <div class="product-action-icon-link-list">
-                                                                {% comment %}
-                                                                <a href="{% url 'addtocart' product_id=product.id %}" data-bs-toggle="modal"
-                                                                data-bs-target="#modalAddcart"
-                                                                class="btn btn-lg btn-black-default-hover">Add to
-                                                                cart</a>
-                                                                {% endcomment %}
-                                                                <a href="#" data-bs-toggle="modal"
-                                                                    data-bs-target="#modalQuickview"
-                                                                    class="btn btn-lg btn-black-default-hover"><i
-                                                                        class="icon-magnifier"></i></a>
-                                                                <a href="wishlist.html"
-                                                                    class="btn btn-lg btn-black-default-hover"><i
-                                                                        class="icon-heart"></i></a>
-                                                                <a href="compare.html"
-                                                                    class="btn btn-lg btn-black-default-hover"><i
-                                                                        class="icon-shuffle"></i></a>
-                                                            </div>
-                                                        </div>
-                                                    </div> <!-- End Product Defautlt Single -->
-                                                </div>
-                                                {% endfor %}
-                                            </div>
-                                        </div> <!-- End List View Product -->
+                                       
                                     </div>
                                 </div>
                             </div>

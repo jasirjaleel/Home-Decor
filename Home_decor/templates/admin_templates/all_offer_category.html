@@ -60,8 +60,8 @@
                     </div>
                 </a>
             </div>
-            <div class="col-lg-2 col-sm-2 col-4 col-price"> <span>{{ category_offer.expire_date }}</span> </div>
-            <div class="col-lg-1 col-sm-2 col-4 col-price"> <span>{{ category_offer.discount_percentage }}</span> </div>
+            <div class="col-lg-2 col-sm-2 col-4 col-price"> <span>{{ category_offer.expire_date|date:'d M Y' }}</span> </div>
+            <div class="col-lg-1 col-sm-2 col-4 col-price"> <span>{{ category_offer.discount_percentage }} %</span> </div>
             <!-- Add other fields related to category offers here -->
             <div class="col-lg-2 col-sm-2 col-2 col-status" style="width: 30px;">
                 {% if  category_offer.is_active %}
@@ -82,7 +82,7 @@
                 {% endif %}
             </div>
             <div class="col-lg-2 col-sm-2 col-4 col-action text-end"> 
-                <a href="" class="btn btn-sm font-sm rounded btn-brand">
+                <a href="{% url 'edit_category_offer' %}?id={{category_offer.id}}" class="btn btn-sm font-sm rounded btn-brand">
                     <i class="material-icons md-edit"></i> Edit
                 </a>
                 <!-- Add delete button or any other action buttons here -->

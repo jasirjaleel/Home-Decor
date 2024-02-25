@@ -32,27 +32,30 @@ def usersignup(request):
         # referalid    = request.POST['referalid']
         
         
-        if Account.objects.filter(username = username).exists():
-            messages.success(request,'User Already Exists')
-        elif Account.objects.filter(email = email).exists():
-            messages.success(request,'Email Already Exists')
+        if Account.objects.filter(username = username,is_active=True).exists():
+            messages.error(request,'User Already Exists')
+        elif Account.objects.filter(email = email,is_active=True).exists():
+            messages.error(request,'Email Already Exists')
         elif pass1 != pass2:
-            messages.success(request,'Passwords does not match')
+            messages.error(request,'Passwords does not match')
         else:
-            myuser = Account.objects.create_user(first_name=first_name,last_name=last_name,username=username,email=email,password=pass1)
-            myuser.is_active    = False
-            myuser.is_admin     = False
-            myuser.is_superuser = False
-            myuser.is_staff     = False
+            acc = Account.objects.filter(username=username,is_active=False).exists()
+            if acc:
+                Account.objects.filter(username=username, is_active=False).delete()
+                print("delete")
+            else:
+                myuser = Account.objects.create_user(first_name=first_name,last_name=last_name,username=username,email=email,password=pass1)
+                myuser.is_active    = False
+                myuser.is_admin     = False
+                myuser.is_superuser = False
+                myuser.is_staff     = False
 
-            myuser.save()
+                myuser.save()
         
         randomotp = str(random.randint(100000, 999999))
 
         request.session['storedotp']    = randomotp
         request.session['storedemail']  = email
-        request.session['storedotp'].set_expiry(300)
-        request.session['storedemail'].set_expiry(300)
         request.session.modified = True
 
         subject = "Verify Your One-Time Password (OTP) - Home Decor Ecommerce Store"
@@ -73,6 +76,7 @@ def verify_otp(request):
         otp = request.POST.get('enteredotp')
         storedotp=request.session['storedotp']
         storedemail = request.session['storedemail']
+        print(storedemail,otp,storedotp)
 
         if otp == storedotp:
             user = Account.objects.get(email=storedemail)
@@ -90,7 +94,7 @@ def verify_otp(request):
                 return redirect('home')
             
         else:
-            messages.error(request,'Wrong Entry')
+            messages.success(request,'Wrong Entry')
         context = {'email': storedemail}
     return render(request,'user_templates/otp.html',context)
 
@@ -143,6 +147,7 @@ def userlogin(request):
             if request.GET.get('next'):
                 return redirect(request.GET.get('next'))
             else:
+                messages.success(request, 'Login Successful')
                 return redirect('home')
         elif user is not None and user.is_blocked == True:
             messages.error(request,'You are Blocked!')

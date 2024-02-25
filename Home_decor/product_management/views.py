@@ -19,8 +19,6 @@ def all_product(request):
         'products_count':product_count
     }
     return render(request, 'admin_templates/all_product.html',context)
-
-
 ##############   CREATING NEW PRODUCT   #############
 def create_product(request):                                                                        
     category    = Category.objects.all()
@@ -198,7 +196,7 @@ def edit_product_variant(request,product_id):
         product_image   = request.FILES.getlist('product_image')
         sale_price      = request.POST['sale_price']
         stock           = request.POST['stock']      
-        thumbnail_image = request.FILES.get('existing_product_images')     
+        thumbnail_image = request.FILES.get('thumbnail_image')     
        
         #getting all atributes  
         attribute_values = request.POST.getlist('attributes')
