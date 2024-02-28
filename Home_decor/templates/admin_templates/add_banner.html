@@ -1,7 +1,6 @@
 {% extends 'admin_templates/base.html' %}
 {% load static %}
 {% block content %}
-
 <section class="content-main">
     <div class="row">
         <div class="col-9">
@@ -53,7 +52,7 @@
                 <div class="card-body">
                     <div class="input-upload">
                         <img src="{% static 'assets/imgs/theme/upload.svg' %}" alt="">
-                        <input class="form-control" type="file" name="banner_image">
+                        <input class="form-control" onchange="validateImage(this)" accept="image/*" type="file" name="banner_image" >
                     </div>
                 </div>
             </div> <!-- card end// -->

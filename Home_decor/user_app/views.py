@@ -15,7 +15,22 @@ from django.urls import reverse
 from cart_app.models import Cart
 from cart_app.views import _cart_id
 
+import threading
+from django.core.mail import EmailMessage
+
 # Create your views here.
+
+
+class EmailThread(threading.Thread):
+
+    def __init__(self, email):
+        self.email = email
+        threading.Thread.__init__(self)
+
+    def run(self):
+        self.email.send()
+
+
 
 def custom_404_view(request,exception):
     return render(request, 'admin_templates/404.html',status=404)
@@ -86,7 +101,9 @@ def verify_otp(request):
             sender_mail = "noreply@homedecorestore.com"
             message = "Dear User,\n\nYour login to Home Decor Ecommerce Store was successful.\n\nThank you for choosing Home Decor Ecommerce Store."
 
-            send_mail(subject, message, sender_mail,[storedemail])
+            email = EmailMessage(subject, message, sender_mail, [email])
+            email_thread = EmailThread(email)
+            email_thread.start()
             login(request,user)
             if request.GET.get('next'):
                 return redirect(request.GET.get('next'))
@@ -177,14 +194,16 @@ class ForgetPasswordView(View):
         random_otp = str(random.randint(100000, 999999))
         self.request.session['storedotp'] = random_otp
         self.request.session['storedemail'] = email
-        self.request.session['storedotp'].set_expiry(300)
-        self.request.session['storedemail'].set_expiry(300)
         self.request.session.modified = True 
 
         subject = "Verify Your One-Time Password (OTP) - Home Decor Ecommerce Store"
         sender_mail = "noreply@homedecorestore.com"
         otp_message = f"Dear User,\n\n Your One-Time Password (OTP) for reset password: {random_otp}\n\nThank you for choosing Home Decor Ecommerce Store."
-        send_mail(subject, otp_message, sender_mail, [email])
+        # send_mail(subject, otp_message, sender_mail, [email])
+        email = EmailMessage(subject, otp_message, sender_mail, [email])
+        email_thread = EmailThread(email)
+        email_thread.start()
+
         return redirect('verify_password_login')
 
     def get(self, request, *args, **kwargs):
@@ -229,7 +248,10 @@ class EnterNewPasswordView(View):
             subject = "Password Reset Successful - Home Decor Ecommerce Store"
             sender_mail = "noreply@homedecorestore.com"
             message = "Dear User,\n\nYour password reset for Home Decor Ecommerce Store was successful.\n\nIf you did not initiate this password reset, please contact our support team immediately.\n\nThank you for choosing Home Decor Ecommerce Store."
-            send_mail(subject, message, sender_mail, [user.email])
+            # send_mail(subject, message, sender_mail, [user.email])
+            email = EmailMessage(subject, message, sender_mail, [email])
+            email_thread = EmailThread(email)
+            email_thread.start()
 
             messages.success(self.request, "Resetting Password Completed")
             return redirect('userlogin')

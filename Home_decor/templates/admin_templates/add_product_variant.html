@@ -57,15 +57,15 @@
                         <div class="card-body">
                             <div>
                                 <label class="form-label">Thumbnail-Images</label>
-                                <input class="form-control" type="file" name="thumbnail_image"onchange="previewImages(event)">
+                                <input class="form-control" type="file" name="thumbnail_image"onchange="previewImages(event),validateImage(this)" accept="image/*">
                             </div>
                         </div>
                         <div class="card-body">
                             <div>
                                 <label class="form-label">Product-Images</label>
                                 <div class="input-upload" id="imagePreviewContainer"></div>
-                                <input class="form-control" type="file" name="product_image" id="product_image"
-                                    multiple onchange="previewImages(event)">
+                                <input class="form-control" type="file" name="product_image" id="product_image" accept="image/*"
+                                    multiple onchange="previewImages(event),validateImage(this)">
                             </div>
                         </div>
                         <div>

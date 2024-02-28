@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from product_management.models import Product,Product_Variant,Additional_Product_Image
+from product_management.models import Product,Product_Variant,Additional_Product_Image,Brand,Attribute_Value
 from category_management.models import Category
 from django.db.models import Q
 from django.http import JsonResponse
@@ -127,8 +127,12 @@ class ShopView(View):
         products = Product_Variant.objects.filter(is_active=True,stock__gt=0,product__is_available=True).order_by('id')
         product_offers = ProductOffer.objects.filter(is_active=True)
         category_offers = CategoryOffer.objects.filter(is_active=True)
-        
-        
+        categories = Category.objects.filter(is_active=True)
+        brands = Brand.objects.filter(is_active=True)
+        colors = Attribute_Value.objects.filter(attribute__attribute_name='Color')
+
+
+    
         for product in products:
             total_price = product.total_price
             max_discount_price = total_price
@@ -156,7 +160,15 @@ class ShopView(View):
         paginator = Paginator(products,8)
         page = request.GET.get('page')
         paged_products = paginator.get_page(page)
-        return render(request, self.template_name, {'products': paged_products,'products_count':products_count,'discounded_price':product.discounted_price})
+        context = {
+                'products': paged_products,
+                'products_count':products_count,
+                'discounded_price':product.discounted_price,
+                'categories':categories,
+                'brands':brands,
+                'colors':colors,
+                   }
+        return render(request, self.template_name, context)
 
 class ProductDetailView(View):
     template_name = 'store_templates/productdetails.html'

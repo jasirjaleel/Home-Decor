@@ -17387,19 +17387,11 @@ input {
 }
 
 .sidebar-single-widget {
-    margin-top: 20px;
-    margin-bottom: 40px
+    margin-top: 0px;
+    margin-bottom: 40px;
+    padding: 20px;
 }
 
-.sidebar-single-widget:first-child {
-    margin-top: 0
-}
-
-.sidebar-single-widget:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0
-}
 
 .sidebar-title {
     font-size: 18px;

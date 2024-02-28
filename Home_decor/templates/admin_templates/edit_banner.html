@@ -53,7 +53,7 @@
                 <div class="card-body">
                     <div class="input-upload">
                         <img src="{{old_banner.banner_image.url}}" alt="">
-                        <input class="form-control" type="file" name="banner_image" accept="image/*"onchange="previewImages(event)">
+                        <input class="form-control" type="file" name="banner_image" accept="image/*"onchange="previewImages(event),validateImage(this)">
                         <div id="imagePreviewContainer"></div>
                     </div>
                 </div>

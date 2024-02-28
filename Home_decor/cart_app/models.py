@@ -36,6 +36,9 @@ class Wishlist(models.Model):
     
     def __str__(self):
         return str(self.user)
+    
+    def get_items_count(self):
+       return self.wishlistitem_set.filter(is_active=True).count()
 
 class WishlistItem(models.Model):
     wishlist = models.ForeignKey(Wishlist,on_delete=models.CASCADE)

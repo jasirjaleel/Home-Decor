@@ -23,7 +23,8 @@ class Attribute_Value(models.Model):
     is_active       = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.attribute_value+"-"+self.attribute.attribute_name
+        # return self.attribute_value+"-"+self.attribute.attribute_name
+        return self.attribute_value
     
 # Brand IKEA , HOME DECOR , DOIR 
 class Brand(models.Model):

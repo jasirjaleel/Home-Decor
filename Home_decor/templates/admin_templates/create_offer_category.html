@@ -38,7 +38,7 @@
                         <div class="mb-0 mt-2">
                             <div class="input-upload" id="imagePreviewContainer"></div>
                             <label class="form-label">Category Offer Image</label>
-                            <input class="form-control" type="file" name="category_offer_image" onchange="previewImages(event)">
+                            <input class="form-control" type="file" name="category_offer_image" onchange="previewImages(event),validateImage(this)" accept="image/*">
                         </div>
                     </div>
                     

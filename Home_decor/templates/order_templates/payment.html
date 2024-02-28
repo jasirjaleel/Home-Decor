@@ -64,7 +64,7 @@
                 <li class="d-flex flex-row p-2">
                   <label for="payment-{{ method.id }}" class="d-flex flex-row">
                     <input type="radio" id="payment-{{ method.id }}" style="width: 20px;" name="payment_method"
-                      value="{{ method.id }}" />
+                      value="{{ method.method_name }}" />
                     <h5 class="ml-2 w-100">{{ method.method_name }}</h5>
                   </label>
                 </li>
@@ -148,21 +148,21 @@
               <div id="quantity">Subtotal ({{quantity}} Items):</div>
               <div class="payment-summary-money" id="total">${{total}}</div>
               </div>
+              <div class="payment-summary-row">
+                <div>Shipping &amp; handling:</div>
+                <div class="payment-summary-money" id="shipping">${{shipping}}</div>
+              </div>
+              <div class="payment-summary-row subtotal-row">
+                <div>Total before tax:</div>
+                <div class="payment-summary-money" id="before_tax">${{ tax }}</div>
+              </div>
               <div class="payment-summary-row" id="offerDiv">
               <div >Offer:</div>
               <div class="payment-summary-money" id="offer"></div>
               </div>
               <div class="payment-summary-row">
-              <div>Shipping &amp; handling:</div>
-              <div class="payment-summary-money" id="shipping">${{shipping}}</div>
-              </div>
-              <div class="payment-summary-row subtotal-row">
-              <div>Total before tax:</div>
-              <div class="payment-summary-money" id="before_tax">${{ tax }}</div>
-              </div>
-              <div class="payment-summary-row">
               <div>Estimated tax (5%):</div>
-              <div class="payment-summary-money" id="tax">${{tax}}</div>
+              <div class="payment-summary-money" id="tax"></div>
               </div>
               <div class="payment-summary-row" id="discountDiv">
               <div>Discount:</div>
@@ -393,7 +393,7 @@ async function updateOrderSummary() {
     var selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked');
     console.log(selectedPaymentMethod.value, 'as');
 
-    if (selectedPaymentMethod.value == 2) {
+    if (selectedPaymentMethod.value == 'Razorpay') {
         // Create the fetch request
         fetch('/payment/', {
                 method: 'POST',
@@ -547,7 +547,7 @@ async function updateOrderSummary() {
                     console.error('There was a problem with the fetch operation:', error);
                 });
         } else {
-            console.log("Please check the checkbox to proceed with the payment.");
+            console.log("Not checked");
         }
     });
 

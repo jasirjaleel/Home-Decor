@@ -38,20 +38,13 @@
                                         <option value="{{ i.id }}" {% if i.id == products.brand.id %}selected{% endif %}>{{ i.brand_name }}</option>
                                     {% endfor %}
                                 </select>
-                               
                             </div>
                             <div class="col-md-4  mb-3">
                                 <label class="form-label">Price</label>
                                 <input type="text" placeholder="Type here" name="price" value="{{products.base_price}}" class="form-control"
                                 id="price">
                             </div>
-                            <!-- <div class="col-md-4  mb-3">
-                            <label for="product_size" class="form-label">Size</label>
-                            <input type="text" placeholder="Type here" class="form-control" id="product_size">
-                        </div> -->
                         </div>
-
-                        
                         <div>
                             <label class="form-label">Description</label>
                             <textarea placeholder="Type here" class="form-control" rows="4"
@@ -66,10 +59,6 @@
                     </div>
             </div>
         </form>
-        <!-- end add new product form  -->
-        <!-- product attribute setting -->
-
-
     </div>
 </section>
 <script>

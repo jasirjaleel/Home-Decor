@@ -135,7 +135,6 @@
                                             <a href="{% url 'userlogout' %}">Logout</a>
                                         </li>
                                         {% endif %}
-
                                     </ul>
                                 </nav>
                             </div>
@@ -152,21 +151,36 @@
                                 <li>
                                     <a href="{% url 'wishlist' %}">
                                         <i class="icon-heart"></i>
-                                        <span class="item-count">3</span>
+                                        {% if request.user.is_authenticated %}
+                                            {% with request.user.wishlist as user_wishlist %}
+                                                {% if user_wishlist %}
+                                                    {% if user_wishlist.get_items_count > 0 %}
+                                                        <span class="wishlist-item-count">{{ user_wishlist.get_items_count }}</span>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endwith %}
+                                        {% endif %}
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{% url 'cart' %}">
                                         <i class="icon-bag"></i>
                                         {% if request.user.is_authenticated %}
-                                            {% with request.user.cart.items_count as cart_items_count %}
-                                                {% if cart_items_count %}
-                                                <span class="item-count"> {{ cart_items_count }}</span>                                                   
+                                            {% with request.user.cart_items.all as cart_items %}
+                                                {% if cart_items %}
+                                                    {% for cart_item in cart_items %}
+                                                        {% if forloop.first %}
+                                                            {% if cart_item.items_count > 0 %}
+                                                                <span class="item-count">{{ cart_item.items_count }}</span>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endfor %}
                                                 {% endif %}
                                             {% endwith %}
                                         {% endif %}
                                     </a>
                                 </li>
+                                
                                 <li>
                                     <a href="#search">
                                         <i class="icon-magnifier"></i>
@@ -256,6 +270,7 @@
                         <li>
                             <a href="#"><span>Home</span></a>
                         </li>
+                        
                        
                     </ul>
                 </div> <!-- End Mobile Menu Nav -->

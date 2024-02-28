@@ -65,7 +65,7 @@
                                 <div class="input-upload">
                                     
                                     <img src="{{old_product.thumbnail_image.url}}" alt="">
-                                    <input class="form-control" type="file" name="thumbnail_image" onchange="previewImages(event)">
+                                    <input class="form-control" type="file" name="thumbnail_image" onchange="previewImages(event),validateImage(this)" accept="image/*">
                                     <label class="form-label">Thumbnail-Images</label>
                                 </div>
                                
@@ -78,7 +78,7 @@
                                         {% endfor %}
                                     {% endif %}
                                     <input class="form-control" type="file" name="product_image" id="product_image"
-                                    multiple onchange="previewImages(event)">
+                                    multiple onchange="previewImages(event),validateImage(this)" accept="image/*">
                                     <label class="form-label">Product-Images</label>
                                     <div id="imagePreviewContainer"></div>
                                 </div>

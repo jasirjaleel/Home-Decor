@@ -43,8 +43,8 @@
                         <div class="mb-0 mt-2">
                             <div class="input-upload" id="imagePreviewContainer"></div>
                             <img src="{{product_offer}}" alt="">
-                            <label class="form-label">Category Offer Image</label>
-                            <input class="form-control" type="file" name="product_offer_image" onchange="previewImages(event)">
+                            <label class="form-label">Product Offer Image</label>
+                            <input class="form-control" type="file" name="product_offer_image" onchange="previewImages(event),validateImage(this)" accept="image/*">
                         </div>
                     </div>
                     

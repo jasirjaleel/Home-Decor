@@ -45,7 +45,7 @@ def adminlogout(request):
     return redirect('home')
 
 @never_cache
-@login_required(login_url='userlogin')
+@login_required(login_url='admin_login')
 def all_users(request):
     if request.user.is_superadmin:
         # if request.method == 'POST':

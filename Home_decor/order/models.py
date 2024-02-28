@@ -47,6 +47,13 @@ class Payment(models.Model):
     payment_status      = models.CharField(choices = PAYMENT_STATUS_CHOICES,max_length=20)
     created_at          = models.DateTimeField(auto_now_add=True)
     
+    def save(self, *args, **kwargs):
+        # Check if payment status is 'SUCCESS'
+        if self.payment_status == 'SUCCESS':
+            # If yes, set is_paid to True
+            self.is_paid = True
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.payment_order_id
     
@@ -63,9 +70,9 @@ class Order(models.Model):
         ("Returned", "Returned"),
         )
     user                = models.ForeignKey(Account,on_delete=models.SET_NULL,null=True)
-    payment             = models.ForeignKey(Payment,on_delete=models.CASCADE,null=True,blank=True)
+    payment             = models.ForeignKey(Payment,on_delete=models.CASCADE,null=True,blank=True,related_name='order')
     order_number        = models.CharField(max_length=100)
-    shipping_address    = models.ForeignKey(ShippingAddress, on_delete=models.CASCADE,null=True)
+    shipping_address    = models.OneToOneField(ShippingAddress, on_delete=models.CASCADE,null=True)
     order_total         = models.DecimalField(max_digits=12, decimal_places=2)
     order_tax           = models.DecimalField(max_digits=12, decimal_places=2)
     additional_discount = models.IntegerField(default=0,null=True)
