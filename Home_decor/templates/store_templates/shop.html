@@ -49,16 +49,16 @@
                                             <!-- Add a button to toggle filter options visibility -->
                                             <button class="btn btn-block btn-golden p-2" id="toggleFilters"  style="max-width: 200px;min-width: 100px">Show/Hide Filters</button>
                                             <!-- Filter options section -->
+                                            <form id='filterForm' method="get">
                                             <div id="filterOptions" style="display:none;align-items: top; justify-content: center;">
-                                                
                                                 <div class="sidebar-single-widget" >
                                                     <h6 class="sidebar-title">CATEGORIES</h6>
                                                     <div class="sidebar-content">
                                                         <ul class="filter-type-select">
                                                             {% for category in categories %}
                                                             <li>
-                                                                <label class="checkbox-default" for="category-{{ forloop.counter }}">
-                                                                    <input type="checkbox" id="category-{{ forloop.counter }}">
+                                                                <label class="checkbox-default">
+                                                                    <input type="checkbox" name="category" value="{{category.id}}" {% if category.id in selected_category %} checked {% endif %} >
                                                                     <span>{{category}}</span>
                                                                 </label>
                                                             </li>
@@ -70,10 +70,10 @@
                                                 <div class="sidebar-single-widget" >
                                                     <h6 class="sidebar-title">FILTER BY PRICE</h6>
                                                     <div class="sidebar-content">
-                                                        <div id="slider-range"></div>
-                                                        <div class="filter-type-price">
-                                                            <label for="amount">Range:</label>
-                                                            <input type="text" id="amount" >
+                                                        <h5 class="w-25">Price</h5>
+                                                        <div class="filter-type-price" style="flex-direction: column;">
+                                                            <input class="form-control" type="number" name="min_price" placeholder="Min">
+                                                            <input class="form-control mt-2" type="number" name="max_price" placeholder="Max">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -85,8 +85,8 @@
                                                             <ul>
                                                                 {% for brand in brands %}
                                                                 <li>
-                                                                    <label class="checkbox-default" for="brand-{{ forloop.counter }}">
-                                                                        <input type="checkbox" id="brand-{{ forloop.counter }}">
+                                                                    <label class="checkbox-default">
+                                                                        <input type="checkbox" name="brand" value="{{brand.id}}" {% if brand.id in selected_brand %} checked {% endif %}>
                                                                         <span>{{brand}}</span>
                                                                     </label>
                                                                 </li>
@@ -103,8 +103,8 @@
                                                             <ul>
                                                                 {% for color in colors %}
                                                                 <li>
-                                                                    <label class="checkbox-default" for="color-{{ forloop.counter }}">
-                                                                        <input type="checkbox" id="color-{{ forloop.counter }}">
+                                                                    <label class="checkbox-default">
+                                                                        <input type="checkbox" name="color" value="{{color}}" {% if color.attribute_value in selected_color %} checked {% endif %}>
                                                                         <span>{{color}}</span>
                                                                     </label>
                                                                 </li>
@@ -112,22 +112,26 @@
                                                             </ul>
                                                         </div>
                                                     </div>
-                                                </div>  
+                                                </div> 
                                             </div>        
+                                            <button class="btn btn-golden"  type="submit">Apply Filters</button> 
                                         </div>
                                     </div>
                                     <div>
                                         <label class="mr-2">Sort By:</label>
-                                        <form action="#">
+                                        
                                             <fieldset>
-                                                <select name="speed" id="speed">
-                                                    <option>Sort by average rating</option>
-                                                    <option>Sort by popularity</option>
-                                                    <option selected="selected">Sort by newness</option>
-                                                    <option>Sort by price: low to high</option>
-                                                    <option>Sort by price: high to low</option>
-                                                    <option>Product Name: Z</option>
-                                                </select>
+                                                <select name="sort_by">
+                                                    <option value="" {% if not sort_by %} selected {% endif %}>Select option</option>
+                                                    <option value="price_low_to_high" {% if sort_by == "price_low_to_high" %} selected {% endif %}>Sort by price: low to high</option>
+                                                    <option value="price_high_to_low" {% if sort_by == "price_high_to_low" %} selected {% endif %}>Sort by price: high to low</option>
+                                                    <option value="newest" {% if sort_by == "newest" %} selected {% endif %}>Sort by newness</option>
+                                                    <option value="oldest" {% if sort_by == "oldest" %} selected {% endif %}>Sort by oldest</option>
+                                                    <option value="a_z" {% if sort_by == "a_z" %} selected {% endif %}>Sort by product name: A to Z</option>
+                                                    <option value="z_a" {% if sort_by == "z_a" %} selected {% endif %}>Sort by product name: Z to A</option>
+                                                    <!-- <option value="discount" {% if sort_by == "discount" %} selected {% endif %}>Sort by discount</option>
+                                                    <option value="rating" {% if sort_by == "rating" %} selected {% endif %}>Sort by rating</option> -->
+                                                </select>                                                                                              
                                             </fieldset>
                                         </form>
                                     </div>
@@ -290,79 +294,28 @@
             });
         });
 
-        $(document).ready(function() {
-    $("#slider-range").slider({
-        range: true,
-        min: 5000,
-        max: 50000,
-        step: 1000, 
-        slide: function(event, ui) {
-            $("#amount").val("$" + ui.values[0] +" - $"+ ui.values[1]);
-        }
+
+        filterForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+    
+    const formData = new FormData(filterForm);
+    console.log(formData);
+    const params = new URLSearchParams(formData);
+
+    const currentUrl = new URL(window.location.href);
+
+    // Remove existing filter parameters
+    currentUrl.searchParams.forEach((value, key) => {
+        currentUrl.searchParams.delete(key);
     });
-    $("#amount").val("$" + $("#slider-range").slider("values", 0) +
-        " - $" + $("#slider-range").slider("values", 1));
+    
+    // Append the new filter parameters
+   currentUrl.search = `${currentUrl.search ? currentUrl.search + '&' : ''}${params.toString()}`;
+
+
+    window.location.href = currentUrl.toString();
 });
 
-    document.addEventListener('DOMContentLoaded', function() {
-        // Select all checkboxes
-        const checkboxes = document.querySelectorAll('.checkbox-default input[type="checkbox"]');
-        console.log('Checkbox change event listener added');
-
-        // Add event listener to each checkbox
-        checkboxes.forEach(function(checkbox) {
-            checkbox.addEventListener('change', function() {
-               
-                const selectedFilters = {
-                    price       : getPriceRange(),
-                    brands      : getSelectedValues('brands'),
-                    colors      : getSelectedValues('colors'), 
-                    categories  : getSelectedValues('categories'), 
-                    
-                };
-                const hi = getSelectedValues('brands')
-            console.log(hi);
-                
-                // Send the selected filters to the backend using fetch
-                fetch('/your-backend-endpoint', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        // Add any additional headers if needed
-                    },
-                    body: JSON.stringify(selectedFilters),
-                })
-                .then(response => {
-                    // Handle the response from the backend
-                    if (response.ok) {
-                        // Handle success
-                        console.log('Filters sent to backend successfully');
-                    } else {
-                        // Handle error
-                        console.error('Error sending filters to backend');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            });
-        });
-        
-        function getPriceRange(){
-            const amountInput = document.getElementById('amount');
-            const amountValue = amountInput.value;
-            const [minPrice, maxPrice] = amountValue.split('-');
-            return { min: minPrice.trim(), max: maxPrice.trim() };
-        }
-        function getSelectedValues(filterType) {
-            const selectedValues = [];
-            const filterCheckboxes = document.querySelectorAll(`.${filterType} input[type="checkbox"]:checked`);
-            filterCheckboxes.forEach(function(checkbox) {
-                selectedValues.push(checkbox.nextSibling.textContent.trim());
-            });
-            return selectedValues;
-        }
-    });
 
     </script>
     

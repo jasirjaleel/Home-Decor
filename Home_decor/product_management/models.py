@@ -102,7 +102,6 @@ class Product_Variant(models.Model):
         return self.stock > 0
     @property  
     def total_price(self):
-        # return self.sale_price + self.product.base_price
         return self.sale_price + self.product.base_price
     def mrp(self):
         return self.max_price + self.product.base_price

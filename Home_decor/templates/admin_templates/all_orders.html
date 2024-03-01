@@ -59,18 +59,27 @@
                                     <td>${{i.order_total}}</td>
                                     <td>
                                         {% if i.payment.payment_status == 'SUCCESS' %}
-                                        <span class="badge badge-pill badge-soft-success">
-                                            {{ i.payment.payment_status }}
-                                        </span>
+                                            <span class="badge badge-pill badge-soft-success">
+                                                {{ i.payment.payment_status }}
+                                            </span>
                                         {% elif i.payment.payment_status == 'PENDING' %}
-                                        <span class="badge badge-pill badge-soft-warning">
-                                            {{ i.payment.payment_status }}
-                                        </span>
+                                            <span class="badge badge-pill badge-soft-warning">
+                                                {{ i.payment.payment_status }}
+                                            </span>
                                         {% elif i.payment.payment_status == 'FAILED' %}
-                                        <span class="badge badge-pill badge-soft-danger">
-                                            {{ i.payment.payment_status }}
-                                        </span>
+                                            <span class="badge badge-pill badge-soft-danger">
+                                                {{ i.payment.payment_status }}
+                                            </span>
+                                        {% elif i.payment.payment_status == 'REFUNDED' %}
+                                            <span class="badge badge-pill badge-soft-info">
+                                                {{ i.payment.payment_status }}
+                                            </span>
+                                        {% elif i.payment.payment_status == 'CANCELLED' %}
+                                            <span class="badge badge-pill badge-soft-secondary">
+                                                {{ i.payment.payment_status }}
+                                            </span>
                                         {% endif %}
+
                                     </td>
                                     <td>
                                             {% if i.payment.payment_method.method_name == 'Razorpay' %}

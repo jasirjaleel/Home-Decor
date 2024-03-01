@@ -12,6 +12,10 @@ from order.models import OrderProduct,Order
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
 from wallet.models import Wallet,Transaction
+from product_management.models import Product
+from django.db.models import Sum
+from django.utils import timezone
+from datetime import datetime, timedelta
 # Create your views here.
 
 
@@ -32,10 +36,20 @@ def admin_login(request):
         
 @login_required(login_url='admin_login')
 def adminhome(request):
-    if request.user.is_authenticated and request.user.is_superadmin:
-        return render(request,"admin_templates/index.html")
-    return redirect('home')
-    # return render(request,'admin_templates/index.html')
+    orders = Order.objects.filter(is_ordered=True)
+    order_count = orders.count()
+    order_total = orders.aggregate(total_order_amount=Sum('order_total'))
+    order_total_amount = float(order_total['total_order_amount'])
+    products = Product.objects.filter(is_available=True).select_related('category')
+    product_count = products.count()
+    category_count = products.values('category__category_name').distinct().count()
+    context = {
+        'order_count'   : order_count,
+        'product_count' : product_count,
+        'category_count': category_count,
+        'order_total'   : order_total_amount,
+    }
+    return render(request,"admin_templates/index.html",context)
 
 @never_cache
 @login_required(login_url='admin_login')
@@ -135,3 +149,61 @@ def update_order_status(request):
             return JsonResponse({'error': str(e)}, status=400)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
+    
+
+########################## CHART #################################
+def fetch_monthly_data(request):
+    response = {}
+    end_date = timezone.now()
+    start_date = end_date - timedelta(days=30)
+    current_date = start_date
+    while current_date < end_date:
+        next_date = current_date + timedelta(days=1)
+        purchase_count = Order.objects.filter(created_at__gte=current_date, created_at__lt=next_date, is_ordered=True).count()
+        response[current_date.day] = purchase_count
+        current_date = next_date
+    return JsonResponse({'response': response}, status=200)
+
+def fetch_weekly_data(request):
+    response = {}
+    end_date = timezone.now()
+    start_date = end_date - timedelta(days=6)  
+    current_date = start_date
+    while current_date <= end_date:
+        next_date = current_date + timedelta(days=1)
+        purchase_count = Order.objects.filter(created_at__date=current_date, is_ordered=True).count()
+        day_name = current_date.strftime("%A")
+        response[day_name] = purchase_count
+        current_date = next_date
+    return JsonResponse({'response':response},status=200)
+
+
+def fetch_yearly_data(request):
+    response = {}
+    end_date = timezone.now()
+    start_date = end_date.replace(month=1, day=1)
+    current_date = start_date
+    while current_date <= end_date:
+        next_month = current_date.replace(month=(current_date.month + 1))
+        purchase_count = Order.objects.filter(
+            created_at__gte=current_date, created_at__lt=next_month, is_ordered=True
+        ).count()
+        month_name = current_date.strftime("%B")
+        response[month_name] = purchase_count
+        current_date = next_month
+    return JsonResponse({'response': response}, status=200)
+
+
+def fetch_custom_data(request):
+    response = {}
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    if start_date and end_date:
+        start_date = datetime.strptime(start_date, '%d-%m-%Y').date() 
+        end_date = datetime.strptime(end_date, '%d-%m-%Y').date() 
+        current_date = start_date
+        while current_date <= end_date:
+            purchase_count = Order.objects.filter(created_at__date=current_date, is_ordered=True).count()
+            response[str(current_date)] = purchase_count
+            current_date += timedelta(days=1)
+    return JsonResponse({'response': response}, status=200)

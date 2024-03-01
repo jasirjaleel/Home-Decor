@@ -12,6 +12,9 @@ from django.contrib.auth import login
 from django.shortcuts import get_object_or_404
 from order.models import Order, OrderProduct
 from django.db.models import Count
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from xhtml2pdf import pisa
 # Create your views here.
 
 def my_account(request):
@@ -87,6 +90,20 @@ def my_order(request):
         'orders': orders,
         }
     return render(request,'account_templates/my-orders.html',context)
+
+###################### ORDER DERAIL PAGE ########################
+def order_details(request):
+    order_id = request.GET.get('order_id')
+    order = Order.objects.get(id=order_id, user=request.user)
+    order_products = OrderProduct.objects.filter(order=order)
+    order_status = Order.ORDER_STATUS_CHOICES
+    context = {
+        'order': order,
+        'order_products': order_products,
+        'order_status': order_status,
+        'order_id':order_id
+    }
+    return render(request, 'account_templates/order_details.html', context)
 
 def my_profile(request):
     print(request.user)
@@ -213,3 +230,31 @@ def edit_address(request):
         "address":address,
     }
     return render(request, 'account_templates/edit-address.html',context)
+
+
+
+
+def generate_pdf(request):
+    
+    order_id = request.GET.get('order_id')
+    order = Order.objects.get(id=order_id, user=request.user)
+    order_products = OrderProduct.objects.filter(order=order)
+    order_status = Order.ORDER_STATUS_CHOICES
+    context = {
+        'order': order,
+        'order_products': order_products,
+        'order_status': order_status,
+        'order_id':order_id
+    }
+    # Render the HTML template
+    html = render_to_string("account_templates/invoice.html", context)
+    pdf_response = HttpResponse(content_type="application/pdf")
+    pdf_response["Content-Disposition"] = f'filename="{order.order_number}_invoice.pdf"'
+    
+
+    # Generate PDF using xhtml2pdf
+    pisa_status = pisa.CreatePDF(html, dest=pdf_response)
+    if pisa_status.err:
+        return HttpResponse('Failed to generate PDF: %s' % pisa_status.err)
+
+    return pdf_response

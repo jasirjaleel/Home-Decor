@@ -177,7 +177,7 @@ def payment(request):
             payment = _process_payment(user, draft_order, payment_methods_instance, grandtotal)
             user = request.user
             request.session['user'] = str(user)
-            draft_order.payment = Payment.objects.get(payment_order_id=payment['id'])
+            draft_order.payment = Payment.objects.get(payment_order_id=payment['payment_order_id'])
             draft_order.save()
             _create_order_products(draft_order, user)
             print('5')
@@ -218,6 +218,10 @@ def _process_payment(user, draft_order, payment_methods_instance, grandtotal):
             payment_status='PENDING',
             payment_order_id=payment_order_id
         )
+        payment1 = {
+            'payment_id': payment.id,
+            'payment_order_id': payment.payment_order_id,
+        }
         return payment1
     else:
         payment = Payment.objects.create(
@@ -392,6 +396,11 @@ def cancel_order(request):
         wallet.balance += amount
         Transaction.objects.create(wallet=wallet, amount=amount, transaction_type='CREDIT')
         wallet.save()
+        order.payment.payment_status = 'REFUNDED'
+        order.payment.save()
+    else:
+        order.payment.payment_status = 'CANCELLED'
+        order.payment.save()
     for order_product in order.order_products.all():
         product_variant = order_product.product_variant
         print(product_variant)

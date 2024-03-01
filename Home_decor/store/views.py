@@ -130,32 +130,76 @@ class ShopView(View):
         categories = Category.objects.filter(is_active=True)
         brands = Brand.objects.filter(is_active=True)
         colors = Attribute_Value.objects.filter(attribute__attribute_name='Color')
-
-
     
-        for product in products:
-            total_price = product.total_price
-            max_discount_price = total_price
-            best_offer = None
-            for offer in product_offers:
-                if offer.product == product.product:
-                    offer_discount = (offer.discount_percentage / Decimal(100)) * total_price
-                    discounted_price = total_price - offer_discount
-                    if discounted_price < max_discount_price:
-                        max_discount_price = discounted_price
-                        best_offer = offer.discount_percentage
-            for category_offer in category_offers:
-                if category_offer.category == product.product.category:
-                    offer_discount = (category_offer.discount_percentage / Decimal(100)) * total_price
-                    discounted_price = total_price - offer_discount
-                    if discounted_price < max_discount_price:
-                        max_discount_price = discounted_price
-                        best_offer = category_offer.discount_percentage
-            if best_offer:
-                product.discounted_price = max_discount_price
-                product.best_offer = best_offer
-            else:
-                product.discounted_price = total_price
+        selected_brand      =  []
+        selected_category   =  []
+        selected_color      =  []
+        selected_sort       =  []
+
+        brand_list      = request.GET.getlist("brand")
+        category_list   = request.GET.getlist("category")
+        colors_list     = request.GET.getlist("color")
+        min_price       = request.GET.get("min_price")
+        max_price       = request.GET.get("max_price")
+        sort_by         = request.GET.get("sort_by")
+        
+
+        if brand_list:
+            products = products.filter(product__brand__in=brand_list,is_active=True)
+            selected_brand = [product.product.brand.id for product in products]
+        if category_list:
+            products = products.filter(product__category_id__in=category_list, is_active=True)
+            selected_category = [product.product.category.id for product in products]
+        if colors_list:
+            products = products.filter(attributes__attribute_value__in=colors_list, is_active=True)
+            selected_color = [color for color in colors_list]
+        if min_price and max_price:
+            products = products.filter(total_price__range=[min_price,max_price])
+
+        if sort_by :
+            if sort_by == "price_low_to_high":
+                products = products.order_by('sale_price')
+            elif sort_by == "price_high_to_low":
+                products = products.order_by('-total_price')
+            elif sort_by == "newest":
+                products = products.order_by('-id')
+            elif sort_by == "oldest":
+                products = products.order_by('id')
+            elif sort_by == "a_z":
+                products = products.order_by('product__product_name')
+            elif sort_by == "z_a":
+                products = products.order_by('-product__product_name')
+            # elif sort_by == "rating":
+            #     products = products.order_by('-product__avg_rating')
+            # elif sort_by == "discount":
+            #     products = products.order_by('-discount_percentage')
+            selected_sort.append(sort_by)
+        if products == None:   
+            for product in products:
+                total_price = product.total_price
+                max_discount_price = total_price
+                best_offer = None
+                for offer in product_offers:
+                    if offer.product == product.product:
+                        offer_discount = (offer.discount_percentage / Decimal(100)) * total_price
+                        discounted_price = total_price - offer_discount
+                        if discounted_price < max_discount_price:
+                            max_discount_price = discounted_price
+                            best_offer = offer.discount_percentage
+                for category_offer in category_offers:
+                    if category_offer.category == product.product.category:
+                        offer_discount = (category_offer.discount_percentage / Decimal(100)) * total_price
+                        discounted_price = total_price - offer_discount
+                        if discounted_price < max_discount_price:
+                            max_discount_price = discounted_price
+                            best_offer = category_offer.discount_percentage
+                if best_offer:
+                    product.discounted_price = max_discount_price
+                    product.best_offer = best_offer
+                else:
+                    product.discounted_price = total_price
+        else:
+            product.discounted_price = 0
         products_count = products.count()
         paginator = Paginator(products,8)
         page = request.GET.get('page')
@@ -167,6 +211,10 @@ class ShopView(View):
                 'categories':categories,
                 'brands':brands,
                 'colors':colors,
+                'selected_brand':selected_brand,
+                'selected_category':selected_category,
+                'selected_color':selected_color,
+                'selected_sort':selected_sort,
                    }
         return render(request, self.template_name, context)
 

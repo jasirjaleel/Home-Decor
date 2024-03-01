@@ -42,7 +42,10 @@ urlpatterns = [
     path('toggle_product_offer/',offerView.toggle_offer_active_status,name='toggle_offer_active_status'),
     path('toggle_category_offer/',offerView.toggle_offer_category_status,name='toggle_offer_category_status'),
     
-    
+    path("fetchData/week",views.fetch_weekly_data, name ="fetch_weekly_data"),
+    path("fetchData/month",views.fetch_monthly_data, name ="fetch_monthly_data"),
+    path("fetchData/year",views.fetch_yearly_data, name ="fetch_yearly_data"),
+    path("fetchData/custom",views.fetch_custom_data, name ="fetch_custom_data"),
     
     # path('add_user/', views.add_user, name='add_user'),
     # path('edit_user/<int:user_id>/', views.edit_user, name='edit_user'),

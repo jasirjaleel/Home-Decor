@@ -37,6 +37,8 @@ class Payment(models.Model):
         ("PENDING", "Pending"),
         ("FAILED", "Failed"),
         ("SUCCESS", "Success"),
+        ("REFUNDED", "Refunded"),
+        ("CANCELLED", "Cancelled"),
         )
     payment_method      = models.ForeignKey(PaymentMethod, on_delete=models.SET_NULL, null=True, blank=True)
     is_paid             = models.BooleanField(default=False)
@@ -104,6 +106,16 @@ class Order(models.Model):
 
         return f"ORD{current_date}{sequence_number:06d}"
 
+    def delete(self, *args, **kwargs):
+        # Delete the related ShippingAddress instance if exists
+        if self.shipping_address:
+            self.shipping_address.delete()
+
+        # Delete the related Payment instance if exists
+        if self.payment:
+            self.payment.delete()
+
+        super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
         if not self.order_number:

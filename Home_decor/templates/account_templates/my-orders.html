@@ -25,137 +25,62 @@
 </div> <!-- ...:::: End Breadcrumb Section:::... -->
 
 <div class=" container col-sm-12 col-md-10 col-lg-10 p-4 mb-3">
-    <!-- <div class="tab-pane justify-content-center" id="orders">
-    <h4 class="justify-content-center">Orders</h4> -->
-    {% comment %}
+    
+    <!--============= Listing Orders ============-->
+
     <div class="table_page table-responsive">
-        <table>
-            <thead>
-                <tr>
-                    <!-- <th>Product</th>
-                    <th>Total</th>
-                    <th>Order Placed</th>
-                    <th>Status</th>
-                    <th>Actions</th> -->
-                    <th>Order ID</th> 
-                    <th colspan="2">Product</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Order Status</th>
-                    <th>Ordered date</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for order in orders  %}
-                <tr>
-                    
-                    <td class="d-flex justify-content-center align-content-center">
-                    {{ order.order_number }}
-                    </td>
-                    
-                    <td >{{order.ordered_product}}</td>
-                    <td>Rs. {{ order.order_total }}</td>
-                    {% if order.order_status == "New" %}
-                    <td>New</td>
-                    {% elif order.order_status == "Pending" %}
-                    <td>Pending</td>
-                    {% elif order.order_status == "Delivered" %}
-                        <td>Delivered</td>
-                    {% elif order.order_status == "Shipped" %}
-                        <td>Shipped</td>
-                    {% elif order.order_status == "Cancelled" %}
-                    <td>Cancelled</td>
-                    {% elif order.order_status == "Returned" %}
-                        <td>Returned</td>
-                    {% endif %}
-                    <td>{{ order.created_at|date:"j M Y" }}</td>
-                    
-                    <td>
-                        {% if order.order_status == 'Delivered' %}
-                        <a href="#" class="return-order" data-order-id="{{ order.id }}" data-order-created-at='{{ order.created_at|date:"Y-m-d\TH:i:s" }}'>Return</a>
-                        {% elif order.order_status == 'Cancelled' %}
-                        <a href="" class="view">Cancelled</a>
-                        {% elif order.order_status == 'Returned' %}
-                        <a href="" class="view">Returned</a>
-                        {% else %}
-                        <a href="#" class="view" onclick="cancelOrderConfirmation('{{ order.id }}')">Cancel</a>
-                        {% endif %}
-                    </td>
-                    
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr> 
+                        <th>Order ID</th> 
+                        <th colspan="2">Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Order Status</th>
+                        <th>Ordered date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        {% for order_product in order.order_products.all %}
+                            <tr>
+                                {% if forloop.first %}
+                                    <td rowspan="{{ order.order_products.count }}">
+                                        <a href="{% url 'order-details' %}?order_id={{order.id}}" class="view">{{ order.order_number }}</a>
+                                        <br>
+                                        {% if order.order_status == 'Delivered' %}
+                                            <a href="#" class="return-order" data-order-id="{{ order.id }}" data-order-created-at="{{ order.created_at|date:'Y-m-d\\TH:i:s' }}">Return</a>
+                                        {% elif order.order_status == 'Cancelled' %}
+                                            <strong class="view text-danger">Cancelled</strong>
+                                        {% elif order.order_status == 'Returned' %}
+                                            <strong class="view text-secondary">Returned</strong>
+                                        {% else %}
+                                            <a href="#" class="view text-secondary" onclick="cancelOrderConfirmation('{{ order.id }}')">Cancel Order</a>
+                                        {% endif %}
+                                    </td>
+                                {% endif %}
+                                <td class="image product-thumbnail"><img src="{{ order_product.images.url }}" style="width: 50px;" alt="#"></td>
+                                <td class="product-name">
+                                    <h5 class="product-name"><a href="#">{{ order_product.product_variant }}</a></h5>
+                                </td>
+                                <td  class="quantity" data-title="Quantity"><span>{{ order_product.quantity }}</span></td>
+                                {% endfor %}
+                                <td rowspan="{{ order.order_products.count }}" class="price"><span>Rs.{{ order.order_total }} </span></td>
+                                <td rowspan="{{ order.order_products.count }}" >{{ order.order_status }}</td>
+                                <td rowspan="{{ order.order_products.count }}" >{{ order.created_at|date:"j M Y" }}</td>
+                            </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-    {% endcomment %}
 
-
-
-
-
-
-                            <!--============= Listing Orders ============-->
-                           
-                            <div class="table_page table-responsive">
-                                <div class="table-responsive">
-                                    <table>
-                                        <thead>
-                                            <tr> 
-                                                <th>Order ID</th> 
-                                                <th colspan="2">Product</th>
-                                                <th>Quantity</th>
-                                                <th>Price</th>
-                                                <th>Order Status</th>
-                                                <th>Ordered date</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for order in orders %}
-                                                {% for order_product in order.order_products.all %}
-                                                    <tr>
-                                                        {% if forloop.first %}
-                                                            <td rowspan="{{ order.order_products.count }}">
-                                                                <a href="cart.html" class="view">{{ order.order_number }}</a>
-                                                                <br>
-                                                                {% if order.order_status == 'Delivered' %}
-                                                                    <a href="#" class="return-order" data-order-id="{{ order.id }}" data-order-created-at="{{ order.created_at|date:'Y-m-d\\TH:i:s' }}">Return</a>
-                                                                {% elif order.order_status == 'Cancelled' %}
-                                                                    <strong class="view text-danger">Cancelled</strong>
-                                                                {% elif order.order_status == 'Returned' %}
-                                                                    <strong class="view text-secondary">Returned</strong>
-                                                                {% else %}
-                                                                    <a href="#" class="view text-secondary" onclick="cancelOrderConfirmation('{{ order.id }}')">Cancel Order</a>
-                                                                {% endif %}
-                                                            </td>
-                                                        {% endif %}
-                                                        <td class="image product-thumbnail"><img src="{{ order_product.images.url }}" style="width: 50px;" alt="#"></td>
-                                                        <td class="product-des product-name">
-                                                            <h5 class="product-name"><a href="#">{{ order_product.product_variant }}</a></h5>
-                                                        </td>
-                                                        <td class="quantity" data-title="Quantity"><span>{{ order_product.quantity }}</span></td>
-                                                        {% endfor %}
-                                                        <td class="price" data-title="Price"><span>Rs.{{ order.order_total }} </span></td>
-                                                        <td>{{ order.order_status }}</td>
-                                                        <td>{{ order.created_at|date:"j M Y" }}</td>
-                                                    </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            
-                                               
-                            <!--============= Listing Orders ============-->
-                            
-
-
-
-
-
-
+                        
+    <!--============= Listing Orders ============-->
 
 </div>
-</div>
+
 <style>
         .return-button-class {
         color: #b19361; /* Change the color as desired */

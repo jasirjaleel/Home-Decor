@@ -1,0 +1,285 @@
+{% extends 'store_templates/base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- ...:::: Start Breadcrumb Section:::... -->
+<div class="breadcrumb-section breadcrumb-bg-color--golden">
+    <div class="breadcrumb-wrapper">
+        <div class="container">
+            <div class="row ">
+                <div class="col-12">
+                    <h3 class="breadcrumb-title">Details</h3>
+                    <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden" >
+                        <nav aria-label="breadcrumb">
+                            <ul>
+                                <li><a href="{% url 'home' %}">Home</a></li>
+                                <li><a href="{% url 'myaccount' %}">My Orders</a></li>
+                                <li class="active" aria-current="page">Order Details</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- ...:::: End Breadcrumb Section:::... -->
+
+<div class=" container col-sm-12 col-md-10 col-lg-10 p-4 mb-3">
+    <section class="content-main" id="invoice">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Order detail</h2>
+                <p>Details for Order ID: {{order.order_number|slice:"14:"}}</p>
+                <a href="{% url 'generate_pdf' %}?order_id={{order.id}}" class="btn btn-golden"></a>
+            </div>
+        </div>
+        <div class="card">
+            <header class="card-header">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-md-6 mb-lg-0 mb-15 p-2">
+                        <span>
+                            <i class="material-icons md-calendar_today"></i> <b>{{ order.created_at|date:"D, M j, Y, g:iA" }}</b>
+                        </span><br>
+                        <small class="text-muted">Order ID: {{order.order_number}}</small>
+                    </div>
+                </div>
+            </header>
+            <div class="card-body">
+                <div class="row mb-50 mt-20 order-info-wrap">
+                    <div class="col-md-4">
+                        <article class="icontext align-items-start">
+                            <span class="icon icon-sm rounded-circle bg-primary-light">
+                                <i class="text-primary material-icons md-person"></i>
+                            </span>
+                            <div class="text">
+                                <h6 class="mb-1">Customer</h6>
+                                <h5 class="mb-1">
+                                    {{order.user.get_usernme}}<br><template class="__cf_email__" data-cfemail="e2838e879aa2879a838f928e87cc818d8f">[email&#160;protected]</template> <br> +91 {{order.shipping_address.phone_number}}
+                                </h5>
+                                <a href="{% url 'myprofile' %}">View profile</a>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="col-md-4">
+                        <article class="icontext align-items-start">
+                            <span class="icon icon-sm rounded-circle bg-primary-light">
+                                <i class="text-primary material-icons md-local_shipping"></i>
+                            </span>
+                            <div class="text">
+                                <h6 class="mb-1">Order info</h6>
+                                <p class="mb-1">
+                                Pay method:  {{order.payment.payment_method}} <br> Status: {{order.order_status}}
+                                </p>
+                            </div>
+                        </article>
+                    </div> <!-- col// -->
+                    <div class="col-md-4">
+                        <article class="icontext align-items-start">
+                            <span class="icon icon-sm rounded-circle bg-primary-light">
+                                <i class="text-primary material-icons md-place"></i>
+                            </span>
+                            <div class="text">
+                                <h6 class="mb-1">Deliver to</h6>
+                                <p class="mb-1">
+                                    {{order.shipping_address.first_name}} {{order.shipping_address.last_name}} <br>
+                                    {{order.shipping_address.town_city}}, {{order.shipping_address.state}} <br>
+                                    {{order.shipping_address.street_address}}<br>
+                                    {{ order.shipping_address.country_region }} {{order.shipping_address.zip_code}}
+                                </p>
+                            </div>
+                        </article>
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="col-lg-7 table_page table-responsive">
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th width="40%">Product</th>
+                                        <th width="20%">Unit Price</th>
+                                        <th width="20%">Quantity</th>
+                                        <th width="20%" class="text-end">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in order_products %}
+                                    <tr>
+                                        <td>
+                                            <a class="itemside" href="#">
+                                                <div class="left">
+                                                    <img src="{{i.images.url}}" width="40" height="40" class="img-xs" alt="Item">
+                                                </div>
+                                                <div class="info">{{i.product_variant}}</div>
+                                            </a>
+                                        </td>
+                                        <td> ${{i.product_price}}</td>
+                                        <td>{{i.quantity}}</td>
+                                        <td class="text-end"> ${{i.total_price}} </td>
+                                    </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <td colspan="4">
+                                            <article class="float-end">
+                                                <dl class="dlist">
+                                                    <dt>Tax:</dt>
+                                                    <dd>₹{{order.order_tax|floatformat:2}}</dd>
+                                                </dl>
+                                                <dl class="dlist">
+                                                    <dt>Shipping cost:</dt>
+                                                    <dd>₹{{order.shipping_charge|floatformat:2}}</dd>
+                                                </dl>
+                                                <dl class="dlist">
+                                                    <dt>Offer:</dt>
+                                                    <dd>- ₹{{order.offer|floatformat:2}}</dd>
+                                                </dl>
+                                                <dl class="dlist">
+                                                    <dt>Discounted Price:</dt>
+                                                    {% if order.additional_discount %}
+                                                    <dd>- ₹{{order.additional_discount|floatformat:2}}</dd>
+                                                    {% else %}
+                                                    <dd>- ₹0.00</dd>
+                                                    {% endif %}
+                                                </dl>
+                                                <dl class="dlist">
+                                                    <dt>Grand total:</dt>
+                                                    <dd> <b class="h5">₹{{order.order_total}}</b> </dd>
+                                                </dl>
+                                                <dl class="dlist">
+                                                    <dt class="text-muted">Status:</dt>
+                                                    <dd>
+                                                        {% if order.payment.payment_status == 'SUCCESS' %}
+                                                            <span class="badge rounded-pill alert-success text-success">
+                                                                {{ order.payment.payment_status }}
+                                                            </span>
+                                                        {% elif order.payment.payment_status == 'PENDING' %}
+                                                            <span class="badge rounded-pill alert-warning text-warning">
+                                                                {{ order.payment.payment_status }}
+                                                            </span>
+                                                        {% elif order.payment.payment_status == 'FAILED' %}
+                                                            <span class="badge rounded-pill alert-danger text-danger">
+                                                                {{ order.payment.payment_status }}
+                                                            </span>
+                                                        {% elif order.payment.payment_status == 'REFUNDED' %}
+                                                            <span class="badge rounded-pill alert-info text-info">
+                                                                {{ order.payment.payment_status }}
+                                                            </span>
+                                                        {% elif order.payment.payment_status == 'CANCELLED' %}
+                                                            <span class="badge rounded-pill alert-secondary text-secondary">
+                                                                {{ order.payment.payment_status }}
+                                                            </span>
+                                                        {% endif %}
+                                                    </dd>
+                                                </dl>
+                                            </article>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div> 
+                    </div>
+                    
+                    <div class="col-lg-4 mt-5">
+                        <div class="card">
+                            <h6 class="mb-15 card-header">Payment info</h6>
+                            <p class="p-2">
+                                Payment Reference Id: {{order.payment.payment_order_id}}
+                                Business name: Home Decor LLC <br>
+                                
+                            </p>
+                        </div>
+                    </div> <!-- col// -->
+                </div>
+            </div> <!-- card-body end// -->
+        </div> <!-- card end// -->
+    </section> 
+
+
+
+
+</div>
+
+
+
+<script>
+      
+
+
+</script>
+
+<style>
+        .return-button-class {
+        color: #b19361; /* Change the color as desired */
+        /* Add any other styles you want */
+    }
+
+</style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.return-order').forEach(item => {
+            item.addEventListener('click', function(event) {
+                event.preventDefault();
+                const orderId = this.dataset.orderId;
+                const returnDateStr = this.dataset.orderCreatedAt;
+                console.log(returnDateStr);
+                const returnDate = new Date(returnDateStr);
+
+                const currentDate = new Date();
+                const daysDiff = Math.floor((currentDate - returnDate) / (1000 * 60 * 60 * 24));
+                console.log(daysDiff,orderId,returnDate,currentDate);
+                if (daysDiff <= 7) {
+                    Swal.fire({
+                        title: 'Return Order',
+                        text: 'Are you sure you want to return this order?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, return it',
+                        cancelButtonText: 'No, keep it',
+                        customClass: {
+                        confirmButton: 'return-button-class'
+                    }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Perform the return action
+                            window.location.href = '{% url "cancel_order" %}?order_id=' + orderId;
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Return Order',
+                        text: 'You can only return the order within 7 days of purchase.',
+                        icon: 'warning',
+                        confirmButtonText: 'Got it'
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+
+
+<script>
+function cancelOrderConfirmation(orderId) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'Do you want to cancel the order?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, cancel it!',
+        cancelButtonText: 'No',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = "{% url 'cancel_order' %}?order_id=" + orderId;
+        }
+    });
+}
+</script>
+
+
+{% endblock content %}

@@ -15,8 +15,10 @@ urlpatterns = [
 
     path('wallet/',WalletView, name='wallet'),
     path('order/',views.my_order,name='myorder'),
+    path('order-details/',views.order_details,name='order-details'),
     path('profile/',views.my_profile,name='myprofile'),
     path('edit-profile/', views.edit_user_profile, name='editprofile'),
+     path('generate-pdf/', views.generate_pdf, name='generate_pdf'),
 
 
 ]
