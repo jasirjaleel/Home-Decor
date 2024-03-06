@@ -1,0 +1,172 @@
+{% extends 'admin_templates/base.html' %}
+{% load static %}
+{% block content %}
+<section class="content-main">
+  <div class="content-header">
+    <div>
+      <h2 class="content-title card-title">Sale Report </h2>
+    </div>
+    <div>
+      <button onclick="downloadPDF()" class="btn btn-md rounded font-sm hover-up">download pdf</button>
+      <button onclick="downloadExcel()" class="btn btn-md rounded font-sm hover-up">Download Excel</button>
+    </div>
+  </div>
+  <div>
+  </div>
+  <div class="card mb-4">
+    <header class="card-header">
+      <div class="row gx-3">
+        <!-- <div class="col-lg-4 col-md-6 me-auto">
+          <input type="text" placeholder="Search..." class="form-control">
+        </div> -->
+        <!-- <div class="col-lg-2 col-6 col-md-3">
+          <select class="form-select">
+            <option>Status</option>
+            <option>Active</option>
+            <option>Disabled</option>
+            <option>Show all</option>
+          </select>
+        </div> -->
+        <!-- <div class="col-lg-2 col-6 col-md-3">
+          <select class="form-select">
+            <option>Show 20</option>
+            <option>Show 30</option>
+            <option>Show 40</option>
+          </select>
+        </div> -->
+      </div>
+    </header>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th class="align-middle" scope="col">Order ID</th>
+              <th class="align-middle" scope="col">Billing Name</th>
+              <th class="align-middle" scope="col">Date</th>
+              <th class="align-middle" scope="col">Products</th>
+              <th class="align-middle" scope="col"> Quantity </th>
+              <th class="align-middle" scope="col">Total</th>
+              <th class="align-middle" scope="col">Status</th>
+              <th class="align-middle" scope="col">Payment Method</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in orders %}
+            {% for order_product in order.order_products.all %}
+            <tr>
+              {% if forloop.first %}
+              <td rowspan="{{ order.order_products.count }}" class="fw-bold"><span>{{ order.order_number|slice:"14:"}}</span></td>
+              <td rowspan="{{ order.order_products.count }}"><b>{{ order.user.get_username }}</b></td>
+              <td rowspan="{{ order.order_products.count }}">{{ order.created_at|date:"j M Y" }}</td>
+              {% endif %}
+              <td>
+                <h5><a>{{ order_product.product_variant }}</a></h5>
+              </td>
+              <td class="quantity" data-title="Quantity"><span>{{ order_product.quantity }}</span></td>
+              {% if forloop.first %}
+              <td rowspan="{{ order.order_products.count }}">${{ order.order_total }}</td>
+              <td rowspan="{{ order.order_products.count }}">
+                {% for choice in order.ORDER_STATUS_CHOICES %}
+                {% if order.order_status == choice.0 %}
+                <span class="badge rounded-pill
+                                            {% if choice.0 == 'New' %} alert-primary
+                                            {% elif choice.0 == 'Pending' %} alert-warning
+                                            {% elif choice.0 == 'Delivered' %} alert-success
+                                            {% elif choice.0 == 'Shipped' %} alert-secondary
+                                            {% elif choice.0 == 'Cancelled' %} alert-danger
+                                            {% elif choice.0 == 'Returned' %} alert-info
+                                            {% endif %}">
+                  {{ choice.1 }}
+                </span>
+                {% endif %}
+                {% endfor %}
+              </td>
+              <td rowspan="{{ order.order_products.count }}">
+                {% if order.payment.payment_method.method_name == 'Razorpay' %}
+                <i class="material-icons md-payment font-xxl text-muted mr-5"></i>Razorpay
+                {% elif order.payment.payment_method.method_name == 'Cash On Delivery' %}
+                <i class="material-icons md-payments font-xxl text-muted mr-5"></i>COD
+                {% endif %}
+              </td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div> <!-- table-responsive //end -->
+    </div> <!-- card-body end// -->
+  </div><!-- card end// -->
+  <div class="pagination-area mt-15 mb-50">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-start">
+            {% if orders.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ products.previous_page_number }}"><i class="material-icons md-chevron_left"></i></a></li>
+            {% endif %}
+            {% for i in orders.paginator.page_range %}
+                    {% if orders.number == i %}
+                        <li class="page-item active"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                    {% endif %}
+                {% endfor %}
+            {% if orders.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ products.next_page_number }}"><i class="material-icons md-chevron_right"></i></a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+</section> <!-- content-main end// -->
+
+
+
+<script>
+  async function downloadPDF() {
+    try {
+      const selectedDate = document.getElementById('selectedDate').value;
+      const response = await fetch(`/admin/download-pdf?date=${selectedDate}`);
+      const blob = await response.blob();
+
+      // Create a link element and trigger a click to start the download
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'sale_report.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Error downloading PDF:', error);
+    }
+  }
+</script>
+<script>
+  async function downloadExcel() {
+    try {
+      const selectedDate = document.getElementById('selectedDate').value;
+      const response = await fetch(`/admin/download-excel?date=${selectedDate}`);
+      const blob = await response.blob();
+
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = 'sale_report.xlsx';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Error downloading Excel:', error);
+    }
+  }
+
+</script>
+
+<script>
+  function updateSalesReport() {
+    const selectedDate = document.getElementById('selectedDate').value;
+    console.log('Selected Date:', selectedDate);
+
+    const apiUrl = `/admin/saleReport?date=${selectedDate}`;
+    window.location.href = apiUrl;
+  }
+</script>
+{% endblock content %}

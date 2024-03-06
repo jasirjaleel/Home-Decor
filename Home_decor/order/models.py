@@ -3,6 +3,7 @@ import datetime
 from user_app.models import Account
 from account.models import Address
 from product_management.models import Product_Variant
+from product_management.models import Coupon 
 
 # Create your models here.
 class ShippingAddress(models.Model):
@@ -84,9 +85,9 @@ class Order(models.Model):
     is_ordered          = models.BooleanField(default=False)
     created_at          = models.DateTimeField(auto_now_add=True)
     updated_at          = models.DateTimeField(auto_now=True)
+    # coupon_code         = models.ForeignKey(Coupon,on_delete=models.SET_NULL,null=True,blank=True)
+    # wallet_discount     = models.IntegerField(default=0,null=True)
     
-    # coupon_code = models.ForeignKey(Coupon,on_delete=models.SET_NULL,null=True,blank=True)
-    # wallet_discount = models.IntegerField(default=0,null=True)
     # order_note = models.CharField(max_length=100,blank=True,null=True)
     # ip = models.CharField(max_length=50,blank=True)
    

@@ -46,6 +46,8 @@ urlpatterns = [
     path("fetchData/month",views.fetch_monthly_data, name ="fetch_monthly_data"),
     path("fetchData/year",views.fetch_yearly_data, name ="fetch_yearly_data"),
     path("fetchData/custom",views.fetch_custom_data, name ="fetch_custom_data"),
+
+    path('sales-report/', views.sales_report, name='sales_report'),
     
     # path('add_user/', views.add_user, name='add_user'),
     # path('edit_user/<int:user_id>/', views.edit_user, name='edit_user'),
