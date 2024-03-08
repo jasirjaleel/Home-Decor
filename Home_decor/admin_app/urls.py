@@ -48,7 +48,10 @@ urlpatterns = [
     path("fetchData/custom",views.fetch_custom_data, name ="fetch_custom_data"),
 
     path('sales-report/', views.sales_report, name='sales_report'),
-    
+    path('transactions/', views.transactions, name='transactions'),
+    path('download-pdf/', views.download_pdf, name='download_pdf'),
+    path('download-excel/', views.download_excel, name='download_excel'),
+    path('download-csv/', views.download_csv, name='download_csv'),
     # path('add_user/', views.add_user, name='add_user'),
     # path('edit_user/<int:user_id>/', views.edit_user, name='edit_user'),
     # path('delete_user/<int:user_id>/', views.delete_user, name='delete_user'),

@@ -3,7 +3,11 @@ from .models import ProductOffer,CategoryOffer,Product,Category
 from datetime import datetime
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse
+from django.views.decorators.cache import never_cache
+from django.contrib.auth.decorators import login_required
 # Create your views here.
+@never_cache
+@login_required(login_url='admin_login')
 def all_product_offer(request):
     product_offer = ProductOffer.objects.all()
     products_count = product_offer.count()
@@ -11,15 +15,15 @@ def all_product_offer(request):
     page = request.GET.get('page')
     paged_products = paginator.get_page(page)
     context = {
-        # 'product_offer':product_offer
         'product_offer':paged_products,
     }
     return render(request,'admin_templates/all_offer_products.html',context)
 
+@never_cache
+@login_required(login_url='admin_login')
 def create_product_offer(request):
     product = Product.objects.all()
     context = { 'product':product}
-    
     if request.method == 'POST':
         offer_name          = request.POST.get('offer_name')
         products             = request.POST.get('product')
@@ -39,6 +43,8 @@ def create_product_offer(request):
         return redirect('all_products_offer')
     return render(request, 'admin_templates/create_offer_product.html',context)
 
+@never_cache
+@login_required(login_url='admin_login')
 def edit_product_offer(request):
     product_id = request.GET.get('product_id')
     product = Product.objects.all()
@@ -62,10 +68,11 @@ def edit_product_offer(request):
         if product_offer_image:
             product_offer.product_offer_image   = product_offer_image
         product_offer.save()
-
         return redirect('all_products_offer')
     return render(request, 'admin_templates/edit_offer_product.html', context)
 
+@never_cache
+@login_required(login_url='admin_login')
 def toggle_offer_active_status(request):
     if request.method == 'POST':
         try:
@@ -80,10 +87,10 @@ def toggle_offer_active_status(request):
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)})
         
-
+@never_cache
+@login_required(login_url='admin_login')
 def all_category_offer(request):
     category_offer = CategoryOffer.objects.all()
-    category_offer_count = category_offer.count()
     paginator = Paginator(category_offer,8)
     page = request.GET.get('page')
     paged_category_offer = paginator.get_page(page)
@@ -92,6 +99,8 @@ def all_category_offer(request):
     }
     return render(request, 'admin_templates/all_offer_category.html', context)
 
+@never_cache
+@login_required(login_url='admin_login')
 def create_category_offer(request):
     category = Category.objects.all()
     context = { 'category':category}
@@ -114,6 +123,8 @@ def create_category_offer(request):
         return redirect('all_category_offer')
     return render(request, 'admin_templates/create_offer_category.html',context)
 
+@never_cache
+@login_required(login_url='admin_login')
 def edit_category_offer(request):
     category_offer_id = request.GET.get('id')
     category = Category.objects.all()

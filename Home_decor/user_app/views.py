@@ -80,7 +80,6 @@ def usersignup(request):
         context = {
             'email':email
         }
-        # messages.success(request,'Your Account Has Been Successfully Created')
         return render(request,'user_templates/otp.html',context)
     return render(request,'user_templates/sign-up.html')
     
@@ -88,30 +87,32 @@ def usersignup(request):
 @never_cache
 def verify_otp(request):
     if request.method == "POST":
-        otp = request.POST.get('enteredotp')
-        storedotp=request.session['storedotp']
-        storedemail = request.session['storedemail']
-        print(storedemail,otp,storedotp)
+        try:
+            otp = request.POST.get('enteredotp')
+            storedemail = request.session['storedemail']
+            storedotp = request.session['storedotp']
+            if otp == storedotp:
+                user = Account.objects.get(email=storedemail)
+                user.is_active = True
+                user.save()
+                subject = "Successful Login - Home Decor Ecommerce Store"
+                sender_mail = "noreply@homedecorestore.com"
+                message = "Dear User,\n\nYour login to Home Decor Ecommerce Store was successful.\n\nThank you for choosing Home Decor Ecommerce Store."
 
-        if otp == storedotp:
-            user = Account.objects.get(email=storedemail)
-            user.is_active = True
-            user.save()
-            subject = "Successful Login - Home Decor Ecommerce Store"
-            sender_mail = "noreply@homedecorestore.com"
-            message = "Dear User,\n\nYour login to Home Decor Ecommerce Store was successful.\n\nThank you for choosing Home Decor Ecommerce Store."
+                email = EmailMessage(subject, message, sender_mail, [storedemail])
+                email_thread = EmailThread(email)
+                email_thread.start()
+                login(request,user)
 
-            email = EmailMessage(subject, message, sender_mail, [email])
-            email_thread = EmailThread(email)
-            email_thread.start()
-            login(request,user)
-            if request.GET.get('next'):
-                return redirect(request.GET.get('next'))
-            else:
-                return redirect('home')
+                if request.GET.get('next'):
+                    return redirect(request.GET.get('next'))
+                else:
+                    return redirect('home')
             
-        else:
-            messages.success(request,'Wrong Entry')
+            else:
+                messages.error(request,'Wrong Entry')
+        except Exception as e:
+            messages.error(request, str(e))  
         context = {'email': storedemail}
     return render(request,'user_templates/otp.html',context)
 
@@ -146,33 +147,37 @@ def userlogin(request):
     if request.user.is_authenticated:
         return redirect('home')
     if request.method=="POST":
-        email = request.POST.get('email')
-        password = request.POST.get('password')  
-        user = authenticate(email=email,password=password) 
-        if user is not None and  user.is_blocked == False and user.is_superadmin == False:
-            login(request,user)
-            try:
-                print("Getting cart id")
-                cart = Cart.objects.get(cart_id=_cart_id(request))
-            except Cart.DoesNotExist:
-                print("Creating cart id")
-                cart = Cart.objects.create(
-                    cart_id = _cart_id(request)
-                )
-                cart.save()
-    
-            if request.GET.get('next'):
-                return redirect(request.GET.get('next'))
-            else:
-                messages.success(request, 'Login Successful')
-                return redirect('home')
-        elif user is not None and user.is_blocked == True:
-            messages.error(request,'You are Blocked!')
-            return redirect('userlogin')
+        try:
+            email = request.POST.get('email')
+            password = request.POST.get('password')  
+            user = authenticate(email=email,password=password) 
+            if user is not None and  user.is_blocked == False and user.is_superadmin == False:
+                login(request,user)
+                try:
+                    print("Getting cart id")
+                    cart = Cart.objects.get(cart_id=_cart_id(request))
+                except Cart.DoesNotExist:
+                    print("Creating cart id")
+                    cart = Cart.objects.create(
+                        cart_id = _cart_id(request)
+                    )
+                    cart.save()
+        
+                if request.GET.get('next'):
+                    return redirect(request.GET.get('next'))
+                else:
+                    messages.success(request, 'Login Successful')
+                    return redirect('home')
+            elif user is not None and user.is_blocked == True:
+                messages.error(request,'You are Blocked!')
+                return redirect('userlogin')
 
-        else:
-            messages.error(request,('There Was An Error Loggin In, Try Again...'))
-            return redirect('userlogin')
+            else:
+                messages.error(request,('There Was An Error Loggin In, Try Again...'))
+                return redirect('userlogin')
+        except Exception as e:
+            messages.error(request, str(e))
+            return redirect('userlogin') 
     else:
         return render(request,'user_templates/login.html')
     

@@ -1,14 +1,20 @@
 {% extends 'admin_templates/base.html' %}
 {% load static %}
 {% block content %}
+<link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <section class="content-main">
   <div class="content-header">
     <div>
       <h2 class="content-title card-title">Sale Report </h2>
     </div>
     <div>
-      <button onclick="downloadPDF()" class="btn btn-md rounded font-sm hover-up">download pdf</button>
-      <button onclick="downloadExcel()" class="btn btn-md rounded font-sm hover-up">Download Excel</button>
+      <!-- <button onclick="downloadPDF()" class="btn btn-md rounded font-sm hover-up">Download pdf</button>
+      <button onclick="downloadExcel()" class="btn btn-md rounded font-sm hover-up">Download Excel</button> -->
+    <a href="{% url 'download_pdf' %}" class="btn btn-md rounded font-sm hover-up">Download PDF</a>
+    <a href="{% url 'download_excel' %}" class="btn btn-md rounded font-sm hover-up">Download Excel</a>
+    <a href="{% url 'download_csv' %}" class="btn btn-md rounded font-sm hover-up">Download CSV</a>
     </div>
   </div>
   <div>
@@ -119,54 +125,48 @@
 </div>
 </section> <!-- content-main end// -->
 
-
-
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
-  async function downloadPDF() {
+async function showDatePickerAndDownload(format) {
+    const { value: selectedDate } = await Swal.fire({
+        html: '<input id="flatpickrInput" class="flatpickr-input form-control">',
+        focusConfirm: false,
+        didOpen: () => {
+            const flatpickrInput = document.getElementById('flatpickrInput');
+            flatpickr(flatpickrInput, {
+                dateFormat: 'Y-m-d', // Date format
+                altFormat: 'F j, Y', // Date format displayed in the input field
+            });
+        },
+        preConfirm: () => {
+            const flatpickrInstance = flatpickr(document.getElementById('flatpickrInput'));
+            const formattedDate = flatpickrInstance.input.value;
+            if (format === 'pdf') {
+              downloadFile('pdf', formattedDate);
+            } else if (format === 'excel') {
+              downloadFile('excel', formattedDate);
+            }
+        }
+    });
+}
+async function downloadFile(fileType, selectedDate) {
     try {
-      const selectedDate = document.getElementById('selectedDate').value;
-      const response = await fetch(`/admin/download-pdf?date=${selectedDate}`);
-      const blob = await response.blob();
-
-      // Create a link element and trigger a click to start the download
-      const link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.download = 'sale_report.pdf';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+        const response = await fetch(`/your-download-endpoint/?date=${selectedDate}&format=${fileType}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `sale_report.${fileType === 'pdf' ? 'pdf' : 'xlsx'}`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Error downloading PDF:', error);
+        console.error('Error downloading file:', error);
+        // Handle error
     }
-  }
-</script>
-<script>
-  async function downloadExcel() {
-    try {
-      const selectedDate = document.getElementById('selectedDate').value;
-      const response = await fetch(`/admin/download-excel?date=${selectedDate}`);
-      const blob = await response.blob();
-
-      const link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.download = 'sale_report.xlsx';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (error) {
-      console.error('Error downloading Excel:', error);
-    }
-  }
-
-</script>
-
-<script>
-  function updateSalesReport() {
-    const selectedDate = document.getElementById('selectedDate').value;
-    console.log('Selected Date:', selectedDate);
-
-    const apiUrl = `/admin/saleReport?date=${selectedDate}`;
-    window.location.href = apiUrl;
-  }
+}
 </script>
 {% endblock content %}

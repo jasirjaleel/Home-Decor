@@ -5,10 +5,12 @@ from .models import Banner
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.decorators.cache import never_cache
 # Create your views here.
 
 
 #===========ATTRIBUTE MANAGEMENT==================
+@never_cache
 @login_required(login_url='admin_login')
 def all_attribute(request):
     
@@ -28,6 +30,7 @@ def create_attribute(request):
 
 
 #===========ATTRIBUTE VALUE MANAGEMENT==================
+@never_cache
 @login_required(login_url='admin_login')
 def all_attribute_value(request):
     
@@ -37,6 +40,7 @@ def all_attribute_value(request):
     }
     return render(request, 'admin_templates/all_attribute_value.html',context)
 
+@never_cache
 @login_required(login_url='admin_login')
 def create_attribute_value(request):
     if request.method == 'POST':
@@ -56,12 +60,14 @@ def create_attribute_value(request):
 
 
 #===========BRAND MANAGEMENT==================
+@never_cache
 @login_required(login_url='admin_login')
 def all_brand(request):
     brd = Brand.objects.all()
     context = { 'brd':brd }
     return render(request,'admin_templates/all_brand.html',context)
 
+@never_cache
 @login_required(login_url='admin_login')
 def create_brand(request):
     if request.method == 'POST':
@@ -71,32 +77,8 @@ def create_brand(request):
         return redirect('brand')
     return render(request,'admin_templates/add_brand.html')
 
-
-
-# class ToggleStatusView(View):
-#     def get(self, request, model, item_id):
-#         model_class = self.get_model_class(model)
-#         item = model_class.objects.get(pk=item_id)
-#         return render(request, 'toggle_status.html', {'item': item, 'model': model})
-
-#     def post(self, request, model, item_id):
-#         model_class = self.get_model_class(model)
-#         item = model_class.objects.get(pk=item_id)
-#         item.is_active = not item.is_active
-#         item.save()
-#         return redirect(f'{model}_list')
-
-#     def get_model_class(self, model):
-#         model_classes = {
-#             'attribute': Attribute,
-#             'attribute_value': Attribute_Value,
-#             'brand': Brand,
-#         }
-#         return model_classes.get(model, None)
-
-
-
 #===========BANNER MANAGEMENT==================
+@never_cache
 @login_required(login_url='admin_login')
 def all_banner(request):
     banner = Banner.objects.all()
@@ -105,6 +87,7 @@ def all_banner(request):
 
 
 
+@never_cache
 @login_required(login_url='admin_login')
 def create_banner(request):
     if request.method == 'POST':
@@ -118,11 +101,10 @@ def create_banner(request):
         return redirect('banner')
     return render(request, 'admin_templates/add_banner.html')
 
+@never_cache
 @login_required(login_url='admin_login')
 def edit_banner(request):
-    print("=====================")
     banner_id = request.GET.get('id')
-    print(banner_id)
     old_banner = Banner.objects.get(id=banner_id)
     if request.method == 'POST':
 
@@ -153,6 +135,7 @@ class DeleteBannerView(View):
 
 
 #================= COUPON MANAGEMENT =====================
+@never_cache
 @login_required(login_url='admin_login')
 def all_coupon(request):
     coupon = Coupon.objects.all()
@@ -163,6 +146,7 @@ def all_coupon(request):
     return render(request, 'admin_templates/all_coupon.html', context)
 
 
+@never_cache
 @login_required(login_url='admin_login')
 def create_coupon(request):
     if request.method == 'POST':
@@ -172,10 +156,7 @@ def create_coupon(request):
         max_uses              = request.POST.get('max_uses')
         expire_date           = request.POST.get('expire_date')
         total_coupons         = request.POST.get('total_coupons')
-        print(coupon_code, discount_percentage, minimum_amount, max_uses, expire_date, total_coupons)
-        print(type(total_coupons),type(discount_percentage))
         expire_date = datetime.strptime(expire_date, '%d %b %Y').date()
-        print(expire_date)
         coupon = Coupon.objects.create(
             coupon_code         = coupon_code,
             discount_percentage = int(discount_percentage),
@@ -188,6 +169,7 @@ def create_coupon(request):
         return redirect('coupon')
     return render(request, 'admin_templates/add_coupon.html')
 
+@never_cache
 @login_required(login_url='admin_login')
 def edit_coupon(request):
     coupon_id = request.GET.get('id')

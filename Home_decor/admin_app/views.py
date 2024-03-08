@@ -17,7 +17,14 @@ from django.db.models import Sum
 from django.utils import timezone
 from datetime import datetime, timedelta
 from django.db.models import Prefetch
-# Create your views here.
+import csv
+from django.http import HttpResponse
+import xlwt
+from django.template.loader import render_to_string
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from io import BytesIO
+
 
 
 def admin_login(request):
@@ -27,14 +34,17 @@ def admin_login(request):
         user = authenticate(email=email, password=password)
         if user is not None and user.is_superadmin == True:
             login(request, user)
-            messages.success(request, 'Successfuly Logged in')
-            return redirect('adminhome')
+            if request.GET.get('next'):
+                return redirect(request.GET.get('next'))
+            else:
+                messages.success(request, 'Successfuly Logged in')
+                return redirect('adminhome')
         else:
             messages.error(request, 'Bad Credentials!')
             return render(request, 'admin_templates/admin-login.html')
     return render(request, 'admin_templates/admin-login.html')
 
-
+@never_cache
 @login_required(login_url='admin_login')
 def adminhome(request):
     orders = Order.objects.filter(is_ordered=True)
@@ -85,7 +95,6 @@ def blockuser(request):
         data = json.loads(request.body)
         selected_user_id = data.get('userId')
         print(selected_user_id)
-
         if selected_user_id:
             try:
                 user = Account.objects.get(id=selected_user_id)
@@ -95,26 +104,15 @@ def blockuser(request):
                     user.save()
                     message = 'User unblocked successfully'
                 else:
-                    # User is not blocked, so block
                     user.is_blocked = True
                     user.save()
                     message = 'User blocked successfully'
-
                 return JsonResponse({'success': True, 'message': message})
             except Account.DoesNotExist:
                 return JsonResponse({'success': False, 'message': 'User not found'})
         else:
             return JsonResponse({'success': False, 'message': 'No user ID provided'})
-
     return render(request, "admin_templates/usermanagement.html", {})
-    # if request.user.is_authenticated and request.user == user1:
-    #     logout(request)
-    #     request.session.flush()
-    # user1.is_blocked = True
-    # user1.save()
-    # # return JsonResponse({'message': 'User blocked successfully'})
-    # return redirect('user_management')
-
 
 @login_required(login_url='admin_login')
 def user_details(request):
@@ -124,7 +122,6 @@ def user_details(request):
     address = Address.objects.filter(account=user.id, is_default=True).first()
     ordered_products = OrderProduct.objects.filter(
         user=user, ordered=True).order_by('-id')
-
     context = {
         "user": user,
         'address': address,
@@ -133,7 +130,6 @@ def user_details(request):
         'wallet': wallet,
     }
     return render(request, 'admin_templates/user_details.html', context)
-
 ##################### CHANGE ORDER STATUS OF PRODUCT ########################
 
 
@@ -144,12 +140,9 @@ def update_order_status(request):
             order_id = data.get('order_id')
             new_status = data.get('new_status')
             print(order_id, new_status)
-
-            # Update the order status
             order = Order.objects.get(id=order_id)
             order.order_status = new_status
             order.save()
-
             return JsonResponse({'message': 'Order status updated successfully'}, status=200)
         except ObjectDoesNotExist:
             return JsonResponse({'error': 'Order not found'}, status=404)
@@ -221,15 +214,129 @@ def fetch_custom_data(request):
     return JsonResponse({'response': response}, status=200)
 
 
+
+######################### Transcations ############################
+@never_cache
+@login_required(login_url='admin_login')
+def transactions(request):
+    transactions = Transaction.objects.all()
+    paginator = Paginator(transactions, 5)
+    page = request.GET.get('page')
+    paged_transactions = paginator.get_page(page)
+    context = {
+        'transactions': paged_transactions,
+    }
+    return render(request, 'admin_templates/transactions.html', context)
+
 ################### sales report ############################
+@never_cache
+@login_required(login_url='admin_login')
 def sales_report(request):
     orders = Order.objects.prefetch_related(
         Prefetch('order_products', queryset=OrderProduct.objects.all())
     ).all().order_by('created_at')
-    paginator = Paginator(orders, 5)
+    paginator = Paginator(orders, 30)
     page = request.GET.get('page')
     paged_orders = paginator.get_page(page)
     context = {
         'orders': paged_orders,
     }
     return render(request, 'admin_templates/sales_report.html', context)
+
+########################### DOWNLOAD ############################
+# def download_pdf(request):
+#     response = HttpResponse(content_type='applications/pdf')
+#     current_date = datetime.now().strftime("%d-%m-%Y")
+    # filename = f"sales_report_{current_date}.pdf"
+    # response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    # response['Content-Transfer-Encoding'] = 'binary'
+
+    # html_string = render_to_string('sales_report/pdf-output',{'orders':Order.objects.all()})
+    # html = HTML(string=html_string)
+    # result = html.write()
+
+    # with tempfile.NamedTemporaryFile(delete=True) as output:
+    #     output.write(result)
+    #     output.flush()
+
+    #     output = open(output.name,'rb')
+    #     response.write(output.read())
+
+    # return response
+
+# from weasyprint import HTML
+
+def download_pdf(request):
+    pass
+#     current_date = datetime.now().strftime("%d-%m-%Y")
+#     filename = f"sales_report_{current_date}.pdf"
+#     html_string = render_to_string('admin_templates/pdf-output.html', {'orders': Order.objects.all()})
+#     html = HTML(string=html_string)
+#     pdf_file = html.write_pdf()
+#     response = HttpResponse(pdf_file, content_type='application/pdf')
+#     response['Content-Disposition'] = f'attachment; filename="{filename}"'
+#     return response
+
+
+def download_excel(request):
+    response = HttpResponse(content_type='applications/ms-excel')
+    current_date = datetime.now().strftime("%d-%m-%Y")
+    filename = f"sales_report_{current_date}.xls"
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Sales Report')
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    columns = ['Order ID', 'Billing Name', 'Date', 'Product', 'Quantity', 'Total', 'Status', 'Payment Method']
+    
+    for col_num, column_title in enumerate(columns):
+        ws.write(row_num, col_num, column_title, font_style)
+
+    for order in Order.objects.all():
+        for index, order_product in enumerate(order.order_products.all()):
+            row_num += 1
+            ws.write(row_num, 0, order.order_number[12:])
+            ws.write(row_num, 1, order.user.get_usernme() if order.user else '')
+            ws.write(row_num, 2, order.created_at.strftime('%d %b %Y'))
+            ws.write(row_num, 3, order_product.product_variant)
+            ws.write(row_num, 4, order_product.quantity)
+            if index == 0:
+                ws.write(row_num, 5, order.order_total)
+                ws.write(row_num, 6, order.order_status)
+                ws.write(row_num, 7, order.payment.payment_method.method_name)
+            else:
+                ws.write(row_num, 5, '')
+                ws.write(row_num, 6, '')
+                ws.write(row_num, 7, '')
+
+    wb.save(response)
+    return response
+
+
+def download_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    current_date = datetime.now().strftime("%d-%m-%Y")
+    filename = f"sales_report_{current_date}.csv"
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+    writer = csv.writer(response)
+    writer.writerow(['Order ID', 'Billing Name', 'Date', 'Product', 'Quantity', 'Total', 'Status', 'Payment Method'])
+
+    for order in Order.objects.all():
+        for index, order_product in enumerate(order.order_products.all()):
+            if index == 0:
+                writer.writerow([
+                    order.order_number[12:],
+                    order.user.get_usernme() if order.user else '',
+                    order.created_at.strftime('%d %b %Y'),
+                    order_product.product_variant,
+                    order_product.quantity,
+                    order.order_total if index == 0 else '',
+                    order.order_status if index == 0 else '',
+                    order.payment.payment_method.method_name if index == 0 else ''
+                ])
+            else:
+                writer.writerow(['', '', '', order_product.product_variant, order_product.quantity, '', '', ''])
+
+    return response
