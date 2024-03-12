@@ -24,7 +24,6 @@ class CartItem(models.Model):
     def items_count(self):
         return CartItem.objects.filter(cart=self.cart).count()
           
-
     def __str__(self):
         return self.product.product.product_name
 
@@ -32,11 +31,8 @@ class CartItem(models.Model):
 class Wishlist(models.Model):
     user = models.OneToOneField(Account,on_delete=models.CASCADE)
     date_added = models.DateField(auto_now_add=True)
-    
-    
     def __str__(self):
         return str(self.user)
-    
     def get_items_count(self):
        return self.wishlistitem_set.filter(is_active=True).count()
 

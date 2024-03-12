@@ -8,7 +8,7 @@ from extra_management.models import Banner
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from offer_management.models import ProductOffer,CategoryOffer
 from decimal import Decimal
-# Create your views here.
+
 def home(request):
     if 'storedotp' in request.session:
             print('otp deleted')
@@ -17,27 +17,13 @@ def home(request):
             print('Email deleted')
             del request.session['storedemail']
     hero_banner = Banner.objects.filter(is_active=True)
-    products = Product_Variant.objects.filter(is_active=True,product__is_available=True)
+    products = Product_Variant.objects.filter(is_active=True,stock__gt=0,product__is_available=True)
     images_dict = {}
     for i in products:
         first_image = Additional_Product_Image.objects.filter(product_variant=i.id).first()
         images_dict[i] = first_image
     context = {'product': images_dict, 'hero_banner': hero_banner} 
     return render(request,'store_templates/index.html',context)
-
-# def shop(request):
-#     products = Product.objects.all().filter(is_available=True)
-#     prod_list = []
-#     for i in products:
-#         attri = Product_Variant.objects.select_related('product').filter(product=i.id,is_active=True).first()
-#         prod_list.append(attri)
-
-#     products_count = len(prod_list)
-#     context  = {
-#         'products':prod_list,
-#         'products_count':products_count,
-#     } 
-#     return render(request,'store_templates/shop.html',context)
 
 
 # def store (request,category_slug=None):

@@ -3,20 +3,14 @@
 {% block content %}
   
 
-    <!-- Start Hero Slider Section-->
     <div class="hero-slider-section">
-        <!-- Slider main container -->
         <div class="hero-slider-active swiper-container">
-            <!-- Additional required wrapper -->
             <div class="swiper-wrapper">
-                <!-- Start Hero Single Slider Item -->
                 {% for i in hero_banner %}
                 <div class="hero-single-slider-item swiper-slide">
-                    <!-- Hero Slider Image -->
                     <div class="hero-slider-bg">
                         <img src="{{i.banner_image}}">
                     </div>
-                    <!-- Hero Slider Content -->
                     <div class="hero-slider-wrapper">
                         <div class="container">
                             <div class="row">
@@ -33,15 +27,11 @@
                     </div>
                 </div> 
                 {% endfor %}
-                <!-- End Hero Single Slider Item -->
-                <!-- Start Hero Single Slider Item -->
                 {% comment %}
                 <div class="hero-single-slider-item swiper-slide">
-                    <!-- Hero Slider Image -->
                     <div class="hero-slider-bg">
                         <img src="{% static 'assets/images/hero-slider/home-1/hero-slider-2.jpg' %}" alt="">
                     </div>
-                    <!-- Hero Slider Content -->
                     <div class="hero-slider-wrapper">
                         <div class="container">
                             <div class="row">
@@ -56,26 +46,19 @@
                             </div>
                         </div>
                     </div>
-                </div> <!-- End Hero Single Slider Item -->
+                </div> 
                 {% endcomment %}
             </div>
 
-            <!-- If we need pagination -->
             <div class="swiper-pagination active-color-golden"></div>
-
-            <!-- If we need navigation buttons -->
             <div class="swiper-button-prev d-none d-lg-block"></div>
             <div class="swiper-button-next d-none d-lg-block"></div>
         </div>
     </div>
-    <!-- End Hero Slider Section-->
-
-    <!-- Start Service Section -->
     <div class="service-promo-section section-top-gap-100">
         <div class="service-wrapper">
             <div class="container">
                 <div class="row">
-                    <!-- Start Service Promo Single Item -->
                     <div class="col-lg-3 col-sm-6 col-12">
                         <div class="service-promo-single-item" data-aos="fade-up" data-aos-delay="0">
                             <div class="image">
@@ -87,8 +70,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- End Service Promo Single Item -->
-                    <!-- Start Service Promo Single Item -->
                     <div class="col-lg-3 col-sm-6 col-12">
                         <div class="service-promo-single-item" data-aos="fade-up" data-aos-delay="200">
                             <div class="image">
@@ -100,8 +81,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- End Service Promo Single Item -->
-                    <!-- Start Service Promo Single Item -->
                     <div class="col-lg-3 col-sm-6 col-12">
                         <div class="service-promo-single-item" data-aos="fade-up" data-aos-delay="400">
                             <div class="image">
@@ -113,8 +92,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- End Service Promo Single Item -->
-                    <!-- Start Service Promo Single Item -->
                     <div class="col-lg-3 col-sm-6 col-12">
                         <div class="service-promo-single-item" data-aos="fade-up" data-aos-delay="600">
                             <div class="image">
@@ -126,21 +103,15 @@
                             </div>
                         </div>
                     </div>
-                    <!-- End Service Promo Single Item -->
                 </div>
             </div>
         </div>
     </div>
-    <!-- End Service Section -->
-
-    <!-- Start Banner Section -->
     <div class="banner-section section-top-gap-100 section-fluid">
         <div class="banner-wrapper">
             <div class="container-fluid">
                 <div class="row mb-n6">
-
                     <div class="col-lg-6 col-12 mb-6">
-                        <!-- Start Banner Single Item -->
                         <div class="banner-single-item banner-style-1 banner-animation img-responsive"
                             data-aos="fade-up" data-aos-delay="0">
                             <div class="image">
@@ -156,12 +127,9 @@
                                             class="ion-ios-arrow-thin-right"></i></span></a>
                             </div>
                         </div>
-                        <!-- End Banner Single Item -->
                     </div>
-
                     <div class="col-lg-6 col-12 mb-6">
                         <div class="row mb-n6">
-                            <!-- Start Banner Single Item -->
                             <div class="col-lg-6 col-sm-6 mb-6">
                                 <div class="banner-single-item banner-style-2 banner-animation img-responsive"
                                     data-aos="fade-up" data-aos-delay="0">
@@ -176,8 +144,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- End Banner Single Item -->
-                            <!-- Start Banner Single Item -->
                             <div class="col-lg-6 col-sm-6 mb-6">
                                 <div class="banner-single-item banner-style-2 banner-animation img-responsive"
                                     data-aos="fade-up" data-aos-delay="200">
@@ -192,8 +158,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- End Banner Single Item -->
-                            <!-- Start Banner Single Item -->
                             <div class="col-lg-6 col-sm-6 mb-6">
                                 <div class="banner-single-item banner-style-2 banner-animation img-responsive"
                                     data-aos="fade-up" data-aos-delay="0">
@@ -208,8 +172,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- End Banner Single Item -->
-                            <!-- Start Banner Single Item -->
                             <div class="col-lg-6 col-sm-6 mb-6">
                                 <div class="banner-single-item banner-style-2 banner-animation img-responsive"
                                     data-aos="fade-up" data-aos-delay="200">
@@ -223,7 +185,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- End Banner Single Item -->
                         </div>
                     </div>
                 </div>
@@ -231,11 +192,7 @@
             </div>
         </div>
     </div>
-    <!-- End Banner Section -->
-
-    <!-- Start Product Default Slider Section -->
     <div class="product-default-slider-section section-top-gap-100 section-fluid">
-        <!-- Start Section Content Text Area -->
         <div class="section-title-wrapper" >
             <div class="container">
                 <div class="row">
@@ -250,38 +207,29 @@
                 </div>
             </div>
         </div>
-        <!-- Start Section Content Text Area -->
         <div class="product-wrapper" >
             <div class="container">
                 <div class="row">
                     <div class="col-12">
                         <div class="product-slider-default-2rows default-slider-nav-arrow">
-                            <!-- Slider main container -->
                             <div class="swiper-container product-default-slider-4grid-2row">
-                                <!-- Additional required wrapper -->
                                 <div class="swiper-wrapper">
-                                    <!-- Start Product Default Single Item -->
                                     {% for i,j in product.items %}
                                     <div class="product-default-single-item product-color--golden swiper-slide">
                                         <div class="image-box">
-                                            <a href="product-details-default.html" class="image-link">
+                                            <a href="{% url 'product_detail' slug=i.product_variant_slug %}" class="image-link">
                                             
                                                 <img src="{{j}}" alt="">
-                                               
-                                              
                                             </a>
                                             <div class="tag">
                                                 <span>sale</span>
                                             </div>
                                             <div class="action-link">
                                                 <div class="action-link-left">
-                                                    <a >Add to Cart</a>
+                                                    <a href="{% url 'addtocart' slug=i.product_variant_slug %}">Add to Cart</a>
                                                 </div>
                                                 <div class="action-link-right">
-                                                    <a ><i
-                                                            class="icon-magnifier"></i></a>
-                                                    <a href="wishlist.html"><i class="icon-heart"></i></a>
-                                                    <a href="compare.html"><i class="icon-shuffle"></i></a>
+                                                    <a class="add-to-wishlist"  data-variant-slug="{{ i.product_variant_slug }}"><i class="icon-heart"></i></a> 
                                                 </div>
                                             </div>
                                         </div>
@@ -297,16 +245,14 @@
                                                 </ul>
                                             </div>
                                             <div class="content-right">
-                                                <span class="price">{{i.max_price}} - {{i.total_price}}</span>
+                                                <span class="price">${{ i.total_price|floatformat:0 }}</span>
                                             </div>
 
                                         </div>
                                     </div>
                                     {% endfor %}
-                                    <!-- End Product Default Single Item -->
                                 </div>
                             </div>
-                            <!-- If we need navigation buttons -->
                             <div class="swiper-button-prev"></div>
                             <div class="swiper-button-next"></div>
                         </div>
@@ -315,14 +261,10 @@
             </div>
         </div>
     </div>
-    <!-- End Product Default Slider Section -->
-
-    <!-- Start Banner Section -->
     <div class="banner-section section-top-gap-100">
         <div class="container">
             <div class="row">
                 <div class="col-xl-8 offset-xl-2">
-                    <!-- Start Banner Single Item -->
                     <div class="banner-single-item banner-style-3 banner-animation img-responsive" data-aos="fade-up"
                         data-aos-delay="0">
                         <div class="image">
@@ -338,17 +280,12 @@
                                         class="ion-ios-arrow-thin-right"></i></span></a>
                         </div>
                     </div>
-                    <!-- End Banner Single Item -->
                 </div>
             </div>
         </div>
     </div>
-    <!-- End Banner Section -->
-
-    <!-- Start Product Default Slider Section -->
     {% comment %}
     <div class="product-default-slider-section section-top-gap-100 section-fluid section-inner-bg">
-        <!-- Start Section Content Text Area -->
         <div class="section-title-wrapper" data-aos="fade-up" data-aos-delay="0">
             <div class="container">
                 <div class="row">
@@ -453,8 +390,6 @@
 
                                         </div>
                                     </div>
-                                    <!-- End Product Default Single Item -->
-                                    <!-- Start Product Default Single Item -->
                                     <div class="product-default-single-item product-color--golden swiper-slide">
                                         <div class="image-box">
                                             <a href="product-details-default.html" class="image-link">
@@ -781,8 +716,40 @@
             <!-- End Banner Single Item -->
         </div>
     </div>
-    <!-- End Banner Section -->
+    <script src="{% static 'assets/js/csrftkn.js' %}" ></script><script>
+        document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.add-to-wishlist').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var variantSlug = this.getAttribute('data-variant-slug');
 
-    
+            fetch('/add-wishlist/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': csrftoken,
+                },
+                body: JSON.stringify({ variant: variantSlug }) 
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.status === "success") {
+                    
+                    console.log("Item added to wishlist successfully");
+                    showToast(data.message,'success')
+                    window.location.reload();
+                } else {
+                    console.error("Error:", data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Fetch error:", error);
+            });
+        });
+    });
+});
+
+    </script>
 
    {% endblock content %}

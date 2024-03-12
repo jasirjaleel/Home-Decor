@@ -234,8 +234,8 @@ def transactions(request):
 def sales_report(request):
     orders = Order.objects.prefetch_related(
         Prefetch('order_products', queryset=OrderProduct.objects.all())
-    ).all().order_by('created_at')
-    paginator = Paginator(orders, 30)
+    ).all().order_by('id')
+    paginator = Paginator(orders, 20)
     page = request.GET.get('page')
     paged_orders = paginator.get_page(page)
     context = {
@@ -244,99 +244,83 @@ def sales_report(request):
     return render(request, 'admin_templates/sales_report.html', context)
 
 ########################### DOWNLOAD ############################
-# def download_pdf(request):
-#     response = HttpResponse(content_type='applications/pdf')
-#     current_date = datetime.now().strftime("%d-%m-%Y")
-    # filename = f"sales_report_{current_date}.pdf"
-    # response['Content-Disposition'] = f'attachment; filename="{filename}"'
-    # response['Content-Transfer-Encoding'] = 'binary'
-
-    # html_string = render_to_string('sales_report/pdf-output',{'orders':Order.objects.all()})
-    # html = HTML(string=html_string)
-    # result = html.write()
-
-    # with tempfile.NamedTemporaryFile(delete=True) as output:
-    #     output.write(result)
-    #     output.flush()
-
-    #     output = open(output.name,'rb')
-    #     response.write(output.read())
-
-    # return response
-
+import os 
 # from weasyprint import HTML
 
 def download_pdf(request):
-    pass
-#     current_date = datetime.now().strftime("%d-%m-%Y")
-#     filename = f"sales_report_{current_date}.pdf"
-#     html_string = render_to_string('admin_templates/pdf-output.html', {'orders': Order.objects.all()})
-#     html = HTML(string=html_string)
-#     pdf_file = html.write_pdf()
-#     response = HttpResponse(pdf_file, content_type='application/pdf')
-#     response['Content-Disposition'] = f'attachment; filename="{filename}"'
-#     return response
+    current_date = datetime.now().strftime("%d-%m-%Y")
+    filename = f"sales_report_{current_date}.pdf"
+    html_string = render_to_string('admin_templates/pdf-output.html', {'orders': Order.objects.all()})
+    os.add_dll_directory(r'C:\msys64\mingw64\bin')
+    # html = HTML(string=html_string)
+    html = 'hi'
+    pdf_file = html.write_pdf()
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    return response
 
 
 def download_excel(request):
-    response = HttpResponse(content_type='applications/ms-excel')
-    current_date = datetime.now().strftime("%d-%m-%Y")
-    filename = f"sales_report_{current_date}.xls"
-    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    try:
+        response = HttpResponse(content_type='applications/ms-excel')
+        current_date = datetime.now().strftime("%d-%m-%Y")
+        filename = f"sales_report_{current_date}.xls"
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
 
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('Sales Report')
-    row_num = 0
-    font_style = xlwt.XFStyle()
-    columns = ['Order ID', 'Billing Name', 'Date', 'Product', 'Quantity', 'Total', 'Status', 'Payment Method']
+        wb = xlwt.Workbook(encoding='utf-8')
+        ws = wb.add_sheet('Sales Report')
+        row_num = 0
+        font_style = xlwt.XFStyle()
+        columns = ['Date', 'Order ID', 'Billing Name', 'Wallet Discount', 'Shipping Charge', 'Offer', 'Additional Discount', 'Tax', 'Total']
+        
+        for col_num, column_title in enumerate(columns):
+            ws.write(row_num, col_num, column_title, font_style)
+
+        for order in Order.objects.all().order_by('id'):
+            try:
+                row_num += 1
+                ws.write(row_num, 0, order.created_at.strftime('%d %b %Y'))
+                ws.write(row_num, 1, order.order_number[12:])
+                ws.write(row_num, 2, order.shipping_address.first_name if order.shipping_address else '')
+                ws.write(row_num, 3, order.wallet_discount)
+                ws.write(row_num, 4, order.shipping_charge)
+                ws.write(row_num, 5, order.offer)
+                ws.write(row_num, 6, order.additional_discount)
+                ws.write(row_num, 7, order.order_tax)
+                ws.write(row_num, 8, order.order_total)
+            except Exception as e:
+                messages.error(request, f'Error: {e}')
+                return redirect('sales_report')
+        wb.save(response)
+        return response
+    except Exception as e:
+        messages.error(request, f'Error: {e}')
+        return redirect('sales_report')
     
-    for col_num, column_title in enumerate(columns):
-        ws.write(row_num, col_num, column_title, font_style)
-
-    for order in Order.objects.all():
-        for index, order_product in enumerate(order.order_products.all()):
-            row_num += 1
-            ws.write(row_num, 0, order.order_number[12:])
-            ws.write(row_num, 1, order.user.get_usernme() if order.user else '')
-            ws.write(row_num, 2, order.created_at.strftime('%d %b %Y'))
-            ws.write(row_num, 3, order_product.product_variant)
-            ws.write(row_num, 4, order_product.quantity)
-            if index == 0:
-                ws.write(row_num, 5, order.order_total)
-                ws.write(row_num, 6, order.order_status)
-                ws.write(row_num, 7, order.payment.payment_method.method_name)
-            else:
-                ws.write(row_num, 5, '')
-                ws.write(row_num, 6, '')
-                ws.write(row_num, 7, '')
-
-    wb.save(response)
-    return response
-
-
 def download_csv(request):
-    response = HttpResponse(content_type='text/csv')
-    current_date = datetime.now().strftime("%d-%m-%Y")
-    filename = f"sales_report_{current_date}.csv"
-    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    try:
+        response = HttpResponse(content_type='text/csv')
+        current_date = datetime.now().strftime("%d-%m-%Y")
+        filename = f"sales_report_{current_date}.csv"
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
 
-    writer = csv.writer(response)
-    writer.writerow(['Order ID', 'Billing Name', 'Date', 'Product', 'Quantity', 'Total', 'Status', 'Payment Method'])
+        writer = csv.writer(response)
+        writer.writerow(['Date', 'Order ID', 'Billing Name', 'Wallet Discount', 'Shipping Charge', 'Offer', 'Additional Discount', 'Tax', 'Total'])
 
-    for order in Order.objects.all():
-        for index, order_product in enumerate(order.order_products.all()):
-            if index == 0:
-                writer.writerow([
-                    order.order_number[12:],
-                    order.user.get_usernme() if order.user else '',
-                    order.created_at.strftime('%d %b %Y'),
-                    order_product.product_variant,
-                    order_product.quantity,
-                    order.order_total if index == 0 else '',
-                    order.order_status if index == 0 else '',
-                    order.payment.payment_method.method_name if index == 0 else ''
-                ])
-            else:
-                writer.writerow(['', '', '', order_product.product_variant, order_product.quantity, '', '', ''])
+        for order in Order.objects.all().order_by('id'):
+            writer.writerow([
+                order.created_at.strftime('%d %b %Y'),
+                order.order_number[12:],
+                order.shipping_address.first_name,
+                order.wallet_discount,
+                order.shipping_charge,
+                order.offer,
+                order.additional_discount,
+                order.order_tax,
+                order.order_total
+            ])
 
-    return response
+        return response
+    except Exception as e:
+        messages.error(request, f"Error downloading CSV: {str(e)}")
+        return redirect('sales_report')

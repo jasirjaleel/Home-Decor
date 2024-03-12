@@ -167,7 +167,6 @@ def add_to_cart(request, slug):
                 cart_id = _cart_id(request)
             )
             cart.save()
-    
         if product.is_available:
             try:
                 cart_item = CartItem.objects.get(user=current_user, product=product)
@@ -181,13 +180,29 @@ def add_to_cart(request, slug):
                 else:
                     quantity1=1
                 
-                if quantity1 > product.stock :
-                    messages.error(request,'Product Out Of Stock')
+                # if quantity1 > product.stock :
+                #     messages.error(request,'Product Out Of Stock')
+                #     print('nostock')
+                # else:
+                #     print('stock')
+                #     cart_item.quantity += quantity1
+                #     cart_item.save()
+                # if cart_item.product.stock < cart_item.quantity:
+                #     messages.error(request, 'Out of Stock')
+                #     print('nostock')
+
+                
+                total_quantity = cart_item.quantity + quantity1
+
+                if total_quantity > product.stock:
+                    messages.error(request, 'Out of Stock')
                     print('nostock')
+                    added_to_cart = False
                 else:
-                    print('stock')
                     cart_item.quantity += quantity1
                     cart_item.save()
+                    print('stock')
+                    added_to_cart = True
 
             except CartItem.DoesNotExist:
                 cart_item = CartItem.objects.create(
@@ -197,14 +212,22 @@ def add_to_cart(request, slug):
                     user     = request.user,
                 )
                 cart_item.save()
-            messages.success(request, "Item added to cart")
+                added_to_cart = True
+            try:
+                wishlist = Wishlist.objects.get(user=current_user)
+                wishlist_item = WishlistItem.objects.get(wishlist=wishlist, product=product)
+                wishlist_item.delete()
+            except Wishlist.DoesNotExist:
+                pass
+            except WishlistItem.DoesNotExist:
+                pass
+            if added_to_cart:
+                messages.success(request, "Item added to cart")
             # return render(request, 'cart_templates/cart.html', context)
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
         else:
             messages.success(request, 'Product is currently unavailable')
             return redirect('shop')
-
     else:
         messages.error(request, 'You should sign in first to add an item to your cart')
         return redirect('userlogin')
@@ -266,20 +289,17 @@ def applying_coupon(request):
             print(grand_total)
         
             try:
-                # Attempt to get the Coupon object based on the provided coupon code
                 coupon = Coupon.objects.get(coupon_code=coupon_code)
                 print(coupon,'1')
             except Coupon.DoesNotExist:
-                # Handle the case where the coupon does not exist
                 data = {'error': 'Coupon does not exist'}
                 return JsonResponse(data, status=200)
             
             try:
-                # Attempt to get the UserCoupon object for the current user and coupon
                 coupon_usage, created = UserCoupon.objects.get_or_create(
                 coupon=coupon,
                 user=request.user,
-                defaults={'usage_count': 0}  # Set default values for newly created instance
+                defaults={'usage_count': 0} 
                 )   
                 print(coupon_usage, '2')
             except UserCoupon.DoesNotExist:
@@ -323,9 +343,7 @@ def delete_coupon(request):
             coupon1 = cache.get('coupon_code')
             coupon_code = coupon1['coupon']
             print(coupon_code)
-            # coupon_obj = Coupon.objects.get(coupon_code=coupon_code)
             usercoupon = UserCoupon.objects.select_related('coupon').get(user=request.user,coupon__coupon_code=coupon_code)
-            # print(usercoupon.usage_count)
             usercoupon.usage_count -=1
             print('users coupon usage undone')
             coupon = Coupon.objects.get(coupon_code=coupon_code)
@@ -363,7 +381,6 @@ def delete_cart_item(request, cart_item_id):
     try:
         cart_item = CartItem.objects.get(id=cart_item_id, user=request.user)
         cart_item.delete()
-
         response_data = {
             'success': True,
             'message': 'Item deleted successfully',
@@ -373,7 +390,6 @@ def delete_cart_item(request, cart_item_id):
             'success': False,
             'message': 'Item not found',
         }
-
     return JsonResponse(response_data)
 
 ################ WISH LIST ####################
@@ -403,42 +419,16 @@ def add_wishlist(request):
         wishlist, created = Wishlist.objects.get_or_create(user=request.user)
         try:
             product_variant = Product_Variant.objects.get(product_variant_slug=slug)
-            print(product_variant,'++++++++++++++=')
         except Product_Variant.DoesNotExist:
             return JsonResponse({"status": "error", "message": "Product not found"})
-
         wishlist_item, created = WishlistItem.objects.get_or_create(wishlist=wishlist, product=product_variant)
-        # if not created:
-        #     wishlist_item.delete()
-
         return JsonResponse({"status": "success", "message": "Added to wishlist"})
     else:
         return JsonResponse({"status": "error", "message": "Invalid request"})
 
-    # # current_user    = request.user
-    # # slug = request.GET.get('slug')
-    # # product = get_object_or_404(Product_Variant, product_variant_slug=slug)
-    # # wishlist, created = Wishlist.objects.get_or_create(user=current_user)
-    
-    # # # Check if the product is already in the wishlist
-    # # if WishlistItem.objects.filter(wishlist=wishlist,product=product).exists():
-    # #     return JsonResponse({'message': 'Product is already in the wishlist'}, status=400)
-    
-    # # # Add the product to the wishlist
-    # # WishlistItem.objects.create(wishlist=wishlist, product=product)
-    
-    # # return JsonResponse({'message': 'Product added to wishlist'}, status=200)
-
-    # return render(request, 'cart_templates/wishlist.html')
-
-
 ##################### Delete User Wishlist ####################
 def delete_wishlist(request):
     wishlist_item_id = request.GET.get('wishlistitemId')
-    print(wishlist_item_id)
-    
-    # wishlist = Wishlist.objects.get(user=request.user)  
     wishlist_item = get_object_or_404(WishlistItem, id=wishlist_item_id)
-    print(wishlist_item)
     wishlist_item.delete()
     return redirect('wishlist')

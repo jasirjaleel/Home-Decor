@@ -350,13 +350,13 @@ function showToast(message, type) {
   const toast = new bootstrap.Toast(toastElement);
   toast.show();
 }
-    //   {% for message in messages %}
-    //     {% if message.tags == 'success' %}
-    //     showToast("{{message}}", "success");
-    //     {% elif message.tags == 'error' %}
-    //     showToast("{{message}}", "error");
-    //     {% endif %}
-    // {% endfor %} 
+      {% for message in messages %}
+        {% if message.tags == 'success' %}
+        showToast("{{message}}", "success");
+        {% elif message.tags == 'error' %}
+        showToast("{{message}}", "error");
+        {% endif %}
+    {% endfor %} 
     </script>
 </body>
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:32:57 GMT -->

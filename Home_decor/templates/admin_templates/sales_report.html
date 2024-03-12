@@ -47,59 +47,35 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              <th class="align-middle" scope="col">Order ID</th>
-              <th class="align-middle" scope="col">Billing Name</th>
               <th class="align-middle" scope="col">Date</th>
-              <th class="align-middle" scope="col">Products</th>
-              <th class="align-middle" scope="col"> Quantity </th>
+              <th class="align-middle" scope="col">Orders</th>
+              <th class="align-middle" scope="col">Billing Name</th>
+              <th class="align-middle" scope="col">Wallet Discount</th>
+              <th class="align-middle" scope="col">Shipping Charge</th>
+              <th class="align-middle" scope="col">Offer</th>
+              <th class="align-middle" scope="col">Additional Discount</th>
+              <th class="align-middle" scope="col">Tax</th>
               <th class="align-middle" scope="col">Total</th>
-              <th class="align-middle" scope="col">Status</th>
-              <th class="align-middle" scope="col">Payment Method</th>
             </tr>
           </thead>
+
           <tbody>
             {% for order in orders %}
-            {% for order_product in order.order_products.all %}
             <tr>
-              {% if forloop.first %}
-              <td rowspan="{{ order.order_products.count }}" class="fw-bold"><span>{{ order.order_number|slice:"14:"}}</span></td>
-              <td rowspan="{{ order.order_products.count }}"><b>{{ order.user.get_username }}</b></td>
-              <td rowspan="{{ order.order_products.count }}">{{ order.created_at|date:"j M Y" }}</td>
-              {% endif %}
-              <td>
-                <h5><a>{{ order_product.product_variant }}</a></h5>
-              </td>
-              <td class="quantity" data-title="Quantity"><span>{{ order_product.quantity }}</span></td>
-              {% if forloop.first %}
-              <td rowspan="{{ order.order_products.count }}">${{ order.order_total }}</td>
-              <td rowspan="{{ order.order_products.count }}">
-                {% for choice in order.ORDER_STATUS_CHOICES %}
-                {% if order.order_status == choice.0 %}
-                <span class="badge rounded-pill
-                                            {% if choice.0 == 'New' %} alert-primary
-                                            {% elif choice.0 == 'Pending' %} alert-warning
-                                            {% elif choice.0 == 'Delivered' %} alert-success
-                                            {% elif choice.0 == 'Shipped' %} alert-secondary
-                                            {% elif choice.0 == 'Cancelled' %} alert-danger
-                                            {% elif choice.0 == 'Returned' %} alert-info
-                                            {% endif %}">
-                  {{ choice.1 }}
-                </span>
-                {% endif %}
-                {% endfor %}
-              </td>
-              <td rowspan="{{ order.order_products.count }}">
-                {% if order.payment.payment_method.method_name == 'Razorpay' %}
-                <i class="material-icons md-payment font-xxl text-muted mr-5"></i>Razorpay
-                {% elif order.payment.payment_method.method_name == 'Cash On Delivery' %}
-                <i class="material-icons md-payments font-xxl text-muted mr-5"></i>COD
-                {% endif %}
-              </td>
-              {% endif %}
+              <td >{{ order.created_at|date:"j M Y" }}</td>
+              <td >{{ order.order_number|slice:"14:" }}</td>
+              <td ><b>{{ order.shipping_address.first_name }}</b></td>
+              <td >{{ order.wallet_discount }}</td>
+              <td >{{ order.shipping_charge }}</td>
+              <td >{{ order.offer }}</td>
+              <td >{{ order.additional_discount }}</td>
+              <td >{{ order.order_tax }}</td>
+              <td >{{ order.order_total }}</td>
             </tr>
             {% endfor %}
-            {% endfor %}
           </tbody>
+
+
         </table>
       </div> <!-- table-responsive //end -->
     </div> <!-- card-body end// -->
@@ -125,48 +101,4 @@
 </div>
 </section> <!-- content-main end// -->
 
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script>
-async function showDatePickerAndDownload(format) {
-    const { value: selectedDate } = await Swal.fire({
-        html: '<input id="flatpickrInput" class="flatpickr-input form-control">',
-        focusConfirm: false,
-        didOpen: () => {
-            const flatpickrInput = document.getElementById('flatpickrInput');
-            flatpickr(flatpickrInput, {
-                dateFormat: 'Y-m-d', // Date format
-                altFormat: 'F j, Y', // Date format displayed in the input field
-            });
-        },
-        preConfirm: () => {
-            const flatpickrInstance = flatpickr(document.getElementById('flatpickrInput'));
-            const formattedDate = flatpickrInstance.input.value;
-            if (format === 'pdf') {
-              downloadFile('pdf', formattedDate);
-            } else if (format === 'excel') {
-              downloadFile('excel', formattedDate);
-            }
-        }
-    });
-}
-async function downloadFile(fileType, selectedDate) {
-    try {
-        const response = await fetch(`/your-download-endpoint/?date=${selectedDate}&format=${fileType}`);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `sale_report.${fileType === 'pdf' ? 'pdf' : 'xlsx'}`;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-    } catch (error) {
-        console.error('Error downloading file:', error);
-        // Handle error
-    }
-}
-</script>
 {% endblock content %}

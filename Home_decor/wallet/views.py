@@ -4,7 +4,6 @@ from .models import Wallet, Transaction,Account
 from django.conf import settings
 import json
 import razorpay
-from django.core.cache import cache
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 # Create your views here.
 #=================  WALLET ====================
@@ -18,10 +17,7 @@ def wallet(request):
         currency = 'INR'
         amount = int(json.loads(request.body)['amount']) 
         user = Account.objects.get(email=user.email)
-        print(amount,user,currency)
-        data = {'amount': amount}
-        serialized_data = json.dumps(data)
-        cache.set('payment_data', serialized_data)
+        print(amount,user,currency)    
         client = razorpay.Client(auth=(settings.RAZOR_PAY_KEY_ID, settings.KEY_SECRET))
         try:
             print(settings.RAZOR_PAY_KEY_ID,settings.KEY_SECRET)

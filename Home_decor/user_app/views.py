@@ -152,6 +152,8 @@ def userlogin(request):
             password = request.POST.get('password')  
             user = authenticate(email=email,password=password) 
             if user is not None and  user.is_blocked == False and user.is_superadmin == False:
+                # if user is not None:
+                #     raise Exception ('Incorrect password. Please try again.')
                 login(request,user)
                 try:
                     print("Getting cart id")
@@ -162,7 +164,6 @@ def userlogin(request):
                         cart_id = _cart_id(request)
                     )
                     cart.save()
-        
                 if request.GET.get('next'):
                     return redirect(request.GET.get('next'))
                 else:
@@ -171,7 +172,6 @@ def userlogin(request):
             elif user is not None and user.is_blocked == True:
                 messages.error(request,'You are Blocked!')
                 return redirect('userlogin')
-
             else:
                 messages.error(request,('There Was An Error Loggin In, Try Again...'))
                 return redirect('userlogin')
@@ -188,9 +188,6 @@ def userlogout(request):
         messages.success(request,("You Were Logged Out!"))
     return redirect('userlogin')
 
-
-
-
 class ForgetPasswordView(View):
     template_name = 'user_templates/forget_password.html'
 
@@ -204,7 +201,6 @@ class ForgetPasswordView(View):
         subject = "Verify Your One-Time Password (OTP) - Home Decor Ecommerce Store"
         sender_mail = "noreply@homedecorestore.com"
         otp_message = f"Dear User,\n\n Your One-Time Password (OTP) for reset password: {random_otp}\n\nThank you for choosing Home Decor Ecommerce Store."
-        # send_mail(subject, otp_message, sender_mail, [email])
         email = EmailMessage(subject, otp_message, sender_mail, [email])
         email_thread = EmailThread(email)
         email_thread.start()
@@ -221,16 +217,13 @@ class VerifyForgetPasswordView(View):
     def post(self, request, *args, **kwargs):
         entered_otp = self.request.POST.get('enteredotp')
         stored_otp = self.request.session.get('storedotp')
-
         if entered_otp == stored_otp:
             return redirect('new_password_login')
-
         return render(request, self.template_name)
-
+    
     def get(self, request, *args, **kwargs):
         if 'storedemail' not in request.session or not request.session['storedemail']:
             return redirect('forget_password_login')
-
         return render(request, self.template_name)
 
 
@@ -240,24 +233,19 @@ class EnterNewPasswordView(View):
     def post(self, request, *args, **kwargs):
         if 'storedemail' not in self.request.session or not self.request.session['storedemail']:
             return redirect('forget_password_login')
-
         password = self.request.POST.get('password')
         confirm_password = self.request.POST.get('confirm_password')
-
         if password == confirm_password:
             stored_email = self.request.session.get('storedemail')
             user = Account.objects.get(email=stored_email)
             user.set_password(password)
             user.save()
-
             subject = "Password Reset Successful - Home Decor Ecommerce Store"
             sender_mail = "noreply@homedecorestore.com"
             message = "Dear User,\n\nYour password reset for Home Decor Ecommerce Store was successful.\n\nIf you did not initiate this password reset, please contact our support team immediately.\n\nThank you for choosing Home Decor Ecommerce Store."
-            # send_mail(subject, message, sender_mail, [user.email])
-            email = EmailMessage(subject, message, sender_mail, [email])
+            email = EmailMessage(subject, message, sender_mail, [stored_email])
             email_thread = EmailThread(email)
             email_thread.start()
-
             messages.success(self.request, "Resetting Password Completed")
             return redirect('userlogin')
 
@@ -266,5 +254,4 @@ class EnterNewPasswordView(View):
     def get(self, request, *args, **kwargs):
         if 'storedemail' not in self.request.session or not self.request.session['storedemail']:
             return redirect('forget_password_login')
-
         return render(request, self.template_name)

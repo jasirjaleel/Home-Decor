@@ -135,6 +135,7 @@ from django.core.serializers import serialize
 #     return render(request,'order_templates/payment.html',context)
 
 ####################################################################
+@never_cache
 @login_required(login_url='userlogin')
 def payment(request):
     if request.method == "POST":
@@ -146,6 +147,7 @@ def payment(request):
             print('2')
             payload = json.loads(request.body)
             selected_payment_method = payload.get('selected_payment_method')
+            wallet_selected = payload.get('use_wallet')
             payment_methods_instance = PaymentMethod.objects.get(method_name=selected_payment_method)
             address = Address.objects.get(is_default=True, account=user)
             shipping_address = ShippingAddress.objects.create(
@@ -160,7 +162,17 @@ def payment(request):
             )
             print('3')
             grandtotal, tax, discount_amount, quantity, shipping, total, offer = _grandtotal_calculation(request)
-            
+            grandtotal2 = grandtotal
+            if wallet_selected == True:
+                wallet = Wallet.objects.get(user=user)
+                if wallet.balance >= grandtotal2:
+                    # wallet.balance -= grandtotal2
+                    # wallet.save()
+                    grandtotal = 0
+                else:
+                    grandtotal2 -= wallet.balance
+                    # wallet.balance = 0
+                    # wallet.save()
             draft_order = Order.objects.create(
                 user=user,
                 order_tax=tax,
@@ -168,13 +180,15 @@ def payment(request):
                 additional_discount=discount_amount,
                 shipping_address=shipping_address,
                 order_total=grandtotal,
+                wallet_discount=(grandtotal-grandtotal2),
                 offer=offer,
                 order_status='New',
                 is_ordered=False,
             )
             print('4')
             # Process payment
-            payment = _process_payment(user, draft_order, payment_methods_instance, grandtotal)
+            payment = _process_payment(user, draft_order, payment_methods_instance, grandtotal2)
+            print(payment['payment_order_id'],payment['payment_id'])
             user = request.user
             request.session['user'] = str(user)
             draft_order.payment = Payment.objects.get(payment_order_id=payment['payment_order_id'])
@@ -221,6 +235,7 @@ def _process_payment(user, draft_order, payment_methods_instance, grandtotal):
         payment1 = {
             'payment_id': payment.id,
             'payment_order_id': payment.payment_order_id,
+            'amount': (int(grandtotal) * 100),
         }
         return payment1
     else:
@@ -250,6 +265,7 @@ def _create_order_products(draft_order, user):
         )
     draft_order.save()
 ####################################################################
+@never_cache
 @login_required(login_url='userlogin')
 def order_review(request):
     orders_items = OrderProduct.objects.filter(user=request.user,ordered= False,)
@@ -259,7 +275,7 @@ def order_review(request):
     }
     return render(request,'order_templates/order_review.html',context)
 
-
+@never_cache
 @csrf_exempt
 def paymenthandler(request):
     print("Payment Handler endpoint reached")
@@ -325,6 +341,7 @@ def paymenthandler(request):
             return render(request, 'order_templates/paymentfail.html')
     else:
         return redirect('payment')
+    
 
 @login_required(login_url='userlogin')
 @never_cache

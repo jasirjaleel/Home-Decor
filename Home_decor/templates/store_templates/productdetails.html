@@ -156,7 +156,7 @@ input.qtyminus { width:30px; height:30px;}
                                 </div>
                                 <div class="product-add-to-cart-btn">
                                    {% for i in variants %}
-                                    <a href="{% url 'addtocart' slug=i.product_variant_slug %}?quantity=" id="addToCartBtn">+ Add To Cart</a>
+                                    <a href="{% url 'addtocart' slug=i.product_variant_slug %}" id="addToCartBtn">+ Add To Cart</a>
                                 </div>
                             </div>
                             <!-- Start  Product Details Meta Area-->

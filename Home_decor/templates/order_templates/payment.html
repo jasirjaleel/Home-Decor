@@ -280,130 +280,30 @@ async function updateOrderSummary() {
 
   const csrftoken = getCookie('csrftoken');
 
-
-
-
-
-
-  // document.getElementById('rzp-button1').onclick = function (e) {
-  // // document.getElementById('rzp-button1').addEventListener("click", function(){
-  //   // Check if the Razorpay payment method is selected
-  //   var selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked');
-  //   console.log(selectedPaymentMethod.value, 'as');
-
-  //   if (selectedPaymentMethod.value == 2) {
-
-
-  //     // Create the fetch request
-  //     fetch('/payment/', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'X-CSRFToken': csrftoken,
-  //         // Add any additional headers if needed
-  //       },
-  //       body: JSON.stringify({
-  //         selected_payment_method: selectedPaymentMethod.value
-  //       })
-  //     })
-  //       .then(response => {
-  //         if (!response.ok) {
-  //           throw new Error('Network response was not ok');
-  //         }
-  //         return response.json(); // Parse response JSON
-  //       })
-  //       .then(data => {
-  //         e.preventDefault();
-  //         console.log('Received data:', data);
-    
-  //         const paymentOrderId = data.context.id;
-  //         const paymentAmount = data.context.amount;
-  //         console.log('Payment information:', paymentOrderId);
-  //     // e.preventDefault();
-  //     var razorpayKeyId = '{{ RAZOR_PAY_KEY_ID }}';
-  //     console.log(razorpayKeyId);
-  //     console.log(paymentAmount);
-  //     console.log(paymentOrderId);
-  //     var callbackURL = `http://127.0.0.1:8000/paymenthander/`;
-  //     var options = {
-  //       "key": razorpayKeyId, // Enter the Key ID generated from the Dashboard
-  //       // "amount": "{{payment.amount}}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-  //       "amount": paymentAmount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-  //       // "currency": "INR",
-  //       "name": "Home Decor",
-  //       "description": "Test Transaction",
-  //       "image": "https://example.com/your_logo",
-  //       "order_id": paymentOrderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-      
-  //       "callback_url": callbackURL,
-      
-      
-  //       "prefill": {
-  //         "name": "{{request.user.get_usernme}}",
-  //         "email": "{{request.user.email}}",
-  //         "contact": "{{request.user.phone_number}}"
-  //       },
-  //       "theme": {
-  //         "color": "#b19361"
-  //       }
-  //     };
-  //     var rzp1 = new Razorpay(options);
-  //     rzp1.on('payment.failed', function (response) {
-  //       alert(response.error.code);
-  //     });
-
-  //     rzp1.open();
-  //     e.preventDefault();
-  //       })
-  //       .catch(error => {
-  //         console.error('There was a problem with the fetch operation:', error);
-  //       });
-  //   }
-  //   else {
-  //     e.preventDefault();
-  //     fetch('/payment/', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'X-CSRFToken': csrftoken,
-  //       },
-  //       body: JSON.stringify({
-  //         selected_payment_method: selectedPaymentMethod.value,
-           
-  //       })
-  //     })
-  //       .then(response => {
-  //         if (!response.ok) {
-  //           throw new Error('Network response was not ok');
-  //         }
-  //         return response.json();
-  //       })
-  //       .then(data => {
-  //         e.preventDefault();
-  //         window.location.href = 'http://127.0.0.1:8000/order-review/';
-  //       })
-  //       .catch(error => {
-  //         console.error('There was a problem with the fetch operation:', error);
-  //       });
-  //   }
-  // };
-
   document.getElementById('rzp-button1').addEventListener('click', function(e) {
-    // Check if the Razorpay payment method is selected
+
     var selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked');
-    console.log(selectedPaymentMethod.value, 'as');
+    var walletCheckbox = document.getElementById('walletCheckbox');
+    console.log(selectedPaymentMethod.value);
 
     if (selectedPaymentMethod.value == 'Razorpay') {
-        // Create the fetch request
+
+      if (walletCheckbox.checked) {
+            var useWallet = true;
+        } else {
+            var useWallet = false;
+        }
+
         fetch('/payment/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': csrftoken,
-                    // Add any additional headers if needed
+                    
                 },
                 body: JSON.stringify({
-                    selected_payment_method: selectedPaymentMethod.value
+                    selected_payment_method: selectedPaymentMethod.value,
+                    use_wallet: useWallet
                 })
             })
             .then(response => {
@@ -416,10 +316,10 @@ async function updateOrderSummary() {
                 e.preventDefault();
                 console.log('Received data:', data);
 
-                const paymentOrderId = data.context.id;
+                const paymentOrderId = data.context.payment_order_id;
                 const paymentAmount = data.context.amount;
                 console.log('Payment information:', paymentOrderId);
-                // e.preventDefault();
+                
                 var razorpayKeyId = '{{ RAZOR_PAY_KEY_ID }}';
                 console.log(razorpayKeyId);
                 console.log(paymentAmount);
@@ -429,9 +329,9 @@ async function updateOrderSummary() {
                     "key": razorpayKeyId, // Enter the Key ID generated from the Dashboard
                     "amount": paymentAmount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
                     "name": "Home Decor",
-                    "description": "Test Transaction",
+                    
                     "image": "https://example.com/your_logo",
-                    "order_id": paymentOrderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                    "order_id": paymentOrderId,
 
                     "callback_url": callbackURL,
 
@@ -528,28 +428,6 @@ async function updateOrderSummary() {
         }
     });
 
-
-
-    document.getElementById("rzp-button1").addEventListener("click", function() {
-        // Check if the checkbox is checked
-        if (document.getElementById("walletCheckbox").checked) {
-            fetch('/payment/')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log(data); // Do something with the response data
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
-                });
-        } else {
-            console.log("Not checked");
-        }
-    });
 
 
     document.getElementById('deleteCouponButton').addEventListener('click', function() {

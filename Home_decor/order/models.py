@@ -85,13 +85,11 @@ class Order(models.Model):
     is_ordered          = models.BooleanField(default=False)
     created_at          = models.DateTimeField(auto_now_add=True)
     updated_at          = models.DateTimeField(auto_now=True)
-    # coupon_code         = models.ForeignKey(Coupon,on_delete=models.SET_NULL,null=True,blank=True)
-    # wallet_discount     = models.IntegerField(default=0,null=True)
+    coupon_code         = models.ForeignKey(Coupon,on_delete=models.SET_NULL,null=True,blank=True)
+    wallet_discount     = models.IntegerField(default=0,null=True)
     
     # order_note = models.CharField(max_length=100,blank=True,null=True)
     # ip = models.CharField(max_length=50,blank=True)
-   
-   
     def generate_order_number(self):
         current_date = datetime.datetime.now().strftime("%Y%m%d")
         print(current_date)

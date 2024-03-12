@@ -46,9 +46,8 @@
                                             <span><b>{{ products_count }}</b> Items found</span>
                                         </div> <!-- End Page Amount -->
                                         <div class="d-flex"  style="flex-direction: column;justify-items: start; padding-left:10px ;">
-                                            <!-- Add a button to toggle filter options visibility -->
+                                        
                                             <button class="btn btn-block btn-golden p-2" id="toggleFilters"  style="max-width: 200px;min-width: 100px">Show/Hide Filters</button>
-                                            <!-- Filter options section -->
                                             <form id='filterForm' method="get">
                                             <div id="filterOptions" style="display:none;align-items: top; justify-content: center;">
                                                 <div class="sidebar-single-widget" >
@@ -152,8 +151,7 @@
                                                 {% for product in products %}
                                                 <div class="col-xl-3 col-lg-4 col-sm-6 col-12">
                                                     <!-- Start Product Default Single Item -->
-                                                    <div class="product-default-single-item product-color--golden"
-                                                       mb-4  >
+                                                    <div class="product-default-single-item product-color--golden  mb-4 ">
                                                         <div class="image-box">
                                                 
                                                             <a href="{% url 'product_detail' slug=product.product_variant_slug %}" class="image-link">
@@ -249,7 +247,6 @@
     document.querySelectorAll('.add-to-wishlist').forEach(function(button) {
         button.addEventListener('click', function() {
             var variantSlug = this.getAttribute('data-variant-slug');
-
             fetch('/add-wishlist/', {
                 method: 'POST',
                 headers: {
@@ -257,24 +254,21 @@
                     'X-Requested-With': 'XMLHttpRequest',
                     'X-CSRFToken': csrftoken,
                 },
-                body: JSON.stringify({ variant: variantSlug }) // Send variant slug in JSON format
+                body: JSON.stringify({ variant: variantSlug })
             })
             .then(response => response.json())
             .then(data => {
                 console.log(data);
                 if (data.status === "success") {
-                    
                     console.log("Item added to wishlist successfully");
                     showToast(data.message,'success')
-                    // Optionally, update UI to reflect item added to wishlist
+                    window.location.reload();
                 } else {
                     console.error("Error:", data.message);
-                    // Optionally, display error message to user
                 }
             })
             .catch(error => {
                 console.error("Fetch error:", error);
-                // Optionally, handle fetch errors
             });
         });
     });

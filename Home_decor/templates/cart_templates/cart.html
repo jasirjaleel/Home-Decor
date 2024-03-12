@@ -186,28 +186,21 @@ function deleteCartItem(cartItemId) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Remove the deleted item from the HTML
                 const deletedItem = document.getElementById(`cart-item-${cartItemId}`);
-                deletedItem.remove();
-
-                // Check if the cart is empty
+                deletedItem.parentElement.parentElement.remove(); 
                 const cartTable = document.getElementById('cart-table');
                 if (cartTable && !cartTable.querySelector('tbody tr')) {
-                    // Cart is empty, redirect to the cart page
                     window.location.href = '/cart/';
+                    // window.location.reload();
                 }
             } else {
                 console.error(data.message);
-                
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            
         });
 
-    // Prevent the default action (page reload) of the link click
-    // event.preventDefault();
 }
 
 
@@ -216,22 +209,16 @@ function deleteCartItem(cartItemId) {
       try {
           const response = await fetch('/order-summary/');
           const data = await response.json();
-        
         if (data.offer && parseFloat(data.offer) > 0) {
-            // Update the discount amount in the HTML
             document.getElementById('offer').innerText = `-$${data.offer}`;
         }else {
-            // Hide the HTML element if no offer price is present or it's not greater than 0
             document.getElementById('offerDiv').style.display       = 'none';
         }
-
         if (data.discount_amount && parseFloat(data.discount_amount) > 0) {
             document.getElementById('discount').innerText   = `-$${data.discount_amount}`;
         }else {
-            // Hide the HTML element if no offer price is present or it's not greater than 0
             document.getElementById('discountDiv').style.display    = 'none';
         }
-          // Update DOM elements with the new data
           document.getElementById('total').innerText      = `$${data.total}`;
           document.getElementById('quantity').innerText   = `Subtotal (${data.quantity} items)`;
           document.getElementById('shipping').innerText   = `$${data.shipping}`;
@@ -324,42 +311,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-
-
-
-
-function applyCoupon() {
-        var couponCode = document.getElementById('coupon').value;
-        fetch('{% url "apply_coupon" %}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken
-            },
-            body: JSON.stringify({ coupon: couponCode})
-        })
-        .then(response => {
-            if (response.ok) {
-                response.json().then(data => {
-                console.log(data);
-                if (data.status === 'success') {
-                    updateOrderSummary();
-                    document.querySelector('.success-message').textContent = data.success;
-                    document.querySelector('.error-message').textContent = ''; 
-                } else {
-                    console.error("Coupon application failed:", data.message);
-                    document.querySelector('.error-message').textContent = data.error;
-                    document.querySelector('.success-message').textContent = '';
-                }
-            });
-            } else {
-                console.error("Failed to apply coupon. Server returned status:", response.status);
-            }
-        })
-        .catch(error => {
-            console.error("Network error:", error);
-        });
-    }
 
 </script>
 
