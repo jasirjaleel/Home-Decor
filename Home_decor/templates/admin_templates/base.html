@@ -24,7 +24,6 @@
     <style>
         .submenu {
             list-style: none;
-            /* Add any additional styling for your submenu items */
         }
     </style>
     
@@ -48,7 +47,6 @@
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-              
                 <li class="menu-item has-submenu {% if request.path == '/admin/all-product/' or request.path == '/admin/create-product/' or request.path == '/admin/add-product-variant/' %}active{% endif %}">
                     <a class="menu-link  "> <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
@@ -92,14 +90,12 @@
                         <a href="page-seller-detail.html">Seller profile</a>
                     </div>
                 </li>
-              
                 <li class="menu-item has-submenu {% if request.path == '/admin/add-product/' %}active{% endif %}">
                     <a class="menu-link" href="{% url 'addproduct' %}"> <i class="icon material-icons md-add_box"></i>
                         <span class="text">Add product</span>
                     </a>
                     <div class="submenu">
                         <a href="{% url 'addproduct' %}">Add product 1</a>
-                        
                     </div>
                 </li>
                 {% endcomment %}
@@ -126,7 +122,7 @@
                 </li> -->
                 {% endcomment %}
                 <li class="menu-item has-submenu  {% if request.path == '/admin/manage-category/' or request.path == '/admin/add-category/' %}active{% endif %}" >
-                    <a class="menu-link " > <i class="icon material-icons md-people"></i>
+                    <a class="menu-link " > <i class="icon material-icons md-category"></i>
                         <span class="text">Category</span>
                     </a>
                     <div class="submenu">
@@ -139,7 +135,7 @@
                     </div>
                 </li>
                 <li class="menu-item has-submenu  {% if request.path == '/admin/attribute/' or request.path == '/admin/attribute-value/' or request.path == '/admin/brand/' or request.path == '/admin/add-brand/' or request.path == '/admin/add-attribute-value/'   or  request.path == '/admin/add-attribute/' or request.path == '/admin/banner/' or request.path == '/admin/add-banner/' %}active{% endif %}" >
-                    <a class="menu-link " ><i class="fa-sharp fa-regular fa-bars-progress" ></i>
+                    <a class="menu-link " ><i class="icon material-icons md-tune" ></i>
                         <span class="text">Management</span>
                     </a>
                     <div class="submenu">
@@ -156,96 +152,52 @@
                             <span class="text">Banner</span>
                         </a>
                         <a class="{% if request.path == '/admin/add-attribute/' %}active{% endif %} p-2" href="{% url 'add-attribute' %}"> 
-                            <!-- <i class="icon material-icons md-add_box"></i> -->
                             <span class="text">Add Attribute</span>
                         </a>
                         <a class="{% if request.path == '/admin/add-attribute-value/' %}active{% endif %} p-2" href="{% url 'add-attribute-value' %}"> 
-                            <!-- <i class="icon material-icons md-add_box"></i> -->
                             <span class="text">Add Attribute Value</span>
                         </a>
                         <a class="{% if request.path == '/admin/add-brand/' %}active{% endif %} p-2" href="{% url 'add-brand' %}"> 
-                            <!-- <i class="icon material-icons md-add_box"></i> -->
                             <span class="text">Add Brand</span>
                         </a>
                         <a class="{% if request.path == '/admin/add-banner/' %}active{% endif %} p-2" href="{% url 'add-banner' %}"> 
-                            <!-- <i class="icon material-icons md-add_box"></i> -->
                             <span class="text">Add Banner</span>
                         </a>
                     </div>
                 </li>
 
                 <li class="menu-item has-submenu  {% if request.path == '/admin/all-coupon/' %}active{% endif %}" >
-                    <a class="menu-link " > <i class="icon material-icons md-people"></i>
+                    <a class="menu-link " > <i class="icon material-icons md-local_activity"></i>
                         <span class="text">Coupon</span>
                     </a>
                     <div class="submenu">
                         <a class="{% if request.path == '/admin/manage-category/' %}active{% endif %}  p-2" href="{% url 'coupon' %}">
-                  
                             <span class="text">Coupon List</span>
                         </a>
-                        
                     </div>
                 </li>
                 <li class="menu-item has-submenu {% if request.path == '/admin/all-offer-product/' or request.path == '/admin/all-offer-category/'  %}active{% endif %}">
-                    <a class="menu-link  "><i class="fa-sharp fa-light fa-tag" ></i>
+                    <a class="menu-link  "><i class="icon material-icons md-local_offer" ></i>
                         <span class="text">Offers</span>
                     </a>
                     <div class="submenu">  
                         <a class="{% if request.path == '/admin/all-offer-product/' %}active{% endif %}" href="{% url 'all_products_offer' %}">
                             <i class="icon material-icons md-menu_open"></i>
                             <span class="text">Product Offers List</span>
-                        </a>
-                     
+                        </a>                 
                         <a class="{% if request.path == '/admin/all-offer-category/' %}active{% endif %}" href="{% url 'all_category_offer' %}"> <i class="icon material-icons md-add_box"></i>
                             <span class="text">Category Offers List</span>
                         </a>
                         </div>
                 </li>
-
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="page-transactions-1.html"> <i class="icon material-icons md-monetization_on"></i>
+                <li class="menu-item">
+                    <a class="menu-link" href="{% url 'transactions' %}"> <i class="icon material-icons md-monetization_on"></i>
                         <span class="text">Transactions</span>
                     </a>
-                    <div class="submenu">
+                    <!-- <div class="submenu">
                         <a href="page-transactions-1.html">Transaction 1</a>
                         <a href="page-transactions-2.html">Transaction 2</a>
-                    </div>
-                </li>
-                <!-- <li class="menu-item has-submenu">
-                    <a class="menu-link" href="#"> <i class="icon material-icons md-person"></i>
-                        <span class="text">Account</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="page-account-login.html">User login</a>
-                        <a href="page-account-register.html">User registration</a>
-                        <a href="page-error-404.html">Error 404</a>
-                    </div>
-                </li> -->
-                <li class="menu-item">
-                    <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
-                        <span class="text">Reviews</span>
-                    </a>
-                </li>
-                <!-- <li class="menu-item">
-                    <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
-                        <span class="text">Brands</span> </a>
-                </li> -->
-                <!-- <li class="menu-item">
-                    <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
-                        <span class="text">Statistics</span>
-                    </a>
-                </li> -->
-            </ul>
-            <hr>
-            <ul class="menu-aside">
-                <li class="menu-item has-submenu ">
-                    <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
-                        <span class="text">Settings</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="page-settings-1.html">Setting sample 1</a>
-                        <a href="page-settings-2.html">Setting sample 2</a>
-                    </div>
+                    </div> -->
                 </li>
             </ul>
             <br>
@@ -255,14 +207,6 @@
     <main class="main-wrap">
         <header class="main-header navbar">
             <div class="col-search">
-                <form class="searchform">
-                    <div class="input-group">
-                        <input list="search_terms" type="text" id="searchInput" class="form-control" placeholder="Search term">
-                        
-                        <ul id="searchResults"></ul>
-                        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
-                    </div>
-                </form>
             </div>
             <div class="col-nav">
                 <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
@@ -275,7 +219,6 @@
                     <li class="dropdown nav-item">
                         <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="{% static 'assets2\imgs\admin.png' %}" alt="User"></a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                            <!-- <div class="dropdown-divider"></div> -->
                             <a class="dropdown-item text-danger" href="{% url 'adminlogout' %}"><i class="material-icons md-exit_to_app"></i>Logout</a>
                         </div>
                     </li>
@@ -307,38 +250,30 @@
         </footer>
     </main>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-
     <script src="{% static 'assets2/js/vendors/jquery-3.6.0.min.js' %}"></script>
     <script src="{% static 'assets2/js/vendors/jquery.fullscreen.min.js' %}"></script>
     <script src="{% static 'assets2/js/vendors/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'assets2/js/vendors/select2.min.js' %}"></script>
     <script src="{% static 'assets2/js/vendors/perfect-scrollbar.js' %}"></script>
     <script src="{% static 'assets2/js/vendors/chart.js' %}"></script>
-    
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script src="{% static 'assets2/js/main.js' %}" type="text/javascript"></script>
     <script src="{% static 'assets2/js/custom-chart.js' %}" type="text/javascript"></script>
-</body>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
     <script>
-     // Function to show toast message
 function showToast(message, type) {
-  // Create toast element
   const toastElement = document.createElement("div");
   toastElement.classList.add("toast");
   toastElement.setAttribute("role", "alert");
   toastElement.setAttribute("aria-live", "assertive");
   toastElement.setAttribute("aria-atomic", "true");
-
-  // Set background color based on type
   let bgColor;
   if (type === "success") {
-    bgColor = "#198754"; // Green color for success
+    bgColor = "#198754"; 
   } else if (type === "error") {
-    bgColor = "#dc3545"; // Red color for error
+    bgColor = "#dc3545";
   } else {
-    bgColor = "#0d6efd"; // Blue color for other types
+    bgColor = "#0d6efd";
   }
   toastElement.style.backgroundColor = bgColor;
   const toastBody = document.createElement("div");
@@ -361,5 +296,3 @@ function showToast(message, type) {
 </body>
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:32:57 GMT -->
 </html>
-
-

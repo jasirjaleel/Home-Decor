@@ -8,60 +8,26 @@
             <h2 class="content-title card-title">Categories</h2>
 
         </div>
-        <div>
-            <!-- <a href="#" class="btn btn-light rounded font-md">Export</a>
-                    <a href="#" class="btn btn-light rounded  font-md">Import</a>
-                    <a href="#" class="btn btn-primary btn-sm rounded">Create new</a> -->
-        </div>
     </div>
     <div class="card mb-4">
-        <header class="card-header">
-            <div class="row align-items-center">
-
-                <div class="col-md-3 col-12 me-auto mb-md-0 mb-3 ">
-                    <form class="searchform">
-                        <div class="input-group" style="width: 350px;">
-                            <input type="text" class="form-control" placeholder="Search">
-                            <button class="btn btn-light bg" type="button"> <i
-                                    class="material-icons md-search"></i></button>
-                        </div>
-                    </form>
-                </div>
-                <div class="col-md-2 col-6">
-                    <input type="date" value="02.05.2021" class="form-control">
-                </div>
-                <div class="col-md-2 col-6">
-                    <select class="form-select">
-                        <option selected>Status</option>
-                        <option>Active</option>
-                        <option>Disabled</option>
-                        <option>Show all</option>
-                    </select>
-                </div>
-            </div>
-        </header> <!-- card-header end// -->
         <div class="card-body">
-
-
-
             <div class="row align-items-center">
-
                 <table class="table" >
                     <thead >
-                        <tr  >
+                        <tr  class="d-flex justify-content-center">
                             <th>Category</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for category in categories %}
-                        <tr>
+                        <tr class="d-flex justify-content-center" >
                             <td>
-                                <div class="d-flex flex-row col-name">
+                               
                                     <div>
                                         <h6 class="mb-0">{{category.category_name}}</h6>
                                     </div>
-                                </div>
+                               
                             </td>
                             
                             <td>
@@ -72,17 +38,25 @@
                         {% endfor %}
                     </tbody>
                 </table>
-            </div> <!-- card-body end// -->
-        </div> <!-- card end// -->
+            </div> 
+        </div> 
+        </div>
         <div class="pagination-area mt-30 mb-50">
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-start">
-                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                    <li class="page-item"><a class="page-link" href="#">02</a></li>
-                    <li class="page-item"><a class="page-link" href="#">03</a></li>
-                    <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                    <li class="page-item"><a class="page-link" href="#">16</a></li>
-                    <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                    {% if product_variant.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{ product_variant.previous_page_number }}"><i class="material-icons md-chevron_left"></i></a></li>
+                    {% endif %}
+                    {% for i in product_variant.paginator.page_range %}
+                            {% if product_variant.number == i %}
+                                <li class="page-item active"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    {% if product_variant.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ product_variant.next_page_number }}"><i class="material-icons md-chevron_right"></i></a></li>
+                    {% endif %}
                 </ul>
             </nav>
         </div>

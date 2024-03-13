@@ -8,6 +8,8 @@ from extra_management.models import Banner
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from offer_management.models import ProductOffer,CategoryOffer
 from decimal import Decimal
+from django.db.models import F, DecimalField, ExpressionWrapper
+
 
 def home(request):
     if 'storedotp' in request.session:
@@ -116,6 +118,12 @@ class ShopView(View):
         categories = Category.objects.filter(is_active=True)
         brands = Brand.objects.filter(is_active=True)
         colors = Attribute_Value.objects.filter(attribute__attribute_name='Color')
+        products = products.annotate(
+            calculated_total_price=ExpressionWrapper(
+                F('sale_price') + F('product__base_price'),
+                output_field=DecimalField()
+            )
+        )
         product = None
         selected_brand      =  []
         selected_category   =  []
@@ -140,7 +148,7 @@ class ShopView(View):
             products = products.filter(attributes__attribute_value__in=colors_list, is_active=True)
             selected_color = [color for color in colors_list]
         if min_price and max_price:
-            products = products.filter(total_price__range=[min_price,max_price])
+            products = products.filter(calculated_total_price__range=[min_price, max_price])
 
         if sort_by :
             if sort_by == "price_low_to_high":
@@ -184,6 +192,9 @@ class ShopView(View):
                 product.best_offer = best_offer
             else:
                 product.discounted_price = total_price
+        
+        if min_price and max_price:
+            products = products.filter(calculated_total_price__range=[min_price, max_price])
         
         products_count = products.count()
         paginator = Paginator(products,8)
@@ -308,3 +319,7 @@ class ProductUpdateView(View):
             return JsonResponse({'success': True, 'slug': product_slug})
         else:
             return JsonResponse({'success': False, 'errors': 'No matching product variant found.'})
+        
+
+def privacy_policy(request):
+    return render(request, 'store_templates/privacy-policy.html')

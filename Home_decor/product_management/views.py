@@ -9,14 +9,24 @@ from django.core.paginator import Paginator
 # Create your views here.
 ##############   DISPLAYING PRODUCT   ############# 
 def all_product(request):
-    products = Product.objects.all().order_by('-id')
+    products = Product.objects.select_related('category').all().order_by('-id')
+    categories = Category.objects.filter(is_active=True) 
+    seleted_category_id = None
+    print('hi')
+    if 'category' in request.GET:
+        selected_category_id = request.GET.get('category')
+        print(selected_category_id)
+        products = products.filter(category_id=selected_category_id).order_by('-id')
+        print(products)
     product_count = products.count()
     paginator = Paginator(products,5)
     page = request.GET.get('page')
     paged_products = paginator.get_page(page)
     context = {
         'products':paged_products,
-        'products_count':product_count
+        'products_count':product_count,
+        'categories':categories,
+        'seleted_category_id':seleted_category_id
     }
     return render(request, 'admin_templates/all_product.html',context)
 ##############   CREATING NEW PRODUCT   #############
@@ -24,7 +34,6 @@ def create_product(request):
     category    = Category.objects.all()
     brand       = Brand.objects.all()
     products    = Product.objects.all()
-
     context= {
         'category'       : category,
         'brand'          : brand,

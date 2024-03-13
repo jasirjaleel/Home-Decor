@@ -12,6 +12,7 @@ urlpatterns = [
     path('product/<slug:slug>/', ProductDetailView.as_view(), name='product_detail'),
     path('product/', ProductUpdateView.as_view(), name='product_update'),
   
+    path('privacy-policy/', views.privacy_policy, name='privacy-policy'),
 
     path('paymenthandler2/',paymenthandlerView,name='paymenthandler2')
 

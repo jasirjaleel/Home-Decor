@@ -1,0 +1,72 @@
+{% extends 'admin_templates/base.html' %}
+{% load static %}
+{% block content %}
+<section class="content-main">
+  <div class="content-header">
+    <div>
+      <h2 class="content-title card-title">Transactions</h2>
+    </div>
+  </div>
+  <div>
+  </div>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="align-middle" scope="col">Date</th>
+                    <th class="align-middle" scope="col">User</th>
+                    <th class="align-middle" scope="col">Transaction</th>
+                    <th class="align-middle" scope="col">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.created_at| date:"g:i ,j M, Y, " }}</td>
+                    <td>{{ transaction.wallet.user.first_name }} {{ transaction.wallet.user.last_name }}</td>
+                    <td>
+                        {% if transaction.transaction_type == 'CREDIT' %}
+                        Deposited
+                        {% else %}
+                        Withdrawal
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if transaction.transaction_type == 'CREDIT' %}
+                        <span style="color: green;">{{ transaction.amount }}</span>
+                        {% else %}
+                        <span style="color: red;">{{ transaction.amount }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+      </div> <!-- table-responsive //end -->
+    </div> <!-- card-body end// -->
+  </div><!-- card end// -->
+  <div class="pagination-area mt-15 mb-50">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-start">
+            {% if transactions.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ products.previous_page_number }}"><i class="material-icons md-chevron_left"></i></a></li>
+            {% endif %}
+            {% for i in transactions.paginator.page_range %}
+                    {% if transactions.number == i %}
+                        <li class="page-item active"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                    {% endif %}
+                {% endfor %}
+            {% if transactions.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ products.next_page_number }}"><i class="material-icons md-chevron_right"></i></a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+</section> <!-- content-main end// -->
+
+{% endblock content %}

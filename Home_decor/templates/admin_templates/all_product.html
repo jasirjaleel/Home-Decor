@@ -17,43 +17,29 @@
             <div class="card mb-4">
                 <header class="card-header">
                     <div class="row align-items-center">
-                        <!-- <div class="col col-check flex-grow-0">
-                            <div class="form-check ms-2">
-                                <input class="form-check-input" type="checkbox" value="">
-                            </div>
-                        </div> -->
+
                         <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
-                            <select class="form-select">
+                            <select  id="category-select"  class="form-select">
                                 <option selected>All category</option>
-                                <option>Electronics</option>
-                                <option>Clothes</option>
-                                <option>Automobile</option>
+                                {% for category in categories %}
+                                <option value="{{ category.id }}">{{ category.category_name }}</option>
+                                {% endfor %}
                             </select>
                         </div>
-                        <div class="col-md-2 col-6">
-                            <input type="date" value="02.05.2021" class="form-control">
-                        </div>
+                        
                         <div class="col-md-2 col-6">
                             <select class="form-select">
-                                <option selected>Status</option>
+                                <option selected>Show all</option>
                                 <option>Active</option>
-                                <option>Disabled</option>
-                                <option>Show all</option>
+                                <option>Blocked</option>
                             </select>
                         </div>
                     </div>
-                </header> <!-- card-header end// -->
+                </header> 
                 <div class="card-body">
                     {% for product in products %}
-
-
                     <article class="itemlist">
                         <div class="row align-items-center">
-                            <div class="col col-check flex-grow-0">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox">
-                                </div>
-                            </div>
                             <div class="col-lg-3 col-sm-1 col-4 flex-grow-1 col-name">
                                 <a class="itemside" href="#">
                                     <div class="info">
@@ -95,17 +81,10 @@
                                
                             </div>
                         </div>
-                    </article>
-
-
-
-
-
-
-                            
+                    </article> 
                     {% endfor %}
-                </div> <!-- card-body end// -->
-            </div> <!-- card end// -->
+                </div> 
+            </div> 
             <div class="pagination-area mt-30 mb-50">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-start">
@@ -127,48 +106,26 @@
             </div>
         </section> <!-- content-main end// -->
 
-<!-- 
         <script>
-            // Add this script to your HTML template or a separate JS file
-        
-           
-                var base_url = "{% url 'adminhome' %}";
-        
-                $('.block-user-btn').click(function () {
-                    var productId = $(this).data('product-id');
-        
-                    $.ajax({
-                        url: base_url + 'deactivateproduct/' + productId + '/',
-                        type: 'GET',  // You can use POST if needed
-                        success: function (response) {
-                            // alert('deac');
-                            // console.log('hi');
-                            location.reload();
-                        },
-                        error: function (error) {
-                            console.log(error);
+            document.getElementById('category-select').addEventListener('change', function () {
+                    var selectedCategory = this.value; // Get the selected category from the dropdown
+                    console.log(selectedCategory);
+                
+                fetch(`{% url 'all-product' %}?category=` + selectedCategory)
+                .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
                         }
+                        return response.text();
+                    })
+                    .then(html => {
+                // Update the product list with the fetched HTML content
+                        document.getElementById('product-list').innerHTML = html;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
                     });
-                });
-        
-                $('.unblock-user-btn').click(function () {
-                    var productId = $(this).data('product-id');
-                    $.ajax({
-                        url: base_url + 'activateproduct/' + productId + '/',
-                        type: 'GET',  // You can use POST if needed
-                        success: function (response) {
-                            alert("active");
-                            location.reload();
-                        },
-                        error: function (error) {
-                            console.log(error);
-                        }
-                    });
-                });
-            
-        
-        
-           
-        
-        </script> -->
+            });
+
+        </script>
         {% endblock content %}

@@ -220,7 +220,7 @@ def fetch_custom_data(request):
 @login_required(login_url='admin_login')
 def transactions(request):
     transactions = Transaction.objects.all()
-    paginator = Paginator(transactions, 5)
+    paginator = Paginator(transactions, 10)
     page = request.GET.get('page')
     paged_transactions = paginator.get_page(page)
     context = {

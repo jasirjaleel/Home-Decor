@@ -15,8 +15,11 @@ from django.views.decorators.cache import never_cache
 def all_attribute(request):
     
     atributes = Attribute.objects.all()
+    paginator = Paginator(atributes,5)
+    page = request.GET.get('page')
+    paged_atributes = paginator.get_page(page)
     context = {
-        'atributes':atributes
+        'atributes':paged_atributes
     }
     return render(request, 'admin_templates/all_attribute.html',context)
 @login_required(login_url='admin_login')

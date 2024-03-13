@@ -8,79 +8,47 @@
             <h2 class="content-title card-title">Brands</h2>
 
         </div>
-        <div>
-            <!-- <a href="#" class="btn btn-light rounded font-md">Export</a>
-                    <a href="#" class="btn btn-light rounded  font-md">Import</a>
-                    <a href="#" class="btn btn-primary btn-sm rounded">Create new</a> -->
-        </div>
     </div>
     <div class="card mb-4">
-        <header class="card-header">
-            <div class="row align-items-center">
-
-                <div class="col-md-3 col-12 me-auto mb-md-0 mb-3 ">
-                    <form class="searchform">
-                        <div class="input-group" style="width: 350px;">
-                            <input type="text" class="form-control" placeholder="Search">
-                            <button class="btn btn-light bg" type="button"> <i
-                                    class="material-icons md-search"></i></button>
-                        </div>
-                    </form>
-                </div>
-                <div class="col-md-2 col-6">
-                    <input type="date" value="02.05.2021" class="form-control">
-                </div>
-                <div class="col-md-2 col-6">
-                    <select class="form-select">
-                        <option selected>Status</option>
-                        <option>Active</option>
-                        <option>Disabled</option>
-                        <option>Show all</option>
-                    </select>
-                </div>
-            </div>
-        </header> <!-- card-header end// -->
         <div class="card-body  w-100  justify-content-center">
-
-
-
             <div class="row d-flex justify-content-center align-items-center">
-
-
                 <table class="table">
                     <thead>
-                      <tr >
-                        <th scope="col" class="font--bold font-xxl">Brands</th>
-                        <!-- <th scope="col" class="font--bold font-xxl">Attribute Value</th> -->
-            
+                      <tr class="d-flex justify-content-center" >
+                        <th  class="font--bold font-xxl">Brands</th>
                       </tr>
                     </thead>
                     <tbody>
                         {% for b in brd %}
-                      <tr>
-                        
-                       
+                      <tr class="d-flex justify-content-center" >
                         <td>{{b.brand_name}}</td>
-                      
                       </tr>
                       {% endfor %}
                     </tbody>
                   </table>
-
-            
             </div> <!-- card-body end// -->
         </div> <!-- card end// -->
-        <div class="pagination-area mt-30 mb-50">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-start">
-                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                    <li class="page-item"><a class="page-link" href="#">02</a></li>
-                    <li class="page-item"><a class="page-link" href="#">03</a></li>
-                    <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                    <li class="page-item"><a class="page-link" href="#">16</a></li>
-                    <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
-                </ul>
-            </nav>
-        </div>
+    </div>
+    <div class="pagination-area mt-30 mb-50">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-start">
+                {% if atributes.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ atributes.previous_page_number }}"><i
+                            class="material-icons md-chevron_left"></i></a></li>
+                {% endif %}
+                {% for i in atributes.paginator.page_range %}
+                {% if atributes.number == i %}
+                <li class="page-item active"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if atributes.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ atributes.next_page_number }}"><i
+                            class="material-icons md-chevron_right"></i></a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
 </section> <!-- content-main end// -->
 {% endblock content %}
