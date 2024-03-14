@@ -186,7 +186,6 @@ def payment(request):
                 is_ordered=False,
             )
             print('4')
-            # Process payment
             payment = _process_payment(user, draft_order, payment_methods_instance, grandtotal2)
             print(payment['payment_order_id'],payment['payment_id'])
             user = request.user
@@ -200,14 +199,12 @@ def payment(request):
             print('Exception:', str(e))
             return HttpResponseBadRequest()
     else:
-        # Handle GET request
         user = request.user
         request.session['user'] = str(user)
         _delete_unordered_orders(user)
         address1 = Address.objects.filter(account=user.id)
         payment_methods = PaymentMethod.objects.filter(is_active=True)
         wallet, created = Wallet.objects.get_or_create(user=user)
-
         context = {
             'address': address1,
             'payment_methods': payment_methods,
@@ -292,10 +289,8 @@ def paymenthandler(request):
             }
             client = razorpay.Client(auth=(settings.RAZOR_PAY_KEY_ID, settings.KEY_SECRET))
             result = client.utility.verify_payment_signature(params_dict)
-
             if not result :
                 return render(request, 'order_templates/paymentfail.html')
-                # return JsonResponse({'message': 'Payment signature verification failed'})
             else:
                 payment = Payment.objects.get(payment_order_id=razorpay_order_id)
                 payment.payment_status = 'SUCCESS'
@@ -307,11 +302,9 @@ def paymenthandler(request):
                 payment.save()
                 cart_items = CartItem.objects.filter(user=user)
                 for cart_item in cart_items:
-                    # Reduce the stock of products
                     product = cart_item.product
                     product.stock -= cart_item.quantity
                     product.save()
-                # Mark the order as processed
                 current_date = datetime.datetime.now().strftime("%Y%m%d")
                 draft_orders = Order.objects.filter(user=user, is_ordered=False, order_number__startswith=f"ORD{current_date}")
                 print(draft_orders)
@@ -323,18 +316,11 @@ def paymenthandler(request):
                         order_product.ordered = True
                         order_product.save()
                 cart_items.delete()
-                # wallet = Wallet.objects.get(user=user)
-                # wallet_balance = float(request.session.get('wallet_balance'))
-                # wallet.balance = wallet_balance
-                # payed_amount = float(request.session.get('grandtotal'))
-                # wallet.save()
-                # Transaction.objects.create(amount=payed_amount, transaction_type='DEBIT', wallet=wallet)
                 session_vars = ['grandtotal', 'discount_amount', 'grandtotal_wallet', 'wallet_balance']
                 for var in session_vars:
                     if var in request.session:
                         del request.session[var]
-                # Here you can add your logic to handle the payment and update your database accordingly
-                return redirect('place_order')   # Redirect to success page
+                return redirect('place_order')
         except Exception as e:
             print('Exception:', str(e))
             # return HttpResponseBadRequest()
@@ -350,11 +336,9 @@ def place_order(request):
         user = request.user
         cart_items = CartItem.objects.filter(user=user)
         for cart_item in cart_items:
-            # Reduce the stock of products
             product = cart_item.product
             product.stock -= cart_item.quantity
             product.save()
-        # Mark the order as processed
         current_date = datetime.datetime.now().strftime("%Y%m%d")
         draft_orders = Order.objects.filter(user=user, is_ordered=False, order_number__startswith=f"ORD{current_date}")
         print(draft_orders)

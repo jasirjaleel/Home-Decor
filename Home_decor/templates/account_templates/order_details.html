@@ -26,21 +26,26 @@
 
 <div class=" container col-sm-12 col-md-10 col-lg-10 p-4 mb-3">
     <section class="content-main" id="invoice">
+       
         <div class="content-header">
             <div>
                 <h2 class="content-title card-title">Order detail</h2>
                 <p>Details for Order ID: {{order.order_number|slice:"14:"}}</p>
-                <a href="{% url 'generate_pdf' %}?order_id={{order.id}}" class="btn btn-golden"></a>
             </div>
         </div>
         <div class="card">
             <header class="card-header">
                 <div class="row align-items-center">
                     <div class="col-lg-6 col-md-6 mb-lg-0 mb-15 p-2">
+                        
                         <span>
                             <i class="material-icons md-calendar_today"></i> <b>{{ order.created_at|date:"D, M j, Y, g:iA" }}</b>
                         </span><br>
                         <small class="text-muted">Order ID: {{order.order_number}}</small>
+                    </div>
+                    <div class="col-lg-6 col-md-6 mb-lg-0 mb-15 p-2">
+                        
+                        <a href="{% url 'generate_pdf' %}?order_id={{order.id}}" class="btn btn-block btn-golden" style="display: flex; width: 150px;height: 50px;justify-content:center ;align-items: center;">Download Invoice</a>
                     </div>
                 </div>
             </header>
