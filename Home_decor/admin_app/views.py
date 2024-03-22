@@ -50,7 +50,13 @@ def adminhome(request):
     orders = Order.objects.filter(is_ordered=True)
     order_count = orders.count()
     order_total = orders.aggregate(total_order_amount=Sum('order_total'))
-    order_total_amount = float(order_total['total_order_amount'])
+    if order_total['total_order_amount'] is not None:
+        try:
+            order_total_amount = float(order_total['total_order_amount'])
+        except ValueError:
+            order_total_amount = 0.0
+    else:
+        order_total_amount = 0.0 
     products = Product.objects.filter(
         is_available=True).select_related('category')
     product_count = products.count()
