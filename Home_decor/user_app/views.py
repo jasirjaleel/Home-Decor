@@ -14,7 +14,6 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from cart_app.models import Cart
 from cart_app.views import _cart_id
-
 import threading
 from django.core.mail import EmailMessage
 
@@ -31,9 +30,10 @@ class EmailThread(threading.Thread):
         self.email.send()
 
 
-
-def custom_404_view(request,exception):
-    return render(request, 'admin_templates/404.html',status=404)
+def custom_404_view(request, exception, template_name="admin_templates/404.html"):
+    response = render(request, template_name)
+    response.status_code = 404
+    return response
 
 @never_cache
 def usersignup(request):

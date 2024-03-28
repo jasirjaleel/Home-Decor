@@ -318,13 +318,12 @@ async function updateOrderSummary() {
 
                 const paymentOrderId = data.context.payment_order_id;
                 const paymentAmount = data.context.amount;
-                console.log('Payment information:', paymentOrderId);
-                
+                const hostName = window.location.hostname;
                 var razorpayKeyId = '{{ RAZOR_PAY_KEY_ID }}';
                 console.log(razorpayKeyId);
                 console.log(paymentAmount);
                 console.log(paymentOrderId);
-                var callbackURL = `http://127.0.0.1:8000/paymenthander/`;
+                var callbackURL = `http://${hostName}/paymenthander/`;
                 var options = {
                     "key": razorpayKeyId, // Enter the Key ID generated from the Dashboard
                     "amount": paymentAmount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
@@ -377,7 +376,8 @@ async function updateOrderSummary() {
             })
             .then(data => {
                 e.preventDefault();
-                window.location.href = 'http://127.0.0.1:8000/order-review/';
+                const hostName = window.location.hostname;
+                window.location.href = `http://${hostName}/order-review/`;
             })
             .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);

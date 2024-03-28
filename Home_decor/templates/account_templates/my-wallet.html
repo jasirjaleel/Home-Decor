@@ -140,9 +140,8 @@
             const paymentOrderId = result.value.payment_order_id;
             const paymentAmount = result.value.amount;
             const razorpayKeyId = result.value.RAZOR_PAY_KEY_ID;
-            const userId = '{{user.id}}'
-            console.log(userId);
-            console.log(paymentOrderId, paymentAmount, razorpayKeyId, 'got it');
+            const userId = '{{user.id}}';
+            const hostName = window.location.hostname;
             var options = {
                 "key": razorpayKeyId,
                 "amount": paymentAmount,
@@ -150,7 +149,7 @@
                 "name": "Home Decor",
                 "description": "Test Transaction",
                 "order_id": paymentOrderId,
-                "callback_url": `http://127.0.0.1:8000/paymenthandler2/?amount=${paymentAmount}&user_id=${userId}`,
+                "callback_url": `http://${hostName}/paymenthandler2/?amount=${paymentAmount}&user_id=${userId}`,
                 "prefill": {
                     "name": "{{ request.user.get_username }}",
                     "email": "{{ request.user.email }}",

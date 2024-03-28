@@ -25,9 +25,9 @@ load_dotenv()
 SECRET_KEY = os.environ["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    # 'whitenoise.runserver_nostatic',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -57,6 +58,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -93,12 +95,18 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE'    : os.environ["ENGINE"],
-        'NAME'      : os.environ["DB_NAME"],
-        'USER'      : os.environ["DB_USER"],
-        'PASSWORD'  : os.environ["DB_PASSWORD"],
-        'HOST'      : os.environ["DB_HOST"],
-        'PORT'      : os.environ["DB_PORT"],
+        # 'ENGINE'    : os.environ["ENGINE"],
+        # 'NAME'      : os.environ["DB_NAME"],
+        # 'USER'      : os.environ["DB_USER"],
+        # 'PASSWORD'  : os.environ["DB_PASSWORD"],
+        # 'HOST'      : os.environ["DB_HOST"],
+        # 'PORT'      : os.environ["DB_PORT"],
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME':'homedecor',
+        'USER':'postgres',
+        'PASSWORD':'1',
+        'HOST':'localhost',
+        'PORT':'5432',
     }
 }
 
@@ -162,7 +170,7 @@ EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
 SESSION_COOKIE_AGE = 10000
 INTERNAL_IPS = [
     # ...
-    "127.0.0.1",
+    "www.jasir.online",
     # ...
 ]
 
