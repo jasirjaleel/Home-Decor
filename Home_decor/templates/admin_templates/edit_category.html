@@ -1,0 +1,35 @@
+{% extends 'admin_templates/base.html' %}
+{% load static %}
+{% block content %}
+<section class="content-main">
+    <div class="row">
+        <div class="col-9">
+            <div class="content-header">
+                <h2 class="content-title">Edit Category</h2>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>General Information</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'edit_category' %}?id={{category.id}}">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="category_name" class="form-label">Category Name</label>
+                            <input type="text" placeholder="Type here"  class="form-control"  value="{{category.category_name}}" name="category_name" required>
+                        </div>
+                      
+                        <div>
+                            
+                            <button class="btn btn-md rounded font-sm hover-up" type="submit">Edit</button>
+                        </div>
+                    </form>
+                </div>
+            </div> <!-- card end// -->
+            
+        </div>
+    </div>
+</section> <!-- content-main end// -->
+{% endblock content %}

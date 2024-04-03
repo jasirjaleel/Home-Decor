@@ -206,11 +206,8 @@
                     <div class="mobile-header-left">
                         <ul class="mobile-menu-logo">
                             <li>
-                                <a href="index.html">
-                                    <div class="logo">
-                                        <img src="{% static 'assets/images/logo/logo_black.png' %}" alt="">
-                                    </div>
-                                </a>
+                                <a href="{% url 'home' %}"><img src="{% static 'assets/images/logo/logo1.png' %}" alt=""style="max-width: 120px;min-width:180px"></a>
+                              
                             </li>
                         </ul>
                     </div>
@@ -219,28 +216,48 @@
                     <!-- Start Mobile Right Side -->
                     <div class="mobile-right-side">
                         <ul class="header-action-link action-color--black action-hover-color--golden">
-                            <!-- <li>
-                                <a href="#search">
-                                    <i class="icon-magnifier"></i>
-                                </a>
-                            </li> -->
                             <li>
-                                <a href="#offcanvas-wishlish" class="offcanvas-toggle">
+                                <a href="{% url 'myaccount' %}" >
+                                    <i class="fa-light fa-user"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'wishlist' %}">
                                     <i class="icon-heart"></i>
-                                    <span class="item-count">3</span>
+                                    {% if request.user.is_authenticated %}
+                                        {% with request.user.wishlist as user_wishlist %}
+                                            {% if user_wishlist %}
+                                                {% if user_wishlist.get_items_count > 0 %}
+                                                    <span class="wishlist-item-count">{{ user_wishlist.get_items_count }}</span>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endwith %}
+                                    {% endif %}
                                 </a>
                             </li>
                             <li>
                                 <a href="{% url 'cart' %}">
                                     <i class="icon-bag"></i>
-                                    <span class="item-count"></span>
+                                    {% if request.user.is_authenticated %}
+                                        {% with request.user.cart_items.all as cart_items %}
+                                            {% if cart_items %}
+                                                {% for cart_item in cart_items %}
+                                                    {% if forloop.first %}
+                                                        {% if cart_item.items_count > 0 %}
+                                                            <span class="item-count">{{ cart_item.items_count }}</span>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endwith %}
+                                    {% endif %}
                                 </a>
                             </li>
-                            <!-- <li>
+                            <li>
                                 <a href="#mobile-menu-offcanvas" class="offcanvas-toggle offside-menu">
                                     <i class="icon-menu"></i>
                                 </a>
-                            </li> -->
+                            </li>
                         </ul>
                     </div>
                     <!-- End Mobile Right Side -->
@@ -263,41 +280,29 @@
                 <!-- Start Mobile Menu Nav -->
                 <div class="offcanvas-menu">
                     <ul>
-                        <li>
-                            <a href="#"><span>Home</span></a>
+                        <li class="has-dropdown">
+                            <a class="active main-menu-link" href="{% url 'home' %}">Home</a>
+                            <!-- Sub Menu -->
                         </li>
-                        
-                       
+                        <li class="has-dropdown">
+                            <a class="active main-menu-link" href="{% url 'shop' %}">Shop</a>
+                            <!-- Sub Menu -->
+                        </li>
+                        {% if not request.user.is_authenticated %}
+                        <li >
+                            <a href="{% url 'userlogin' %}">Login</a>
+                        </li>
+                        <li >
+                            <a href="{% url 'usersignup' %}">SignUp</a>
+                        </li>
+                        {% else %}
+                        <li >
+                            <a href="{% url 'userlogout' %}">Logout</a>
+                        </li>
+                        {% endif %}
                     </ul>
                 </div> <!-- End Mobile Menu Nav -->
             </div> <!-- End Mobile Menu -->
-
-            <!-- Start Mobile contact Info -->
-            <div class="mobile-contact-info">
-                <div class="logo">
-                    <a href="index.html"><img src="{% static 'assets/images/logo/logo_white.png' %}" alt=""></a>
-                </div>
-
-                <address class="address">
-                    <span>Address: Your address goes here.</span>
-                    <span>Call Us: 0123456789, 0123456789</span>
-                    <span>Email: demo@example.com</span>
-                </address>
-
-                <ul class="social-link">
-                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                    <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                    <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                </ul>
-
-                <ul class="user-link">
-                    <li><a href="wishlist.html">Wishlist</a></li>
-                    <li><a href="cart.html">Cart</a></li>
-                    <li><a href="checkout.html">Checkout</a></li>
-                </ul>
-            </div>
-            <!-- End Mobile contact Info -->
 
         </div> <!-- End Offcanvas Mobile Menu Wrapper -->
     </div> <!-- ...:::: End Offcanvas Mobile Menu Section:::... -->
@@ -312,46 +317,13 @@
         <!-- Start Mobile contact Info -->
         <div class="mobile-contact-info">
             <div class="logo">
-                <a href="index.html"><img src="{% static 'assets/images/logo/logo_white.png' %}" alt=""></a>
+                <a href="{% url 'home' %}"><img src="{% static 'assets/images/logo/logo1.png' %}" alt=""style="max-width: 120px;min-width:180px"></a>
             </div>
-
-            <address class="address">
-                <span>Address: Your address goes here.</span>
-                <span>Call Us: 0123456789, 0123456789</span>
-                <span>Email: demo@example.com</span>
-            </address>
-
-            <ul class="social-link">
-                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-            </ul>
-
-            <ul class="user-link">
-                <li><a href="wishlist.html">Wishlist</a></li>
-                <li><a href="cart.html">Cart</a></li>
-                <li><a href="checkout.html">Checkout</a></li>
-            </ul>
         </div>
         <!-- End Mobile contact Info -->
     </div> <!-- ...:::: End Offcanvas Mobile Menu Section:::... -->
 
-    <!-- Start Offcanvas Addcart Section -->
-     <!-- End  Offcanvas Addcart Section -->
 
-    <!-- Start Offcanvas Mobile Menu Section -->
-     <!-- End Offcanvas Mobile Menu Section -->
-
-    <!-- Start Offcanvas Search Bar Section -->
-    <div id="search" class="search-modal">
-        <button type="button" class="close">×</button>
-        <form>
-            <input type="search" placeholder="type keyword(s) here" />
-            <button type="submit" class="btn btn-lg btn-golden">Search</button>
-        </form>
-    </div>
-    <!-- End Offcanvas Search Bar Section -->
 
      <!-- Offcanvas Overlay -->
      <div class="offcanvas-overlay"></div>
@@ -418,8 +390,7 @@
                             <div class="footer-widget-single-item footer-widget-color--golden">
                                 <h5 class="title">ABOUT US</h5>
                                 <div class="footer-about">
-                                    <p>We are a team of designers and developers that create high quality Magento,
-                                        Prestashop, Opencart.</p>
+                                    <p>Welcome to our furniture store! We offer high-quality, stylish furniture at affordable prices to help you create a space you'll love.</p>
 
                                     <address class="address">
                                         <span>Address: Home Decor - Furnishings  </span>

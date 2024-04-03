@@ -76,7 +76,9 @@ def usersignup(request):
         subject = "Verify Your One-Time Password (OTP) - Home Decor Ecommerce Store"
         sendermail = "noreply@homedecorestore.com"
         otp = f"Dear User,\n\n Your One-Time Password (OTP) for verification is: {randomotp}\n\nThank you for choosing Home Decor Ecommerce Store."
-        send_mail(subject,otp,sendermail,[email])
+        email = EmailMessage(subject, otp, sendermail, [email])
+        email_thread = EmailThread(email)
+        email_thread.start()
         context = {
             'email':email
         }
@@ -116,32 +118,6 @@ def verify_otp(request):
         context = {'email': storedemail}
     return render(request,'user_templates/otp.html',context)
 
-
-# def userlogin(request):
-#     if request.user.is_authenticated:
-#         return redirect('home')
-#     if request.method=="POST":
-#         email = request.POST.get('email')
-#         password = request.POST.get('password')  
-#         if not Account.objects.filter(email=email).exists():
-#             messages.error(request,("Email Doesn't exist"))
-#         else:
-#             account = Account.objects.get(email=email)
-#             if not check_password(password,account.password):
-#                 messages.error(request, "Incorrect password")
-#             else:
-#                 user = authenticate(email=email,password=password)
-#                 if user is not None and  user.is_blocked == False and user.is_superadmin == False:
-#                     login(request,user)
-#                     return redirect('home')
-#                 elif user is not None and user.is_blocked == True:
-#                     messages.error(request,'You are Blocked!')
-#                     return redirect('userlogin')
-#                 else:
-#                     messages.error(request,('There Was An Error Loggin In, Try Again...'))
-#                     return redirect('userlogin')
-#     else:
-#         return render(request,'user_templates/login.html')
 @never_cache
 def userlogin(request):
     if request.user.is_authenticated:
@@ -152,8 +128,6 @@ def userlogin(request):
             password = request.POST.get('password')  
             user = authenticate(email=email,password=password) 
             if user is not None and  user.is_blocked == False and user.is_superadmin == False:
-                # if user is not None:
-                #     raise Exception ('Incorrect password. Please try again.')
                 login(request,user)
                 try:
                     print("Getting cart id")
@@ -197,16 +171,13 @@ class ForgetPasswordView(View):
         self.request.session['storedotp'] = random_otp
         self.request.session['storedemail'] = email
         self.request.session.modified = True 
-
         subject = "Verify Your One-Time Password (OTP) - Home Decor Ecommerce Store"
         sender_mail = "noreply@homedecorestore.com"
         otp_message = f"Dear User,\n\n Your One-Time Password (OTP) for reset password: {random_otp}\n\nThank you for choosing Home Decor Ecommerce Store."
         email = EmailMessage(subject, otp_message, sender_mail, [email])
         email_thread = EmailThread(email)
         email_thread.start()
-
         return redirect('verify_password_login')
-
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name)
 

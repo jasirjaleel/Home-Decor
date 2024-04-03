@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from .models import Address
 from user_app.models import Account
+from product_management.models import Coupon,UserCoupon
 from django.http import JsonResponse
 import json
 from django.core.mail import send_mail
@@ -8,6 +9,8 @@ import random
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
+from django.views.decorators.cache import never_cache
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth import login
 from django.shortcuts import get_object_or_404
 from order.models import Order, OrderProduct
@@ -15,6 +18,8 @@ from django.db.models import Count
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from xhtml2pdf import pisa
+from django.db.models import F,Sum,Q
+from django.utils import timezone
 # Create your views here.
 
 def my_account(request):
@@ -118,49 +123,50 @@ def my_profile(request):
     
     return render(request,'account_templates/my-profile.html',context)
 
- 
-def forget_password(request):
+@never_cache
+def change_password(request):
     if request.method == "POST":
-        email = request.POST.get('email')
-        # if email == request.user
-        print(request.user)
-        randomotp = str(random.randint(100000, 999999))
-        request.session['storedotp'] = randomotp
-        request.session['storedemail']=email
-        request.session.modified = True 
-        request.session.set_expiry(600)
+        old_password = request.POST.get('old_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+        user = request.user
+        if check_password(old_password, user.password):
+            if new_password == confirm_password:
+                user.set_password(new_password)
+                user.save()
+                messages.success(request, 'Password changed successfully.')
+                return redirect('myaccount')
+            else:
+                messages.error(request, 'New password and confirm password do not match.')
+        else:
+            messages.error(request, 'Old password is incorrect.')
+    return render(request,'account_templates/change_password.html')
 
-        subject = "Verify Your One-Time Password (OTP) - Home Decor Ecommerce Store"
-        sendermail = "noreply@homedecorestore.com"
-        otp = f"Dear User,\n\n Your One-Time Password (OTP) for reset password: {randomotp}\n\nThank you for choosing Home Decor Ecommerce Store."
-        send_mail(subject,otp,sendermail,[email])
-        return redirect ('verif_forget_password')
-    return render(request,'account_templates/forget_password.html')
-
-
-
-def verif_forget_password(request):
-    if 'storedemail' not in request.session or not request.session['storedemail']:
-        return redirect('forget_password')
-    if request.method == "POST":
-        otp = request.POST.get('enteredotp')
-        storedotp=request.session['storedotp']
-
-        if otp == storedotp:
-            return redirect ('new_password')
-    return render(request,'account_templates/verify_forget_password.html')
-
+@never_cache
+def change_password_with_email(request):
+    randomotp = str(random.randint(100000, 999999))
+    
+    subject = "Verify Your One-Time Password (OTP) - Home Decor Ecommerce Store"
+    sendermail = "noreply@homedecorestore.com"
+    otp = f"Dear User,\n\n Your One-Time Password (OTP) for reset password: {randomotp}\n\nThank you for choosing Home Decor Ecommerce Store."
+    send_mail(subject,otp,sendermail,[request.user.email])
+    if request.method == "POST":    
+        otp = request.POST.get('otp')
+        print(otp)
+        if otp == randomotp:
+            messages.success(request, 'OTP verified successfully.')
+        return redirect('new_password')
+    return render(request,'account_templates/change_password_with_email.html')
 
 # @login_required(login_url='userlogin') 
+@never_cache
 def enter_new_password(request):
-    if 'storedemail' not in request.session or not request.session['storedemail']:
-        return redirect('forget_password')
     if request.method == "POST":
         password           = request.POST.get('password')
         confirm_password   = request.POST.get('confirm_password')
         if password == confirm_password:
     
-            userr = request.user         # Assuming you have a custom user model (Account)
+            userr = request.user  
             userr.set_password(password)
             userr.save()
             login(request, userr)
@@ -214,7 +220,6 @@ def edit_address(request):
         country_region   = request.POST.get('country_region')
         zip_code         = request.POST.get('zip_code')
     
-
         new_address = Address.objects.get(account=user,id=address_id)
         new_address.first_name      = first_name
         new_address.last_name       = last_name
@@ -232,10 +237,7 @@ def edit_address(request):
     return render(request, 'account_templates/edit-address.html',context)
 
 
-
-
 def generate_pdf(request):
-    
     order_id = request.GET.get('order_id')
     order = Order.objects.get(id=order_id, user=request.user)
     order_products = OrderProduct.objects.filter(order=order)
@@ -246,15 +248,29 @@ def generate_pdf(request):
         'order_status': order_status,
         'order_id':order_id
     }
-    # Render the HTML template
     html = render_to_string("account_templates/invoice.html", context)
     pdf_response = HttpResponse(content_type="application/pdf")
     pdf_response["Content-Disposition"] = f'filename="{order.order_number}_invoice.pdf"'
-    
-
-    # Generate PDF using xhtml2pdf
     pisa_status = pisa.CreatePDF(html, dest=pdf_response)
     if pisa_status.err:
         return HttpResponse('Failed to generate PDF: %s' % pisa_status.err)
 
     return pdf_response
+
+def my_coupons(request):
+    user = request.user
+    coupons = Coupon.objects.filter(is_expired=False)
+    # # available_coupons = UserCoupon.objects.filter(user=user,coupon__in=coupons)
+    # coupons = Coupon.objects.annotate(
+    #     total_usage_count=Sum('usercoupon__usage_count', filter=Q(usercoupon__user=user))
+    # ).filter(
+    #     is_expired=False,
+    #     total_coupons__gt=F('total_usage_count')
+    # )
+    
+    
+    print(coupons)
+    context = { 
+       'coupons':coupons,
+    }
+    return render(request, 'account_templates/coupons.html', context)

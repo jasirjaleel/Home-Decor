@@ -63,23 +63,23 @@
                 </div>
             </a>
 
-
-            <div class="col-2 p-2"
-                style="width: 328px; height: 156px;   background: rgba(255, 255, 255, 0); box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.12); border-radius: 12px">
-                <div class="d-flex w-25 p-2">
-                    <i class="fa-sharp fa-light fa-shield-halved"
-                        style="display: flex;font-size: 35px;color: #b19561;"></i>
-                </div>
-                <div class="flex-column" style=" flex-direction: column;height: 50px; ">
-                    <div class="pb-2 pt-2"
-                        style="color: #222222; font-size: 16px; font-weight: 800; line-height: 20px; word-wrap: break-word">
-                        <a href="{% url 'forget_password' %}">Login & security</a>
+            <a href="{% url 'change_password' %}">
+                <div class="col-2 p-2"
+                    style="width: 328px; height: 156px;   background: rgba(255, 255, 255, 0); box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.12); border-radius: 12px">
+                    <div class="d-flex w-25 p-2">
+                        <i class="fa-sharp fa-light fa-shield-halved" style="display: flex;font-size: 35px;color: #b19561;"></i>
                     </div>
-                    <div class="ProvidePersonalDetailsAndHowWeCanReachYou"
-                        style="width: 258.89px; color: #717171; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
-                        Update your password and secure your account</div>
+                    <div class="flex-column" style=" flex-direction: column;height: 50px; ">
+                        <div class="pb-2 pt-2"
+                            style="color: #222222; font-size: 16px; font-weight: 800; line-height: 20px; word-wrap: break-word">
+                            Login & security
+                        </div>
+                        <div class="ProvidePersonalDetailsAndHowWeCanReachYou"
+                            style="width: 258.89px; color: #717171; font-size: 14px; font-weight: 400; line-height: 18px; word-wrap: break-word">
+                            Update your password and secure your account</div>
+                    </div>
                 </div>
-            </div>
+            </a>
 
 
             <a href="{% url 'myorder' %}">
@@ -126,7 +126,7 @@
                 </div>
             </a>
 
-
+        <a href="{% url 'mycoupons' %}">
             <div class="col-2 p-2"
                 style="width: 328px; height: 156px;   background: rgba(255, 255, 255, 0); box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.12); border-radius: 12px">
                 <div class="d-flex w-25 p-2">
@@ -141,7 +141,7 @@
                         Unlock exclusive deals! Enjoy extra savings. Happy shopping</div>
                 </div>
             </div>
-
+        </a>
 
             <a href="{% url 'wallet' %}">
 

@@ -323,7 +323,7 @@ async function updateOrderSummary() {
                 console.log(razorpayKeyId);
                 console.log(paymentAmount);
                 console.log(paymentOrderId);
-                var callbackURL = `http://${hostName}/paymenthander/`;
+                var callbackURL = `https://${hostName}/paymenthander/`;
                 var options = {
                     "key": razorpayKeyId, // Enter the Key ID generated from the Dashboard
                     "amount": paymentAmount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise

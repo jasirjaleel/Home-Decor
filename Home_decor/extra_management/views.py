@@ -194,7 +194,6 @@ def edit_coupon(request):
         old_coupon.total_coupons       = int(total_coupons)
         old_coupon.save()
         return redirect('coupon')
-    
     return render(request, 'admin_templates/edit_coupon.html', {'old_coupon':old_coupon})
 
 class DeleteCouponView(View):

@@ -28,91 +28,11 @@ def home(request):
     return render(request,'store_templates/index.html',context)
 
 
-# def store (request,category_slug=None):
-#     categories = None
-#     product_variants = None
-#     # search_query = request.GET.get('query')
-#     # price_min = request.GET.get('price-min')
-#     # price_max = request.GET.get('price-max')
-#     # ratings = request.GET.getlist('RATING')
-    
-    
-#     if category_slug !=None:
-#         try:
-#             category = Category.objects.filter(cat_slug=category_slug)
-#         except Exception as e:
-#                 print(e)
-#                 return redirect('store')
-#         product_variants = Product_Variant.objects.select_related('product').prefetch_related('atributes').filter(product__product_catg=category,is_active=True)
-#         product_variants_count = product_variants.count()
-#     else:
-#         product_variants = Product_Variant.objects.select_related('product').prefetch_related('attributes').filter(is_active=True).annotate(avg_rating=Avg('product_review__rating'))
-
-#         # product_variants_count = product_variants.count()
-
- 
-#     # #search
-#     # if search_query:
-#     #     terms = search_query.split()  # Split the search query into individual terms
-#     #     for term in terms:
-#     #         product_variants = [
-#     #                         product for product in product_variants
-#     #                         if term.lower() in product.get_product_name().lower()
-#     #                     ]
-       
-#     # #ratings filter   
-#     # if ratings:
-#     #     rating_filters = Q()
-#     #     for rating in ratings:
-#     #         rating_filters |= Q(avg_rating__gte=rating)
-
-#     #     product_variants = product_variants.filter(rating_filters)
-    
-    
-    
-#     # #price filter 
-#     # if price_min:
-#     #     product_variants = product_variants.filter(sale_price__gte=price_min)
-#     # if price_max:
-#     #     product_variants = product_variants.filter(sale_price__lte=price_max)
-        
-        
-#     # # Get all attribute names from the request avoid certain parameters
-#     # attribute_names = [key for key in request.GET.keys() if key not in ['query','page','price-min','price-max','RATING']]
-    
-#     # #other filter
-#     # for attribute_name in attribute_names:
-#     #     attribute_values = request.GET.getlist(attribute_name)
-#     #     if attribute_values:
-#     #         product_variants=product_variants.filter(atributes__atribute_value__in=attribute_values)
-    
-    
-    
-    
-    
-#     # product_variants_count = len(product_variants)
-    
-  
-#     # # paginator start
-#     # paginator = Paginator(product_variants,6)
-#     # page = request.GET.get('page')
-#     # paged_products = paginator.get_page(page)
-    
-#     context = {'product_variants':product_variants,
-#                 #'product_variants':paged_products,
-#             #    'product_variants_count':product_variants_count,
-#             #    'search_query':search_query,
-#             #    'price_min':price_min,
-#             #    'price_max':price_max,
-#                }
-    
-#     return render(request, 'store/store.html',context)
-
 class ShopView(View):
-    template_name = 'store_templates/shop.html'
+    template_name = 'store_templates/shop2.html'
 
     def get(self, request):
-        products = Product_Variant.objects.filter(is_active=True,stock__gt=0,product__is_available=True).order_by('id')
+        products = Product_Variant.objects.filter(is_active=True,stock__gt=0,product__is_available=True,product__category__is_active=True).order_by('id')
         product_offers = ProductOffer.objects.filter(is_active=True)
         category_offers = CategoryOffer.objects.filter(is_active=True)
         categories = Category.objects.filter(is_active=True)
@@ -147,28 +67,27 @@ class ShopView(View):
         if colors_list:
             products = products.filter(attributes__attribute_value__in=colors_list, is_active=True)
             selected_color = [color for color in colors_list]
-        if min_price and max_price:
-            products = products.filter(calculated_total_price__range=[min_price, max_price])
+        
 
         if sort_by :
             if sort_by == "price_low_to_high":
                 products = products.order_by('sale_price')
             elif sort_by == "price_high_to_low":
-                products = products.order_by('-total_price')
+                products = products.order_by('-sale_price')
             elif sort_by == "newest":
                 products = products.order_by('-id')
             elif sort_by == "oldest":
                 products = products.order_by('id')
             elif sort_by == "a_z":
-                products = products.order_by('product__product_name')
+                products = products.order_by('product_variant_slug')
             elif sort_by == "z_a":
-                products = products.order_by('-product__product_name')
+                products = products.order_by('-product_variant_slug')
             # elif sort_by == "rating":
             #     products = products.order_by('-product__avg_rating')
             # elif sort_by == "discount":
             #     products = products.order_by('-discount_percentage')
             selected_sort.append(sort_by)
-    
+        print(sort_by)
         for product in products:
             total_price = product.total_price
             max_discount_price = total_price

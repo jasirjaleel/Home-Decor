@@ -10,55 +10,54 @@
         </div>
     </div>
     <div class="card mb-4">
-        <div class="card-body">
-            <div class="row align-items-center">
-                <table class="table" >
-                    <thead >
-                        <tr  class="d-flex justify-content-center">
-                            <th>Category</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for category in categories %}
-                        <tr class="d-flex justify-content-center" >
-                            <td>
-                               
-                                    <div>
-                                        <h6 class="mb-0">{{category.category_name}}</h6>
-                                    </div>
-                               
-                            </td>
-                            
-                            <td>
-                                <a href="" class="btn btn-sm font-sm alert-danger rounded">Deactivate</a>
-                                <a href="" class="btn btn-sm font-sm alert-success rounded">Activate</a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div> 
-        </div> 
-        </div>
-        <div class="pagination-area mt-30 mb-50">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-start">
-                    {% if product_variant.has_previous %}
-                    <li class="page-item"><a class="page-link" href="?page={{ product_variant.previous_page_number }}"><i class="material-icons md-chevron_left"></i></a></li>
-                    {% endif %}
-                    {% for i in product_variant.paginator.page_range %}
-                            {% if product_variant.number == i %}
-                                <li class="page-item active"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
-                            {% else %}
-                                <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
-                            {% endif %}
-                        {% endfor %}
-                    {% if product_variant.has_next %}
-                    <li class="page-item"><a class="page-link" href="?page={{ product_variant.next_page_number }}"><i class="material-icons md-chevron_right"></i></a></li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </div>
-</section> <!-- content-main end// -->
-{% endblock content %}
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="align-middle" scope="col">Category</th>
+                                    <th class="align-middle" scope="col" > Action </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for category in categories %}
+                                <tr>
+                                    <td>
+                                        <b>{{category.category_name}}</b>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'edit_category' %}?id={{category.id}}" class="btn badge alert-primary">Edit</a>
+                                        {% if category.is_active %}
+                                        <a href="{% url 'toggle_category_status' %}?id={{category.id}}" class="btn badge alert-danger">Unlist</a>
+                                        {% else %}
+                                        <a href="{% url 'toggle_category_status' %}?id={{category.id}}" class="btn badge alert-success">List</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div> <!-- table-responsive //end -->
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+            <div class="pagination-area mt-30 mb-50">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-start">
+                        {% if product_variant.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{ product_variant.previous_page_number }}"><i class="material-icons md-chevron_left"></i></a></li>
+                        {% endif %}
+                        {% for i in product_variant.paginator.page_range %}
+                                {% if product_variant.number == i %}
+                                    <li class="page-item active"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        {% if product_variant.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ product_variant.next_page_number }}"><i class="material-icons md-chevron_right"></i></a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </section> <!-- content-main end// -->
+    {% endblock content %}

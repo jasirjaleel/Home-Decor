@@ -394,37 +394,49 @@ def delete_cart_item(request, cart_item_id):
 
 ################ WISH LIST ####################
 def user_wishlist(request):
-    
-    wishlist,created = Wishlist.objects.get_or_create(user=request.user)
-    wishlistItems = WishlistItem.objects.filter(wishlist=wishlist,is_active=True).order_by('-created_at')
-    wishlistItems_count = wishlistItems.count()
-    for i in wishlistItems:
-        print(i.product.get_product_name())
-    # paginator = Paginator(wishlistItems,10)
-    # page = request.GET.get('page')
-    # paged_wishlist = paginator.get_page(page)
-    
-    context = {
-        'wishlistItems':wishlistItems,
-        'wishlistItems_count':wishlistItems_count
-    }
-    return render(request, 'cart_templates/wishlist.html',context)
+    if request.user.is_authenticated:  
+        try:
+            wishlist,created = Wishlist.objects.get_or_create(user=request.user)
+            wishlistItems = WishlistItem.objects.filter(wishlist=wishlist,is_active=True).order_by('-created_at')
+            wishlistItems_count = wishlistItems.count()
+            for i in wishlistItems:
+                print(i.product.get_product_name())
+            # paginator = Paginator(wishlistItems,10)
+            # page = request.GET.get('page')
+            # paged_wishlist = paginator.get_page(page)
+            
+            context = {
+                'wishlistItems':wishlistItems,
+                'wishlistItems_count':wishlistItems_count
+            }
+            return render(request, 'cart_templates/wishlist.html',context)
+        except Exception as e:
+            print(e)
+            return redirect('home')
+    else:
+        return redirect('userlogin')
     
 
 @login_required(login_url='userlogin')
 def add_wishlist(request):
-    if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        data = json.loads(request.body)
-        slug = data.get('variant')
-        wishlist, created = Wishlist.objects.get_or_create(user=request.user)
-        try:
-            product_variant = Product_Variant.objects.get(product_variant_slug=slug)
-        except Product_Variant.DoesNotExist:
-            return JsonResponse({"status": "error", "message": "Product not found"})
-        wishlist_item, created = WishlistItem.objects.get_or_create(wishlist=wishlist, product=product_variant)
-        return JsonResponse({"status": "success", "message": "Added to wishlist"})
+    if request.user.is_authenticated:
+        if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            data = json.loads(request.body)
+            slug = data.get('variant')
+            wishlist, created = Wishlist.objects.get_or_create(user=request.user)
+            try:
+                product_variant = Product_Variant.objects.get(product_variant_slug=slug)
+            except Product_Variant.DoesNotExist:
+                return JsonResponse({"status": "error", "message": "Product not found"})
+            wishlist_item, created = WishlistItem.objects.get_or_create(wishlist=wishlist, product=product_variant)
+            if created:
+                return JsonResponse({"status": "success", "message": "Added to wishlist"})
+            else:
+                return JsonResponse({"status": "success", "message": "Item already in wishlist"})
+        else:
+            return JsonResponse({"status": "error", "message": "Invalid request"})
     else:
-        return JsonResponse({"status": "error", "message": "Invalid request"})
+        return redirect('userlogin')
 
 ##################### Delete User Wishlist ####################
 def delete_wishlist(request):

@@ -23,6 +23,8 @@ urlpatterns = [
     path('toggle-product/<int:id>/',productView.toggle_product_variant,name='toggle-product-variant'),       
     
     path('add-category/',categoryView.add_category,name='addcategory'),
+    path('edit-category/', categoryView.edit_category, name='edit_category'),
+    path('toggle-category-status/',categoryView.toggle_category_status, name='toggle_category_status'),
     path('manage-category/',categoryView.manage_category,name='manage_category'),
 
     path('all-users/', views.all_users, name='all-users'),
